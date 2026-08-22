@@ -1,0 +1,1606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>TimeSuite &mdash; Apple Design Time Studio</title>
+  <style>
+    :root {
+      --bg-primary: #F5F7FA;
+      --bg-card: rgba(255, 255, 255, 0.9);
+      --bg-card-solid: #FFFFFF;
+      --bg-box: #F2F4F7;
+      --accent-blue: #0071E3;
+      --accent-blue-hover: #0077ED;
+      --accent-blue-light: #EBF3FC;
+      --accent-blue-glow: rgba(0, 113, 227, 0.18);
+      --accent-red: #FF3B30;
+      --accent-red-light: rgba(255, 59, 48, 0.16);
+      --text-main: #1D1D1F;
+      --text-muted: #86868B;
+      --text-sub: #424245;
+      --border-subtle: rgba(0, 0, 0, 0.08);
+      --border-focus: rgba(0, 113, 227, 0.45);
+      --btn-subtle-bg: rgba(0, 0, 0, 0.05);
+      --stepper-bg: #FFFFFF;
+      --stepper-color: #333336;
+      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
+      --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.06);
+      --shadow-float: 0 16px 36px rgba(0, 113, 227, 0.12);
+      --radius-sm: 10px;
+      --radius-md: 16px;
+      --radius-lg: 24px;
+      --radius-full: 9999px;
+      --font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    }
+
+    /* Dark Mode */
+    body.dark-mode {
+      --bg-primary: #121214;
+      --bg-card: rgba(28, 28, 30, 0.92);
+      --bg-card-solid: #1C1C1E;
+      --bg-box: #242428;
+      --accent-blue-light: rgba(0, 113, 227, 0.22);
+      --accent-blue-glow: rgba(0, 113, 227, 0.3);
+      --accent-red: #FF453A;
+      --accent-red-light: rgba(255, 69, 58, 0.2);
+      --text-main: #F5F5F7;
+      --text-muted: #8E8E93;
+      --text-sub: #C7C7CC;
+      --border-subtle: rgba(255, 255, 255, 0.1);
+      --border-focus: rgba(10, 132, 255, 0.5);
+      --btn-subtle-bg: rgba(255, 255, 255, 0.08);
+      --stepper-bg: #2C2C2E;
+      --stepper-color: #E5E5EA;
+      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+      --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.4);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: var(--font-family);
+      -webkit-font-smoothing: antialiased;
+      transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease;
+    }
+
+    body {
+      background-color: var(--bg-primary);
+      color: var(--text-main);
+      min-height: 100vh;
+      padding-top: 96px;
+      padding-bottom: 60px;
+      overflow-x: hidden;
+    }
+
+    /* Top Navigation */
+    .top-nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 72px;
+      background: var(--bg-card);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 32px;
+      z-index: 1000;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      color: var(--text-main);
+      flex-shrink: 0;
+    }
+
+    .brand-icon {
+      width: 34px;
+      height: 34px;
+      background: linear-gradient(135deg, var(--accent-blue), #5AC8FA);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #FFF;
+      font-size: 16px;
+      box-shadow: 0 4px 12px var(--accent-blue-glow);
+    }
+
+    /* Top Sliding Pill Group */
+    .nav-pill-group {
+      display: flex;
+      background: var(--btn-subtle-bg);
+      padding: 4px;
+      border-radius: var(--radius-full);
+      position: relative;
+      align-items: center;
+    }
+
+    .nav-pill-indicator {
+      position: absolute;
+      background: var(--bg-card-solid);
+      border-radius: var(--radius-full);
+      box-shadow: var(--shadow-sm);
+      transition: all 0.35s cubic-bezier(0.25, 1, 0.5, 1);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    body.dark-mode .nav-pill-indicator {
+      background: #2C2C2E;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+    }
+
+    .nav-pill-btn {
+      border: none;
+      background: transparent !important;
+      padding: 9px 18px;
+      font-size: 13.5px;
+      font-weight: 500;
+      color: var(--text-sub);
+      border-radius: var(--radius-full);
+      cursor: pointer;
+      position: relative;
+      z-index: 2;
+      transition: color 0.25s ease;
+      white-space: nowrap;
+    }
+
+    .nav-pill-btn:hover {
+      color: var(--text-main);
+    }
+
+    .nav-pill-btn.active {
+      color: var(--accent-blue);
+      font-weight: 600;
+    }
+
+    /* Dark Mode Toggle */
+    .theme-toggle-btn {
+      background: var(--btn-subtle-bg);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-main);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 17px;
+      flex-shrink: 0;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .theme-toggle-btn:hover {
+      transform: scale(1.06);
+      background: var(--accent-blue-light);
+      color: var(--accent-blue);
+    }
+
+    /* Content Area & Clean Fade-In */
+    .container {
+      max-width: 1040px;
+      margin: 0 auto;
+      padding: 0 20px;
+      position: relative;
+    }
+
+    .tab-pane {
+      display: none;
+      opacity: 0;
+    }
+
+    .tab-pane.active {
+      display: block;
+      animation: pureFadeIn 0.28s ease forwards;
+    }
+
+    @keyframes pureFadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .glass-card {
+      background: var(--bg-card-solid);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 32px;
+      box-shadow: var(--shadow-md);
+      margin-bottom: 24px;
+    }
+
+    .section-title {
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      margin-bottom: 4px;
+    }
+
+    .section-desc {
+      font-size: 14.5px;
+      color: var(--text-muted);
+      margin-bottom: 22px;
+      line-height: 1.4;
+    }
+
+    /* Sub-Switch Bar */
+    .sub-switch-bar {
+      position: relative;
+      display: inline-flex;
+      background: var(--btn-subtle-bg);
+      padding: 4px;
+      border-radius: var(--radius-full);
+      margin-bottom: 22px;
+      gap: 2px;
+    }
+
+    .sub-indicator {
+      position: absolute;
+      background: var(--accent-blue);
+      border-radius: var(--radius-full);
+      box-shadow: var(--shadow-sm);
+      transition: all 0.32s cubic-bezier(0.25, 1, 0.5, 1);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .sub-switch-btn {
+      position: relative;
+      z-index: 2;
+      padding: 8px 18px;
+      border: none;
+      background: transparent !important;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-sub);
+      border-radius: var(--radius-full);
+      cursor: pointer;
+      transition: color 0.25s ease;
+      white-space: nowrap;
+    }
+
+    .sub-switch-btn.active {
+      color: #FFFFFF;
+      font-weight: 600;
+    }
+
+    /* Form Inputs */
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    input[type="time"],
+    input[type="datetime-local"] {
+      width: 100%;
+      padding: 11px 14px;
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--text-main);
+      background: var(--bg-card-solid);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    input:focus {
+      border-color: var(--accent-blue);
+      box-shadow: 0 0 0 3.5px var(--accent-blue-glow);
+    }
+
+    /* Error Shake Animation for Date Input */
+    @keyframes inputErrorShake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-6px); }
+      40%, 80% { transform: translateX(6px); }
+    }
+
+    .input-error-shake {
+      animation: inputErrorShake 0.42s ease-in-out !important;
+      border-color: var(--accent-red) !important;
+      box-shadow: 0 0 0 3.5px var(--accent-red-light) !important;
+    }
+
+    /* Status & Feedback Toast/Alert */
+    .switch-feedback-toast {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--accent-red-light);
+      color: var(--accent-red);
+      padding: 6px 12px;
+      border-radius: var(--radius-full);
+      font-size: 12px;
+      font-weight: 600;
+      margin-top: 10px;
+      opacity: 0;
+      transform: translateY(-4px);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      pointer-events: none;
+    }
+
+    .switch-feedback-toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .btn-subtle {
+      background: var(--btn-subtle-bg);
+      color: var(--text-main);
+      padding: 9px 14px;
+      font-size: 13px;
+      font-weight: 600;
+      border-radius: 8px;
+      border: 1px solid var(--border-subtle);
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    .btn-subtle:hover {
+      background: var(--accent-blue-light);
+      color: var(--accent-blue);
+      border-color: var(--accent-blue-glow);
+    }
+
+    /* MODE 1: COUNTDOWN & SINCE */
+    .countdown-display {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin: 24px 0;
+    }
+
+    .countdown-unit {
+      background: var(--accent-blue-light);
+      border-radius: var(--radius-md);
+      padding: 20px 14px;
+      text-align: center;
+      position: relative;
+    }
+
+    .countdown-num {
+      font-size: 42px;
+      font-weight: 700;
+      color: var(--accent-blue);
+      letter-spacing: -1.5px;
+      line-height: 1;
+      margin-bottom: 6px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .countdown-tag {
+      font-size: 11.5px;
+      text-transform: uppercase;
+      font-weight: 600;
+      color: var(--text-sub);
+      letter-spacing: 0.6px;
+    }
+
+    .presets-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .preset-chip {
+      background: var(--btn-subtle-bg);
+      padding: 7px 14px;
+      font-size: 12.5px;
+      border-radius: var(--radius-full);
+      cursor: pointer;
+      color: var(--text-sub);
+      border: 1px solid transparent;
+      transition: all 0.2s;
+    }
+
+    .preset-chip:hover {
+      background: var(--accent-blue-light);
+      color: var(--accent-blue);
+      border-color: var(--accent-blue-glow);
+    }
+
+    /* MODE 2: CONVERTER (Completely Isolated Grid) */
+    .converter-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 14px;
+      margin-top: 20px;
+    }
+
+    .conv-cell-form {
+      display: block;
+      margin: 0;
+      padding: 0;
+    }
+
+    .conv-card {
+      background: var(--bg-box);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 16px 18px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .conv-card:focus-within {
+      background: var(--bg-card-solid);
+      border-color: var(--accent-blue);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .conv-card label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .conv-input {
+      font-size: 20px !important;
+      font-weight: 600 !important;
+      color: var(--text-main) !important;
+      padding: 4px 0 !important;
+      border: none !important;
+      background: transparent !important;
+      box-shadow: none !important;
+    }
+
+    /* MODE 3: TIME SOLVER */
+    .mode-switch-bar {
+      position: relative;
+      display: flex;
+      flex-direction: row;
+      background: var(--btn-subtle-bg);
+      padding: 5px;
+      border-radius: var(--radius-full);
+      margin-bottom: 24px;
+      gap: 2px;
+    }
+
+    .mode-indicator {
+      position: absolute;
+      background: var(--accent-blue);
+      border-radius: var(--radius-full);
+      box-shadow: var(--shadow-sm);
+      transition: all 0.35s cubic-bezier(0.25, 1, 0.5, 1);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .mode-switch-btn {
+      position: relative;
+      z-index: 2;
+      flex: 1;
+      padding: 11px 14px;
+      border: none;
+      background: transparent !important;
+      font-size: 13.5px;
+      font-weight: 500;
+      color: var(--text-sub);
+      border-radius: var(--radius-full);
+      cursor: pointer;
+      transition: color 0.25s ease;
+      text-align: center;
+      line-height: 1.3;
+    }
+
+    .mode-switch-btn.active {
+      color: #FFFFFF;
+      font-weight: 600;
+    }
+
+    /* Solver Equation Layout */
+    .solver-equation-container {
+      display: flex;
+      flex-direction: row;
+      align-items: stretch;
+      gap: 12px;
+      justify-content: space-between;
+    }
+
+    .solver-box {
+      flex: 1;
+      background: var(--bg-box);
+      border: 1.5px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 18px;
+      position: relative;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 14px;
+    }
+
+    .solver-box.highlight {
+      background: var(--accent-blue-light);
+      border-color: var(--accent-blue);
+      box-shadow: 0 4px 18px var(--accent-blue-glow);
+    }
+
+    @keyframes gentleShake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-5px); }
+      40%, 80% { transform: translateX(5px); }
+    }
+
+    .solver-box.shake {
+      animation: gentleShake 0.4s ease-in-out;
+    }
+
+    .solver-target-badge {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      background: var(--accent-blue);
+      color: #FFF;
+      font-size: 10px;
+      text-transform: uppercase;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: var(--radius-full);
+      letter-spacing: 0.4px;
+    }
+
+    .equation-operator {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+      font-weight: 600;
+      color: var(--text-muted);
+      user-select: none;
+      padding: 0 2px;
+    }
+
+    .input-row-with-btn {
+      display: flex;
+      gap: 8px;
+      margin-top: 8px;
+      align-items: center;
+    }
+
+    .duration-inputs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    /* Steppers Grid */
+    .stepper-row {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 4px;
+      margin-top: 10px;
+    }
+
+    .stepper-btn {
+      width: 100%;
+      min-width: 0;
+      background: var(--stepper-bg);
+      border: 1px solid var(--border-subtle);
+      color: var(--stepper-color);
+      font-size: 11px;
+      font-weight: 600;
+      padding: 7px 0;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      text-align: center;
+    }
+
+    .stepper-btn:hover {
+      background: var(--accent-blue);
+      color: #FFFFFF;
+      border-color: var(--accent-blue);
+    }
+
+    .field-hint-tip {
+      font-size: 11.5px;
+      color: var(--accent-red);
+      margin-top: 8px;
+      min-height: 16px;
+      font-weight: 500;
+      line-height: 1.3;
+    }
+
+    .day-wrap-badge {
+      display: inline-flex;
+      align-items: center;
+      background: rgba(0, 113, 227, 0.14);
+      color: var(--accent-blue);
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 6px;
+      margin-left: 6px;
+      vertical-align: middle;
+    }
+
+    .result-callout {
+      margin-top: 24px;
+      background: linear-gradient(135deg, #0071E3, #005bb5);
+      border-radius: var(--radius-md);
+      padding: 24px 18px;
+      color: white;
+      text-align: center;
+      box-shadow: var(--shadow-float);
+    }
+
+    .result-callout .sub {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      opacity: 0.85;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .result-callout .val {
+      font-size: 34px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .result-callout .val .day-wrap-badge {
+      background: rgba(255, 255, 255, 0.25);
+      color: #FFFFFF;
+      font-size: 12.5px;
+      padding: 3px 9px;
+    }
+
+    .result-callout .desc {
+      font-size: 13.5px;
+      opacity: 0.92;
+      margin-top: 4px;
+      line-height: 1.4;
+    }
+
+    @media (max-width: 820px) {
+      body {
+        padding-top: 86px;
+      }
+      .top-nav {
+        padding: 0 14px;
+        height: 66px;
+      }
+      .brand-icon {
+        width: 30px;
+        height: 30px;
+        font-size: 15px;
+      }
+      .brand span {
+        display: none;
+      }
+      .nav-pill-btn {
+        padding: 8px 12px;
+        font-size: 12.5px;
+      }
+      .theme-toggle-btn {
+        width: 36px;
+        height: 36px;
+        font-size: 15px;
+      }
+
+      .solver-equation-container {
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .equation-operator {
+        font-size: 20px;
+        padding: 2px 0;
+      }
+
+      .mode-switch-bar {
+        flex-direction: column;
+        border-radius: var(--radius-md);
+        gap: 4px;
+      }
+
+      .mode-indicator {
+        border-radius: var(--radius-sm);
+      }
+
+      .mode-switch-btn {
+        padding: 10px 12px;
+        font-size: 13px;
+      }
+
+      .glass-card {
+        padding: 22px 16px;
+        border-radius: var(--radius-md);
+      }
+
+      .container {
+        padding: 0 12px;
+      }
+
+      .section-title {
+        font-size: 21px;
+      }
+
+      .countdown-display {
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+
+      .countdown-unit {
+        padding: 16px 10px;
+      }
+
+      .countdown-num {
+        font-size: 36px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Apple Navigation -->
+  <header class="top-nav">
+    <div class="brand">
+      <div class="brand-icon">⏱</div>
+      <span>TimeSuite</span>
+    </div>
+
+    <!-- Sliding Menu Group -->
+    <nav class="nav-pill-group" id="nav-pill-group">
+      <div class="nav-pill-indicator" id="nav-indicator"></div>
+      <button class="nav-pill-btn active" onclick="switchMainTab('countdown-tab', this)">Countdown / Since</button>
+      <button class="nav-pill-btn" onclick="switchMainTab('converter-tab', this)">Converter</button>
+      <button class="nav-pill-btn" onclick="switchMainTab('solver-tab', this)">Time Solver</button>
+    </nav>
+
+    <!-- Dark Mode Toggle -->
+    <button class="theme-toggle-btn" id="theme-toggle" onclick="toggleTheme()" title="Toggle Dark / Light Mode">
+      🌙
+    </button>
+  </header>
+
+  <main class="container">
+
+    <!-- MODE 1: COUNTDOWN / SINCE -->
+    <section id="countdown-tab" class="tab-pane active">
+      <div class="glass-card">
+        <div class="section-title" id="cd-title">Target Date Countdown</div>
+        <div class="section-desc" id="cd-desc">Select a target date and time to track time remaining down to the second.</div>
+
+        <!-- Sub-Mode Switcher: Countdown (Future) vs Since (Past) -->
+        <div class="sub-switch-bar" id="cd-sub-switch-bar">
+          <div class="sub-indicator" id="cd-sub-indicator"></div>
+          <button class="sub-switch-btn active" id="btn-sub-cd" onclick="setCountdownSubMode('countdown')">Countdown (Future)</button>
+          <button class="sub-switch-btn" id="btn-sub-since" onclick="setCountdownSubMode('since')">Time Since (Past)</button>
+        </div>
+
+        <div class="form-group" style="max-width: 320px;">
+          <label class="form-label" id="cd-input-label">Target Date & Time</label>
+          <input type="datetime-local" id="countdown-target-input" onchange="updateCountdownTarget(true)" />
+          <div id="cd-feedback-toast" class="switch-feedback-toast"></div>
+        </div>
+
+        <div class="presets-row" id="presets-container">
+          <!-- Dynamically populated presets -->
+        </div>
+
+        <div class="countdown-display">
+          <div class="countdown-unit">
+            <div class="countdown-num" id="cd-days">00</div>
+            <div class="countdown-tag">Days</div>
+          </div>
+          <div class="countdown-unit">
+            <div class="countdown-num" id="cd-hours">00</div>
+            <div class="countdown-tag">Hours</div>
+          </div>
+          <div class="countdown-unit">
+            <div class="countdown-num" id="cd-mins">00</div>
+            <div class="countdown-tag">Minutes</div>
+          </div>
+          <div class="countdown-unit">
+            <div class="countdown-num" id="cd-secs">00</div>
+            <div class="countdown-tag">Seconds</div>
+          </div>
+        </div>
+
+        <div id="countdown-meta" style="font-size: 13px; color: var(--text-muted); text-align: center;">
+          Calculating...
+        </div>
+      </div>
+    </section>
+
+    <!-- MODE 2: CONVERTER (Completely Separated Independent Cells) -->
+    <section id="converter-tab" class="tab-pane">
+      <div class="glass-card">
+        <div class="section-title">Synchronized Unit Converter</div>
+        <div class="section-desc">Type any value into any box. All units from seconds to months update immediately in real time.</div>
+
+        <div class="converter-grid">
+          
+          <form class="conv-cell-form" onsubmit="handleFormSubmit(event, 'conv-sec', 'sec')">
+            <div class="conv-card">
+              <label>Seconds <span>sec</span></label>
+              <input type="number" step="any" inputmode="decimal" enterkeyhint="done" class="conv-input" id="conv-sec" 
+                     onfocus="handleConvFocus(this)" 
+                     onblur="handleConvBlur(this, 'sec')" 
+                     onkeydown="handleConvKeyDown(event, this, 'sec')"
+                     oninput="handleConvInput('sec', this.value)" placeholder="0" />
+            </div>
+          </form>
+
+          <form class="conv-cell-form" onsubmit="handleFormSubmit(event, 'conv-min', 'min')">
+            <div class="conv-card">
+              <label>Minutes <span>min</span></label>
+              <input type="number" step="any" inputmode="decimal" enterkeyhint="done" class="conv-input" id="conv-min" 
+                     onfocus="handleConvFocus(this)" 
+                     onblur="handleConvBlur(this, 'min')" 
+                     onkeydown="handleConvKeyDown(event, this, 'min')"
+                     oninput="handleConvInput('min', this.value)" placeholder="0" />
+            </div>
+          </form>
+
+          <form class="conv-cell-form" onsubmit="handleFormSubmit(event, 'conv-hr', 'hr')">
+            <div class="conv-card">
+              <label>Hours <span>hr</span></label>
+              <input type="number" step="any" inputmode="decimal" enterkeyhint="done" class="conv-input" id="conv-hr" 
+                     onfocus="handleConvFocus(this)" 
+                     onblur="handleConvBlur(this, 'hr')" 
+                     onkeydown="handleConvKeyDown(event, this, 'hr')"
+                     oninput="handleConvInput('hr', this.value)" placeholder="0" />
+            </div>
+          </form>
+
+          <form class="conv-cell-form" onsubmit="handleFormSubmit(event, 'conv-day', 'day')">
+            <div class="conv-card">
+              <label>Days <span>d</span></label>
+              <input type="number" step="any" inputmode="decimal" enterkeyhint="done" class="conv-input" id="conv-day" 
+                     onfocus="handleConvFocus(this)" 
+                     onblur="handleConvBlur(this, 'day')" 
+                     onkeydown="handleConvKeyDown(event, this, 'day')"
+                     oninput="handleConvInput('day', this.value)" placeholder="0" />
+            </div>
+          </form>
+
+          <form class="conv-cell-form" onsubmit="handleFormSubmit(event, 'conv-wk', 'wk')">
+            <div class="conv-card">
+              <label>Weeks <span>wk</span></label>
+              <input type="number" step="any" inputmode="decimal" enterkeyhint="done" class="conv-input" id="conv-wk" 
+                     onfocus="handleConvFocus(this)" 
+                     onblur="handleConvBlur(this, 'wk')" 
+                     onkeydown="handleConvKeyDown(event, this, 'wk')"
+                     oninput="handleConvInput('wk', this.value)" placeholder="0" />
+            </div>
+          </form>
+
+          <form class="conv-cell-form" onsubmit="handleFormSubmit(event, 'conv-mo', 'mo')">
+            <div class="conv-card">
+              <label>Months <span>mo (avg)</span></label>
+              <input type="number" step="any" inputmode="decimal" enterkeyhint="done" class="conv-input" id="conv-mo" 
+                   onfocus="handleConvFocus(this)" 
+                   onblur="handleConvBlur(this, 'mo')" 
+                   onkeydown="handleConvKeyDown(event, this, 'mo')"
+                   oninput="handleConvInput('mo', this.value)" placeholder="0" />
+            </div>
+          </form>
+
+        </div>
+
+        <div style="margin-top: 18px; font-size: 12px; color: var(--text-muted); text-align: right;">
+          * Standard month calculated at 30.4375 days (365.25 / 12).
+        </div>
+      </div>
+    </section>
+
+    <!-- MODE 3: TIME SOLVER (START + DURATION = END) -->
+    <section id="solver-tab" class="tab-pane">
+      <div class="glass-card">
+        <div class="section-title">3-Point Time Solver</div>
+        <div class="section-desc">Select what to solve. You can type into any field at any time.</div>
+
+        <!-- Mode Selector Bar -->
+        <div class="mode-switch-bar" id="mode-switch-bar">
+          <div class="mode-indicator" id="mode-indicator"></div>
+          <button class="mode-switch-btn active" id="btn-mode-start" onclick="setSolverMode('start')">
+            Solve Start Time (End &minus; Duration)
+          </button>
+          <button class="mode-switch-btn" id="btn-mode-dur" onclick="setSolverMode('dur')">
+            Solve Duration (End &minus; Start)
+          </button>
+          <button class="mode-switch-btn" id="btn-mode-end" onclick="setSolverMode('end')">
+            Solve End Time (Start &plus; Duration)
+          </button>
+        </div>
+
+        <!-- Visual Formula Equation Layout -->
+        <div class="solver-equation-container">
+          
+          <!-- Box 1: Start Time -->
+          <div class="solver-box" id="box-start" onclick="handleBoxClick('start')">
+            <div>
+              <div class="form-label">Start Time</div>
+              <div id="badge-start"></div>
+              <div class="input-row-with-btn">
+                <input type="time" id="solver-start-input" value="10:45" onfocus="handleFieldInteraction('start')" oninput="handleFieldInput('start')" />
+                <button type="button" class="btn-subtle" title="Set to Current Time" onclick="setCurrentTimeToStart(event)">Now</button>
+              </div>
+            </div>
+
+            <!-- Steppers for Start Time -->
+            <div>
+              <div class="stepper-row">
+                <button type="button" class="stepper-btn" onclick="adjustTime('solver-start-input', -60, 'start', event)">&minus;1h</button>
+                <button type="button" class="stepper-btn" onclick="adjustTime('solver-start-input', -15, 'start', event)">&minus;15m</button>
+                <button type="button" class="stepper-btn" onclick="adjustTime('solver-start-input', -1, 'start', event)">&minus;1m</button>
+                <button type="button" class="stepper-btn" onclick="adjustTime('solver-start-input', 1, 'start', event)">&plus;1m</button>
+                <button type="button" class="stepper-btn" onclick="adjustTime('solver-start-input', 15, 'start', event)">&plus;15m</button>
+                <button type="button" class="stepper-btn" onclick="adjustTime('solver-start-input', 60, 'start', event)">&plus;1h</button>
+              </div>
+              <div id="hint-start" class="field-hint-tip"></div>
+            </div>
+          </div>
+
+          <!-- Operator + -->
+          <div class="equation-operator">&plus;</div>
+
+          <!-- Box 2: Duration -->
+          <div class="solver-box" id="box-dur" onclick="handleBoxClick('dur')">
+            <div>
+              <div class="form-label">Duration</div>
+              <div id="badge-dur"></div>
+              <div class="duration-inputs">
+                <input type="number" min="0" max="999" id="solver-dur-h" placeholder="Hours" value="4" onfocus="handleFieldInteraction('dur')" oninput="handleFieldInput('dur')" />
+                <input type="number" min="0" max="59" id="solver-dur-m" placeholder="Mins" value="30" onfocus="handleFieldInteraction('dur')" oninput="handleFieldInput('dur')" />
+              </div>
+            </div>
+
+            <!-- Steppers for Duration -->
+            <div>
+              <div class="stepper-row">
+                <button type="button" class="stepper-btn" onclick="adjustDuration(-60, event)">&minus;1h</button>
+                <button type="button" class="stepper-btn" onclick="adjustDuration(-15, event)">&minus;15m</button>
+                <button type="button" class="stepper-btn" onclick="adjustDuration(-1, event)">&minus;1m</button>
+                <button type="button" class="stepper-btn" onclick="adjustDuration(1, event)">&plus;1m</button>
+                <button type="button" class="stepper-btn" onclick="adjustDuration(15, event)">&plus;15m</button>
+                <button type="button" class="stepper-btn" onclick="adjustDuration(60, event)">&plus;1h</button>
+              </div>
+              <div id="hint-dur" class="field-hint-tip"></div>
+            </div>
+          </div>
+
+          <!-- Operator = -->
+          <div class="equation-operator">&equals;</div>
+
+          <!-- Box 3: End Time -->
+          <div class="solver-box" id="box-end" onclick="handleBoxClick('end')">
+            <div>
+              <div class="form-label">End Time</div>
+              <div id="badge-end"></div>
+              <div class="input-row-with-btn">
+                <input type="time" id="solver-end-input" value="15:15" onfocus="handleFieldInteraction('end')" oninput="handleFieldInput('end')" />
+                <button type="button" class="btn-subtle" title="Set to Current Time" onclick="setCurrentTimeToEnd(event)">Now</button>
+              </div>
+            </div>
+
+            <!-- Steppers for End Time -->
+            <div>
+              <div class="stepper-row">
+                <button type="button" class="stepper-btn" onclick="adjustTime('solver-end-input', -60, 'end', event)">&minus;1h</button>
+                <button type="button" class="stepper-btn" onclick="adjustTime('solver-end-input', -15, 'end', event)">&minus;15m</button>
+                <button type="button" class="stepper-btn" onclick="adjustTime('solver-end-input', -1, 'end', event)">&minus;1m</button>
+                <button type="button" class="stepper-btn" onclick="adjustTime('solver-end-input', 1, 'end', event)">&plus;1m</button>
+                <button type="button" class="stepper-btn" onclick="adjustTime('solver-end-input', 15, 'end', event)">&plus;15m</button>
+                <button type="button" class="stepper-btn" onclick="adjustTime('solver-end-input', 60, 'end', event)">&plus;1h</button>
+              </div>
+              <div id="hint-end" class="field-hint-tip"></div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Big Highlight Banner -->
+        <div class="result-callout">
+          <div class="sub" id="callout-subtitle">Calculated Start Time</div>
+          <div class="val" id="callout-value">
+            <span id="callout-time-text">10:45</span>
+            <span id="callout-day-badge"></span>
+          </div>
+          <div class="desc" id="callout-explanation">To finish by 15:15 with a 4h 30m duration, Start Time must be 10:45.</div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    /* THEME / DARK MODE */
+    function toggleTheme() {
+      const isDark = document.body.classList.toggle('dark-mode');
+      document.getElementById('theme-toggle').textContent = isDark ? '☀️' : '🌙';
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    }
+
+    function initTheme() {
+      const saved = localStorage.getItem('theme');
+      if (saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.body.classList.add('dark-mode');
+        document.getElementById('theme-toggle').textContent = '☀️';
+      }
+    }
+
+    /* SLIDING INDICATORS */
+    function updateNavIndicator() {
+      const activeBtn = document.querySelector('.nav-pill-btn.active');
+      const indicator = document.getElementById('nav-indicator');
+      if (activeBtn && indicator) {
+        indicator.style.left = `${activeBtn.offsetLeft}px`;
+        indicator.style.top = `${activeBtn.offsetTop}px`;
+        indicator.style.width = `${activeBtn.offsetWidth}px`;
+        indicator.style.height = `${activeBtn.offsetHeight}px`;
+      }
+    }
+
+    function updateModeIndicator() {
+      const activeBtn = document.querySelector('.mode-switch-btn.active');
+      const indicator = document.getElementById('mode-indicator');
+      if (activeBtn && indicator) {
+        indicator.style.left = `${activeBtn.offsetLeft}px`;
+        indicator.style.top = `${activeBtn.offsetTop}px`;
+        indicator.style.width = `${activeBtn.offsetWidth}px`;
+        indicator.style.height = `${activeBtn.offsetHeight}px`;
+      }
+    }
+
+    function updateCdSubIndicator() {
+      const activeBtn = document.querySelector('.sub-switch-btn.active');
+      const indicator = document.getElementById('cd-sub-indicator');
+      if (activeBtn && indicator) {
+        indicator.style.left = `${activeBtn.offsetLeft}px`;
+        indicator.style.top = `${activeBtn.offsetTop}px`;
+        indicator.style.width = `${activeBtn.offsetWidth}px`;
+        indicator.style.height = `${activeBtn.offsetHeight}px`;
+      }
+    }
+
+    function switchMainTab(tabId, el) {
+      document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.nav-pill-btn').forEach(b => b.classList.remove('active'));
+      
+      el.classList.add('active');
+      const targetPane = document.getElementById(tabId);
+      targetPane.classList.add('active');
+
+      updateNavIndicator();
+      if (tabId === 'solver-tab') {
+        setTimeout(updateModeIndicator, 30);
+      } else if (tabId === 'countdown-tab') {
+        setTimeout(updateCdSubIndicator, 30);
+      }
+    }
+
+    /* MODE 1: COUNTDOWN & SINCE */
+    let cdSubMode = 'countdown';
+    let countdownInterval = null;
+    let targetTimestamp = null;
+    let toastTimeout = null;
+
+    function setCountdownSubMode(mode, fromAutoSwitch = false) {
+      cdSubMode = mode;
+      document.querySelectorAll('.sub-switch-btn').forEach(b => b.classList.remove('active'));
+      
+      const activeBtn = (mode === 'countdown') ? document.getElementById('btn-sub-cd') : document.getElementById('btn-sub-since');
+      activeBtn.classList.add('active');
+      updateCdSubIndicator();
+
+      const titleEl = document.getElementById('cd-title');
+      const descEl = document.getElementById('cd-desc');
+      const labelEl = document.getElementById('cd-input-label');
+
+      if (mode === 'countdown') {
+        titleEl.textContent = "Target Date Countdown";
+        descEl.textContent = "Select a target date and time to track time remaining down to the second.";
+        labelEl.textContent = "Target Date & Time (Future)";
+        if (!fromAutoSwitch) initCountdownDefault();
+      } else {
+        titleEl.textContent = "Time Since (Elapsed)";
+        descEl.textContent = "Select a past date and time to track how long it has been since then down to the second.";
+        labelEl.textContent = "Past Date & Time (Since)";
+        if (!fromAutoSwitch) initSinceDefault();
+      }
+      renderPresets();
+    }
+
+    function renderPresets() {
+      const container = document.getElementById('presets-container');
+      if (cdSubMode === 'countdown') {
+        container.innerHTML = `
+          <span style="font-size: 12px; color: var(--text-muted); align-self: center; margin-right: 4px;">Presets:</span>
+          <div class="preset-chip" onclick="setPreset('today-end')">End of Day (23:59)</div>
+          <div class="preset-chip" onclick="setPreset('tomorrow-9')">Tomorrow (09:00)</div>
+          <div class="preset-chip" onclick="setPreset('weekend')">Friday (17:00)</div>
+          <div class="preset-chip" onclick="setPreset('new-year')">New Year</div>
+        `;
+      } else {
+        container.innerHTML = `
+          <span style="font-size: 12px; color: var(--text-muted); align-self: center; margin-right: 4px;">Presets:</span>
+          <div class="preset-chip" onclick="setPreset('today-start')">Start of Today (00:00)</div>
+          <div class="preset-chip" onclick="setPreset('yesterday')">Yesterday This Time</div>
+          <div class="preset-chip" onclick="setPreset('month-start')">Start of Month</div>
+          <div class="preset-chip" onclick="setPreset('year-start')">Start of Year</div>
+        `;
+      }
+    }
+
+    function initCountdownDefault() {
+      const def = new Date(Date.now() + 6 * 3600 * 1000);
+      const iso = new Date(def.getTime() - (def.getTimezoneOffset() * 60000)).toISOString().slice(0, 16);
+      document.getElementById('countdown-target-input').value = iso;
+      updateCountdownTarget(false);
+    }
+
+    function initSinceDefault() {
+      const def = new Date(Date.now() - 24 * 3600 * 1000);
+      const iso = new Date(def.getTime() - (def.getTimezoneOffset() * 60000)).toISOString().slice(0, 16);
+      document.getElementById('countdown-target-input').value = iso;
+      updateCountdownTarget(false);
+    }
+
+    function setPreset(type) {
+      const now = new Date();
+      let target = new Date();
+
+      if (type === 'today-end') {
+        target.setHours(23, 59, 59, 999);
+      } else if (type === 'tomorrow-9') {
+        target.setDate(target.getDate() + 1);
+        target.setHours(9, 0, 0, 0);
+      } else if (type === 'weekend') {
+        const day = now.getDay();
+        const diff = (5 - day + 7) % 7 || 7;
+        target.setDate(now.getDate() + diff);
+        target.setHours(17, 0, 0, 0);
+      } else if (type === 'new-year') {
+        target = new Date(now.getFullYear() + 1, 0, 1, 0, 0, 0);
+      } else if (type === 'today-start') {
+        target.setHours(0, 0, 0, 0);
+      } else if (type === 'yesterday') {
+        target.setDate(target.getDate() - 1);
+      } else if (type === 'month-start') {
+        target = new Date(now.getFullYear(), now.getMonth(), 1, 0, 0, 0);
+      } else if (type === 'year-start') {
+        target = new Date(now.getFullYear(), 0, 1, 0, 0, 0);
+      }
+
+      const iso = new Date(target.getTime() - (target.getTimezoneOffset() * 60000)).toISOString().slice(0, 16);
+      document.getElementById('countdown-target-input').value = iso;
+      updateCountdownTarget(false);
+    }
+
+    function showAutoSwitchFeedback(msg) {
+      const inputEl = document.getElementById('countdown-target-input');
+      const toastEl = document.getElementById('cd-feedback-toast');
+
+      // Trigger red border shake
+      inputEl.classList.remove('input-error-shake');
+      void inputEl.offsetWidth; // Force reflow
+      inputEl.classList.add('input-error-shake');
+      setTimeout(() => inputEl.classList.remove('input-error-shake'), 1200);
+
+      // Show toast message
+      toastEl.innerHTML = `⚠️ ${msg}`;
+      toastEl.classList.add('show');
+
+      if (toastTimeout) clearTimeout(toastTimeout);
+      toastTimeout = setTimeout(() => {
+        toastEl.classList.remove('show');
+      }, 3500);
+    }
+
+    function updateCountdownTarget(isUserInput = false) {
+      const inputEl = document.getElementById('countdown-target-input');
+      const val = inputEl.value;
+      if (!val) return;
+      targetTimestamp = new Date(val).getTime();
+
+      if (isUserInput) {
+        const now = Date.now();
+        // If user was in Countdown mode but picked a past date -> Auto-switch to Since
+        if (cdSubMode === 'countdown' && targetTimestamp < now - 1000) {
+          setCountdownSubMode('since', true);
+          showAutoSwitchFeedback("Input incorrect: switched to Time Since mode");
+        }
+        // If user was in Since mode but picked a future date -> Auto-switch to Countdown
+        else if (cdSubMode === 'since' && targetTimestamp > now + 1000) {
+          setCountdownSubMode('countdown', true);
+          showAutoSwitchFeedback("Input incorrect: switched to Countdown mode");
+        }
+      }
+
+      renderCountdownTick();
+
+      if (countdownInterval) clearInterval(countdownInterval);
+      countdownInterval = setInterval(renderCountdownTick, 1000);
+    }
+
+    function renderCountdownTick() {
+      if (!targetTimestamp) return;
+      const now = Date.now();
+
+      if (cdSubMode === 'countdown') {
+        const diff = targetTimestamp - now;
+        if (diff <= 0) {
+          document.getElementById('cd-days').textContent = '00';
+          document.getElementById('cd-hours').textContent = '00';
+          document.getElementById('cd-mins').textContent = '00';
+          document.getElementById('cd-secs').textContent = '00';
+          document.getElementById('countdown-meta').textContent = 'Target date & time reached.';
+          return;
+        }
+
+        const totalSecs = Math.floor(diff / 1000);
+        const days = Math.floor(totalSecs / 86400);
+        const hours = Math.floor((totalSecs % 86400) / 3600);
+        const mins = Math.floor((totalSecs % 3600) / 60);
+        const secs = totalSecs % 60;
+
+        document.getElementById('cd-days').textContent = String(days).padStart(2, '0');
+        document.getElementById('cd-hours').textContent = String(hours).padStart(2, '0');
+        document.getElementById('cd-mins').textContent = String(mins).padStart(2, '0');
+        document.getElementById('cd-secs').textContent = String(secs).padStart(2, '0');
+
+        document.getElementById('countdown-meta').textContent = 
+          `Total remaining: ${totalSecs.toLocaleString()} seconds (${(totalSecs / 3600).toFixed(2)} hours)`;
+      } else {
+        const diff = now - targetTimestamp;
+        if (diff < 0) {
+          document.getElementById('cd-days').textContent = '00';
+          document.getElementById('cd-hours').textContent = '00';
+          document.getElementById('cd-mins').textContent = '00';
+          document.getElementById('cd-secs').textContent = '00';
+          document.getElementById('countdown-meta').textContent = 'Selected date is in the future. Switch to Countdown.';
+          return;
+        }
+
+        const totalSecs = Math.floor(diff / 1000);
+        const days = Math.floor(totalSecs / 86400);
+        const hours = Math.floor((totalSecs % 86400) / 3600);
+        const mins = Math.floor((totalSecs % 3600) / 60);
+        const secs = totalSecs % 60;
+
+        document.getElementById('cd-days').textContent = String(days).padStart(2, '0');
+        document.getElementById('cd-hours').textContent = String(hours).padStart(2, '0');
+        document.getElementById('cd-mins').textContent = String(mins).padStart(2, '0');
+        document.getElementById('cd-secs').textContent = String(secs).padStart(2, '0');
+
+        document.getElementById('countdown-meta').textContent = 
+          `Total elapsed: ${totalSecs.toLocaleString()} seconds (${(totalSecs / 3600).toFixed(2)} hours ago)`;
+      }
+    }
+
+    /* MODE 2: CONVERTER (Isolated Forms + Clean Precision Math) */
+    const SECONDS_MAP = {
+      sec: 1,
+      min: 60,
+      hr: 3600,
+      day: 86400,
+      wk: 604800,
+      mo: 2629800
+    };
+
+    let activeSourceUnit = null;
+
+    function handleConvFocus(el) {
+      el.dataset.prevVal = el.value;
+      el.value = '';
+    }
+
+    function handleConvInput(unit, valStr) {
+      activeSourceUnit = unit;
+      convertFrom(unit, valStr);
+    }
+
+    function handleConvBlur(el, unit) {
+      if (el.value.trim() === '') {
+        if (el.dataset.prevVal !== undefined && el.dataset.prevVal !== '') {
+          el.value = el.dataset.prevVal;
+          convertFrom(unit, el.value);
+        }
+      }
+      activeSourceUnit = null;
+    }
+
+    function handleConvKeyDown(e, el, unit) {
+      if (e.key === 'Enter' || e.keyCode === 13) {
+        e.preventDefault();
+        e.stopPropagation();
+        el.blur();
+      }
+    }
+
+    function handleFormSubmit(e, inputId, unit) {
+      e.preventDefault();
+      e.stopPropagation();
+      const el = document.getElementById(inputId);
+      if (el) {
+        el.blur();
+      }
+      return false;
+    }
+
+    function cleanFloat(val) {
+      if (isNaN(val)) return '';
+      const precise = parseFloat(Number(val.toPrecision(10)));
+      return precise;
+    }
+
+    function convertFrom(sourceUnit, valStr) {
+      if (valStr === '' || isNaN(valStr)) {
+        Object.keys(SECONDS_MAP).forEach(unit => {
+          if (unit !== sourceUnit) document.getElementById(`conv-${unit}`).value = '';
+        });
+        return;
+      }
+
+      const val = parseFloat(valStr);
+      const totalSeconds = val * SECONDS_MAP[sourceUnit];
+
+      Object.keys(SECONDS_MAP).forEach(unit => {
+        if (unit !== sourceUnit) {
+          const converted = totalSeconds / SECONDS_MAP[unit];
+          const cleaned = cleanFloat(converted);
+          const targetEl = document.getElementById(`conv-${unit}`);
+          targetEl.value = cleaned;
+          targetEl.dataset.prevVal = cleaned;
+        }
+      });
+    }
+
+    /* MODE 3: TIME SOLVER */
+    let currentSolverMode = 'start';
+
+    function setSolverMode(mode) {
+      currentSolverMode = mode;
+
+      document.querySelectorAll('.mode-switch-btn').forEach(b => b.classList.remove('active'));
+      const activeBtn = document.getElementById(`btn-mode-${mode}`);
+      activeBtn.classList.add('active');
+
+      updateModeIndicator();
+
+      ['start', 'dur', 'end'].forEach(m => {
+        const box = document.getElementById(`box-${m}`);
+        const badge = document.getElementById(`badge-${m}`);
+        const hint = document.getElementById(`hint-${m}`);
+        const isTarget = (m === mode);
+
+        hint.innerHTML = '';
+        box.classList.remove('shake');
+
+        if (isTarget) {
+          box.classList.add('highlight');
+          badge.innerHTML = '<span class="solver-target-badge">Solving</span>';
+        } else {
+          box.classList.remove('highlight');
+          badge.innerHTML = '';
+        }
+      });
+
+      runInteractiveSolver();
+    }
+
+    function timeStringToMinutes(str) {
+      if (!str) return null;
+      const [h, m] = str.split(':').map(Number);
+      return h * 60 + m;
+    }
+
+    function minutesToTimeString(totalMins) {
+      let normalized = ((totalMins % 1440) + 1440) % 1440;
+      const h = Math.floor(normalized / 60);
+      const m = normalized % 60;
+      return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
+    }
+
+    function setCurrentTimeToStart(e) {
+      if (e) e.stopPropagation();
+      const now = new Date();
+      const hh = String(now.getHours()).padStart(2, '0');
+      const mm = String(now.getMinutes()).padStart(2, '0');
+      document.getElementById('solver-start-input').value = `${hh}:${mm}`;
+      handleFieldInput('start');
+    }
+
+    function setCurrentTimeToEnd(e) {
+      if (e) e.stopPropagation();
+      const now = new Date();
+      const hh = String(now.getHours()).padStart(2, '0');
+      const mm = String(now.getMinutes()).padStart(2, '0');
+      document.getElementById('solver-end-input').value = `${hh}:${mm}`;
+      handleFieldInput('end');
+    }
+
+    function adjustTime(inputId, deltaMinutes, fieldType, e) {
+      if (e) e.stopPropagation();
+      const input = document.getElementById(inputId);
+      let mins = timeStringToMinutes(input.value) || 0;
+      mins += deltaMinutes;
+      input.value = minutesToTimeString(mins);
+      handleFieldInput(fieldType);
+    }
+
+    function adjustDuration(deltaMinutes, e) {
+      if (e) e.stopPropagation();
+      let h = parseInt(document.getElementById('solver-dur-h').value || 0, 10);
+      let m = parseInt(document.getElementById('solver-dur-m').value || 0, 10);
+      let total = Math.max(0, (h * 60 + m) + deltaMinutes);
+
+      document.getElementById('solver-dur-h').value = Math.floor(total / 60);
+      document.getElementById('solver-dur-m').value = total % 60;
+      handleFieldInput('dur');
+    }
+
+    function handleFieldInteraction(fieldType) {
+      if (currentSolverMode === fieldType) {
+        triggerShakeAndWarning(fieldType);
+      }
+    }
+
+    function handleBoxClick(fieldType) {
+      if (currentSolverMode === fieldType) {
+        triggerShakeAndWarning(fieldType);
+      }
+    }
+
+    function triggerShakeAndWarning(fieldType) {
+      const box = document.getElementById(`box-${fieldType}`);
+      const hint = document.getElementById(`hint-${fieldType}`);
+      
+      box.classList.remove('shake');
+      void box.offsetWidth;
+      box.classList.add('shake');
+
+      let alternateMode = (fieldType === 'start') ? 'end' : (fieldType === 'end' ? 'start' : 'end');
+      let alternateName = (alternateMode === 'start') ? 'Start Time' : (alternateMode === 'end' ? 'End Time' : 'Duration');
+
+      hint.innerHTML = `⚠️ Currently solving this. <span onclick="setSolverMode('${alternateMode}')" style="font-weight:700; text-decoration:underline; cursor:pointer;">Click to solve ${alternateName} instead</span>`;
+    }
+
+    function handleFieldInput(fieldType) {
+      if (currentSolverMode === fieldType) {
+        triggerShakeAndWarning(fieldType);
+      } else {
+        document.getElementById(`hint-${currentSolverMode}`).innerHTML = '';
+        runInteractiveSolver();
+      }
+    }
+
+    function runInteractiveSolver() {
+      const startVal = document.getElementById('solver-start-input').value;
+      const endVal = document.getElementById('solver-end-input').value;
+      const durH = parseInt(document.getElementById('solver-dur-h').value || 0, 10);
+      const durM = parseInt(document.getElementById('solver-dur-m').value || 0, 10);
+      const durationMins = Math.max(0, durH * 60 + durM);
+
+      const calloutSubtitle = document.getElementById('callout-subtitle');
+      const calloutTimeText = document.getElementById('callout-time-text');
+      const calloutDayBadge = document.getElementById('callout-day-badge');
+      const calloutExplanation = document.getElementById('callout-explanation');
+
+      calloutDayBadge.innerHTML = '';
+
+      if (currentSolverMode === 'start') {
+        calloutSubtitle.textContent = "Calculated Start Time";
+        const endMins = timeStringToMinutes(endVal);
+        if (endMins !== null) {
+          const rawStartMins = endMins - durationMins;
+          const resultStr = minutesToTimeString(rawStartMins);
+          document.getElementById('solver-start-input').value = resultStr;
+          calloutTimeText.textContent = resultStr;
+
+          let dayOffset = Math.floor(rawStartMins / 1440);
+          if (dayOffset < 0) {
+            const badgeHtml = `<span class="day-wrap-badge">${dayOffset} Day${Math.abs(dayOffset) > 1 ? 's' : ''}</span>`;
+            calloutDayBadge.innerHTML = badgeHtml;
+            calloutExplanation.textContent = `To end at ${endVal} with a ${durH}h ${durM}m duration, Start Time is ${resultStr} (${Math.abs(dayOffset)} day${Math.abs(dayOffset) > 1 ? 's' : ''} prior).`;
+          } else {
+            calloutExplanation.textContent = `To end at ${endVal} with a ${durH}h ${durM}m duration, Start Time must be ${resultStr}.`;
+          }
+        }
+      } else if (currentSolverMode === 'dur') {
+        calloutSubtitle.textContent = "Calculated Duration";
+        const startMins = timeStringToMinutes(startVal);
+        const endMins = timeStringToMinutes(endVal);
+        if (startMins !== null && endMins !== null) {
+          let diff = endMins - startMins;
+          let isNextDay = false;
+          if (diff < 0) {
+            diff += 1440;
+            isNextDay = true;
+          }
+          const resH = Math.floor(diff / 60);
+          const resM = diff % 60;
+          document.getElementById('solver-dur-h').value = resH;
+          document.getElementById('solver-dur-m').value = resM;
+          calloutTimeText.textContent = `${resH}h ${String(resM).padStart(2, '0')}m`;
+          
+          if (isNextDay) {
+            const badgeHtml = `<span class="day-wrap-badge">Overnight (+1 Day)</span>`;
+            calloutDayBadge.innerHTML = badgeHtml;
+            calloutExplanation.textContent = `From ${startVal} to ${endVal} (next day), duration is ${resH} hours and ${resM} minutes (${(diff / 60).toFixed(2)} hrs).`;
+          } else {
+            calloutExplanation.textContent = `From ${startVal} to ${endVal}, duration is ${resH} hours and ${resM} minutes (${(diff / 60).toFixed(2)} hrs).`;
+          }
+        }
+      } else if (currentSolverMode === 'end') {
+        calloutSubtitle.textContent = "Calculated End Time";
+        const startMins = timeStringToMinutes(startVal);
+        if (startMins !== null) {
+          const rawEndMins = startMins + durationMins;
+          const resultStr = minutesToTimeString(rawEndMins);
+          document.getElementById('solver-end-input').value = resultStr;
+          calloutTimeText.textContent = resultStr;
+
+          let dayOffset = Math.floor(rawEndMins / 1440);
+          if (dayOffset > 0) {
+            const badgeHtml = `<span class="day-wrap-badge">+${dayOffset} Day${dayOffset > 1 ? 's' : ''}</span>`;
+            calloutDayBadge.innerHTML = badgeHtml;
+            calloutExplanation.textContent = `Starting at ${startVal} for ${durH}h ${durM}m finishes at ${resultStr} (+${dayOffset} day${dayOffset > 1 ? 's' : ''} later).`;
+          } else {
+            calloutExplanation.textContent = `Starting at ${startVal} for ${durH}h ${durM}m finishes at ${resultStr}.`;
+          }
+        }
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      initTheme();
+      renderPresets();
+      initCountdownDefault();
+      convertFrom('hr', '2.5');
+      setSolverMode('start');
+      setTimeout(() => {
+        updateNavIndicator();
+        updateModeIndicator();
+        updateCdSubIndicator();
+      }, 50);
+    });
+
+    window.addEventListener('resize', () => {
+      updateNavIndicator();
+      updateModeIndicator();
+      updateCdSubIndicator();
+    });
+  </script>
+</body>
+</html>
