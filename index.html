@@ -25,7 +25,7 @@
       --stepper-bg: #FFFFFF;
       --stepper-color: #333336;
       --popover-bg: rgba(255, 255, 255, 0.98);
-      --popover-backdrop: rgba(0, 0, 0, 0.52);
+      --popover-backdrop: rgba(0, 0, 0, 0.55);
       --scrollbar-thumb: rgba(0, 0, 0, 0.2);
       --scrollbar-thumb-hover: rgba(0, 0, 0, 0.35);
       --shadow-sm: 0 3px 10px rgba(0, 0, 0, 0.05);
@@ -82,15 +82,13 @@
 
     .ts-drum-list-wrapper,
     .ts-my-year-strip,
-    .ts-pills-carousel,
-    .ts-day-strip-scroll {
+    .ts-pills-carousel {
       scrollbar-width: none !important;
       -ms-overflow-style: none !important;
     }
     .ts-drum-list-wrapper::-webkit-scrollbar,
     .ts-my-year-strip::-webkit-scrollbar,
-    .ts-pills-carousel::-webkit-scrollbar,
-    .ts-day-strip-scroll::-webkit-scrollbar {
+    .ts-pills-carousel::-webkit-scrollbar {
       display: none !important;
       width: 0 !important;
       height: 0 !important;
@@ -256,7 +254,7 @@
       color: var(--accent-blue);
     }
 
-    /* Container */
+    /* Layout Containers */
     .container {
       max-width: 1260px;
       margin: 0 auto;
@@ -488,7 +486,7 @@
       text-align: center;
     }
     .countdown-num {
-      font-size: 52px;
+      font-size: clamp(34px, 6vw, 52px);
       font-weight: 800;
       color: var(--accent-blue);
       letter-spacing: -1.5px;
@@ -735,7 +733,7 @@
       margin-bottom: 6px;
     }
     .result-callout .val {
-      font-size: 44px;
+      font-size: clamp(28px, 6vw, 44px);
       font-weight: 800;
       letter-spacing: -0.5px;
       display: flex;
@@ -765,7 +763,7 @@
     }
     .clipboard-btn:hover { background: rgba(255, 255, 255, 0.32); }
 
-    /* Centered Modal / Bottom Sheet */
+    /* Centered Modal & Mobile Bottom Sheet */
     .ts-picker-scrim {
       position: fixed;
       top: 0;
@@ -827,6 +825,7 @@
       justify-content: space-between;
       border-bottom: 1px solid var(--border-subtle);
       padding-bottom: 14px;
+      flex-shrink: 0;
     }
 
     .ts-picker-title-preview {
@@ -844,12 +843,12 @@
     }
 
     .ts-picker-title-preview .live-val {
-      font-size: 38px;
+      font-size: clamp(24px, 5vw, 36px);
       font-weight: 800;
       color: var(--text-main);
-      letter-spacing: -1.2px;
+      letter-spacing: -1px;
       font-variant-numeric: tabular-nums;
-      line-height: 1.05;
+      line-height: 1.1;
     }
 
     .ts-picker-done-btn {
@@ -862,6 +861,7 @@
       border-radius: var(--radius-full);
       cursor: pointer;
       transition: background 0.15s, transform 0.1s;
+      flex-shrink: 0;
     }
     .ts-picker-done-btn:hover { background: var(--accent-blue-hover); transform: scale(1.03); }
     .ts-picker-done-btn:active { transform: scale(0.97); }
@@ -870,14 +870,15 @@
       display: flex;
       gap: 8px;
       overflow-x: auto;
-      padding: 2px 0 8px 0;
+      padding: 2px 0 6px 0;
+      flex-shrink: 0;
     }
 
     .ts-speed-pill {
       background: var(--btn-subtle-bg);
       border: 1.5px solid var(--border-subtle);
       color: var(--text-sub);
-      padding: 9px 16px;
+      padding: 8px 16px;
       font-size: 13.5px;
       font-weight: 700;
       border-radius: var(--radius-full);
@@ -905,15 +906,17 @@
       align-items: stretch;
     }
 
+    /* Fully Responsive Calendar Box */
     .ts-calendar-box {
       background: var(--bg-box);
       border: 1.5px solid var(--border-subtle);
       border-radius: var(--radius-md);
-      padding: 16px;
+      padding: 14px;
       position: relative;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+      min-height: 310px;
     }
 
     .ts-calendar-header {
@@ -926,7 +929,7 @@
     .ts-cal-month-title-btn {
       background: var(--bg-card-solid);
       border: 1.5px solid var(--border-subtle);
-      padding: 8px 18px;
+      padding: 8px 16px;
       border-radius: var(--radius-full);
       font-size: 15px;
       font-weight: 700;
@@ -934,8 +937,8 @@
       cursor: pointer;
       display: inline-flex;
       align-items: center;
-      gap: 8px;
-      min-height: 42px;
+      gap: 6px;
+      min-height: 40px;
       box-shadow: var(--shadow-sm);
       transition: all 0.18s ease;
     }
@@ -943,7 +946,6 @@
       background: var(--accent-blue-light);
       color: var(--accent-blue);
       border-color: var(--accent-blue);
-      transform: translateY(-1px);
     }
 
     .ts-cal-nav-btn {
@@ -962,42 +964,68 @@
     }
     .ts-cal-nav-btn:hover { background: var(--accent-blue-light); color: var(--accent-blue); }
 
+    /* Popover for Fast Month & Year Selection */
     .ts-month-year-popover {
       position: absolute;
-      top: 58px;
-      left: 12px;
-      right: 12px;
-      bottom: 12px;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
       background: var(--bg-card-solid);
       border: 2px solid var(--border-focus);
       border-radius: var(--radius-md);
       box-shadow: var(--shadow-md);
       z-index: 50;
-      padding: 16px;
+      padding: 14px;
       display: none;
       flex-direction: column;
-      gap: 14px;
+      gap: 10px;
       animation: pureFadeIn 0.2s ease;
     }
     .ts-month-year-popover.open { display: flex; }
+
+    .ts-my-popover-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+    }
+
+    .ts-my-popover-close-btn {
+      background: var(--btn-subtle-bg);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-main);
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 800;
+    }
 
     .ts-my-year-strip {
       display: flex;
       gap: 8px;
       overflow-x: auto;
       padding: 4px 2px 8px 2px;
-      margin-bottom: 2px;
-      cursor: grab;
+      touch-action: pan-x;
+      -webkit-overflow-scrolling: touch;
     }
-    .ts-my-year-strip:active { cursor: grabbing; }
 
     .ts-my-year-chip {
-      padding: 10px 20px;
-      min-height: 42px;
+      padding: 8px 18px;
+      min-height: 38px;
       background: var(--bg-box);
       border: 1.5px solid var(--border-subtle);
       border-radius: var(--radius-full);
-      font-size: 15px;
+      font-size: 14.5px;
       font-weight: 700;
       color: var(--text-sub);
       cursor: pointer;
@@ -1021,7 +1049,7 @@
     .ts-my-month-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
+      gap: 6px;
       flex: 1;
     }
     .ts-my-month-chip {
@@ -1031,11 +1059,11 @@
       background: var(--bg-box);
       border: 1.5px solid var(--border-subtle);
       border-radius: 10px;
-      font-size: 14.5px;
+      font-size: 14px;
       font-weight: 700;
       color: var(--text-main);
       cursor: pointer;
-      min-height: 42px;
+      min-height: 36px;
       transition: all 0.15s;
     }
     .ts-my-month-chip:hover { background: var(--accent-blue-light); color: var(--accent-blue); }
@@ -1057,15 +1085,15 @@
       font-size: 12px;
       font-weight: 800;
       color: var(--text-muted);
-      padding-bottom: 6px;
+      padding-bottom: 4px;
     }
 
     .ts-cal-cell {
-      height: 38px;
+      height: 36px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 14.5px;
+      font-size: 14px;
       font-weight: 600;
       border-radius: 8px;
       cursor: pointer;
@@ -1080,31 +1108,7 @@
     }
     .ts-cal-cell.empty { pointer-events: none; opacity: 0; }
 
-    .ts-day-strip-scroll {
-      display: none;
-      gap: 8px;
-      overflow-x: auto;
-      padding-bottom: 8px;
-    }
-
-    .ts-day-chip {
-      background: var(--bg-box);
-      border: 1.5px solid var(--border-subtle);
-      border-radius: var(--radius-sm);
-      padding: 10px 14px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 3px;
-      cursor: pointer;
-      min-width: 64px;
-      flex-shrink: 0;
-    }
-    .ts-day-chip .d-tag { font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; }
-    .ts-day-chip .d-num { font-size: 16px; font-weight: 800; color: var(--text-main); }
-    .ts-day-chip.selected { background: var(--accent-blue); border-color: var(--accent-blue); }
-    .ts-day-chip.selected .d-tag, .ts-day-chip.selected .d-num { color: #FFF; }
-
+    /* Time Drum Stage */
     .ts-drum-stage-card {
       position: relative;
       background: var(--bg-box);
@@ -1133,7 +1137,7 @@
 
     .ts-drum-columns-stage {
       position: relative;
-      height: 250px;
+      height: 240px;
       display: grid;
       grid-template-columns: 1fr 1fr;
       align-items: center;
@@ -1165,12 +1169,12 @@
 
     .ts-drum-list-wrapper {
       position: relative;
-      height: 250px;
+      height: 240px;
       overflow-y: scroll;
       scroll-snap-type: y mandatory;
       -webkit-mask-image: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.85) 24%, black 50%, rgba(0,0,0,0.85) 76%, transparent 100%);
       mask-image: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.85) 24%, black 50%, rgba(0,0,0,0.85) 76%, transparent 100%);
-      padding: 97px 0;
+      padding: 92px 0;
       z-index: 2;
       cursor: grab;
       touch-action: pan-y;
@@ -1242,18 +1246,18 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 12px;
+      gap: 8px;
       width: 100%;
     }
 
     .ts-prec-btn {
       flex: 1;
       max-width: 100px;
-      height: 48px;
+      height: 46px;
       background: var(--bg-card-solid);
       border: 2px solid var(--border-subtle);
       color: var(--text-main);
-      font-size: 15px;
+      font-size: 14.5px;
       font-weight: 800;
       border-radius: var(--radius-sm);
       cursor: pointer;
@@ -1275,7 +1279,7 @@
       transform: translateY(1px) scale(0.97);
     }
 
-    /* Responsive Mobile Overrides */
+    /* Fully Scaled Mobile Architecture */
     @media (max-width: 860px) {
       body {
         padding-top: 136px;
@@ -1291,14 +1295,8 @@
         gap: 10px 0;
       }
 
-      .brand {
-        font-size: 19px;
-      }
-
-      .brand-icon {
-        width: 36px;
-        height: 36px;
-      }
+      .brand { font-size: 19px; }
+      .brand-icon { width: 36px; height: 36px; }
 
       .nav-pill-group {
         order: 3;
@@ -1326,9 +1324,7 @@
         font-size: 16px;
       }
 
-      .container {
-        padding: 0 16px;
-      }
+      .container { padding: 0 16px; }
 
       .glass-card {
         padding: 26px 18px;
@@ -1336,14 +1332,8 @@
         margin-bottom: 20px;
       }
 
-      .section-title {
-        font-size: 23px;
-      }
-
-      .section-desc {
-        font-size: 14.5px;
-        margin-bottom: 20px;
-      }
+      .section-title { font-size: 23px; }
+      .section-desc { font-size: 14.5px; margin-bottom: 20px; }
 
       .sub-switch-bar {
         width: 100%;
@@ -1351,10 +1341,7 @@
         margin-bottom: 22px;
       }
 
-      .sub-switch-btn {
-        padding: 9px 10px;
-        font-size: 13px;
-      }
+      .sub-switch-btn { padding: 9px 10px; font-size: 13px; }
 
       .countdown-display {
         grid-template-columns: repeat(2, 1fr);
@@ -1362,13 +1349,7 @@
         margin: 24px 0;
       }
 
-      .countdown-unit {
-        padding: 18px 12px;
-      }
-
-      .countdown-num {
-        font-size: 38px;
-      }
+      .countdown-unit { padding: 18px 12px; }
 
       .converter-grid {
         grid-template-columns: 1fr;
@@ -1380,10 +1361,7 @@
         gap: 12px;
       }
 
-      .equation-operator {
-        font-size: 24px;
-        padding: 0;
-      }
+      .equation-operator { font-size: 24px; padding: 0; }
 
       .mode-switch-bar {
         flex-direction: column;
@@ -1391,28 +1369,21 @@
         gap: 4px;
       }
 
-      .mode-indicator {
-        border-radius: var(--radius-sm);
-      }
+      .mode-indicator { border-radius: var(--radius-sm); }
+      .mode-switch-btn { padding: 11px 14px; font-size: 13.5px; }
 
-      .mode-switch-btn {
-        padding: 11px 14px;
-        font-size: 13.5px;
+      .stepper-row {
+        gap: 4px;
       }
 
       .stepper-btn {
-        padding: 13px 0;
-        font-size: 13px;
+        padding: 11px 0;
+        font-size: 12px;
       }
 
-      .result-callout {
-        padding: 24px 16px;
-      }
+      .result-callout { padding: 24px 16px; }
 
-      .result-callout .val {
-        font-size: 34px;
-      }
-
+      /* Mobile Modal Bottom Sheet */
       .ts-picker-modal {
         top: auto !important;
         left: 0 !important;
@@ -1421,7 +1392,7 @@
         transform: translateY(100%) !important;
         width: 100vw !important;
         max-width: 100vw !important;
-        max-height: 85vh !important;
+        max-height: 90vh !important;
         border-radius: 28px 28px 0 0 !important;
         padding: 24px 18px calc(24px + env(safe-area-inset-bottom, 0px)) 18px !important;
       }
@@ -1433,11 +1404,12 @@
       .ts-picker-modal.wide-mode .ts-picker-body-grid {
         display: flex;
         flex-direction: column;
+        gap: 16px;
       }
 
-      .ts-calendar-box { display: none; }
-      .ts-day-strip-scroll { display: flex; }
-      .ts-prec-btn { height: 48px; font-size: 15px; }
+      .ts-calendar-box {
+        display: flex !important;
+      }
     }
   </style>
 </head>
@@ -1699,7 +1671,7 @@
     </section>
   </main>
 
-  <!-- Centered Modal / Bottom Sheet -->
+  <!-- Modal / Mobile Bottom Sheet -->
   <div class="ts-picker-scrim" id="ts-picker-scrim"></div>
   <div class="ts-picker-modal" id="ts-picker-modal" role="dialog" aria-modal="true" aria-label="Time Selector">
     <div class="ts-picker-header">
@@ -1714,24 +1686,27 @@
 
     <div class="ts-picker-body-grid">
       
-      <!-- Date Section -->
+      <!-- Date Section with Month & Year Selector -->
       <div id="picker-date-section" style="display: none;">
         <div class="ts-calendar-box">
           <div class="ts-calendar-header">
-            <button class="ts-cal-nav-btn" id="cal-prev-month">&lsaquo;</button>
+            <button class="ts-cal-nav-btn" id="cal-prev-month" aria-label="Previous Month">&lsaquo;</button>
             <button class="ts-cal-month-title-btn" id="cal-month-title-btn">August 2026 ▾</button>
-            <button class="ts-cal-nav-btn" id="cal-next-month">&rsaquo;</button>
+            <button class="ts-cal-nav-btn" id="cal-next-month" aria-label="Next Month">&rsaquo;</button>
           </div>
 
+          <!-- Month / Year Overlay Popover -->
           <div class="ts-month-year-popover" id="ts-month-year-popover">
+            <div class="ts-my-popover-header">
+              <span>Select Month & Year</span>
+              <button class="ts-my-popover-close-btn" id="btn-close-my-popover" title="Close">✕</button>
+            </div>
             <div class="ts-my-year-strip" id="ts-my-year-strip"></div>
             <div class="ts-my-month-grid" id="ts-my-month-grid"></div>
           </div>
 
           <div class="ts-calendar-grid" id="cal-grid"></div>
         </div>
-
-        <div class="ts-day-strip-scroll" id="day-strip-scroll"></div>
       </div>
 
       <!-- Time & Precision Section -->
@@ -1785,7 +1760,7 @@
 
     const SECONDS_MAP = { sec: 1, min: 60, hr: 3600, day: 86400, wk: 604800, mo: 2629800 };
 
-    /* 2. TIME PICKER ENGINE */
+    /* 2. TIME & DATE PICKER ENGINE */
     const TimePickerEngine = {
       activeTrigger: null,
       activeType: 'time',
@@ -1814,13 +1789,14 @@
         
         document.getElementById('cal-prev-month').addEventListener('click', () => {
           this.calViewDate.setMonth(this.calViewDate.getMonth() - 1);
-          this.renderDesktopCalendar();
+          this.renderCalendar();
         });
         document.getElementById('cal-next-month').addEventListener('click', () => {
           this.calViewDate.setMonth(this.calViewDate.getMonth() + 1);
-          this.renderDesktopCalendar();
+          this.renderCalendar();
         });
         document.getElementById('cal-month-title-btn').addEventListener('click', () => this.toggleMonthYearPopover());
+        document.getElementById('btn-close-my-popover').addEventListener('click', () => this.toggleMonthYearPopover());
 
         this.yearStrip.addEventListener('wheel', (e) => {
           e.preventDefault();
@@ -1906,8 +1882,7 @@
         this.renderHoursDrum();
         this.renderMinutesDrum();
         if (type === 'datetime') {
-          this.renderDesktopCalendar();
-          this.renderMobileDayStrip();
+          this.renderCalendar();
         }
 
         this.scrim.classList.add('visible');
@@ -2245,7 +2220,7 @@
             e.stopPropagation();
             this.calViewDate.setMonth(idx);
             this.selectedDate.setFullYear(this.calViewDate.getFullYear(), idx);
-            this.renderDesktopCalendar();
+            this.renderCalendar();
             this.toggleMonthYearPopover();
             this.commitChange();
           });
@@ -2254,11 +2229,16 @@
 
         setTimeout(() => {
           const activeY = yearStrip.querySelector('.active');
-          if (activeY) yearStrip.scrollLeft = activeY.offsetLeft - (yearStrip.clientWidth / 2) + (activeY.clientWidth / 2);
-        }, 10);
+          if (activeY) {
+            yearStrip.scrollTo({
+              left: activeY.offsetLeft - (yearStrip.clientWidth / 2) + (activeY.clientWidth / 2),
+              behavior: 'smooth'
+            });
+          }
+        }, 20);
       },
 
-      renderDesktopCalendar() {
+      renderCalendar() {
         const grid = document.getElementById('cal-grid');
         grid.innerHTML = '';
         const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
@@ -2292,31 +2272,6 @@
             this.commitChange();
           });
           grid.appendChild(cell);
-        }
-      },
-
-      renderMobileDayStrip() {
-        const strip = document.getElementById('day-strip-scroll');
-        strip.innerHTML = '';
-        const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-        const base = new Date();
-
-        for (let i = -1; i <= 14; i++) {
-          const d = new Date(base.getFullYear(), base.getMonth(), base.getDate() + i);
-          const isSel = d.toDateString() === this.selectedDate.toDateString();
-          const chip = document.createElement('div');
-          chip.className = `ts-day-chip ${isSel ? 'selected' : ''}`;
-          
-          let tag = daysOfWeek[d.getDay()];
-          if (i === 0) tag = 'Today';
-          if (i === 1) tag = 'Tmrw';
-
-          chip.innerHTML = `<span class="d-tag">${tag}</span><span class="d-num">${d.getDate()}</span>`;
-          chip.addEventListener('click', () => {
-            this.selectedDate.setFullYear(d.getFullYear(), d.getMonth(), d.getDate());
-            this.commitChange();
-          });
-          strip.appendChild(chip);
         }
       },
 
@@ -2372,8 +2327,7 @@
 
         this.updateLiveDisplay();
         if (this.activeType === 'datetime') {
-          this.renderDesktopCalendar();
-          this.renderMobileDayStrip();
+          this.renderCalendar();
         }
 
         if (shouldScrollDrums) {
@@ -2682,6 +2636,7 @@
       document.getElementById('countdown-meta').textContent = `Total ${isCd ? 'remaining' : 'elapsed'}: ${totalSecs.toLocaleString()} seconds`;
     }
 
+    /* MODE 2: CONVERTER */
     function handleConvFocus(el) {
       el.dataset.prevVal = el.value;
       el.value = '';
@@ -2721,6 +2676,7 @@
       });
     }
 
+    /* MODE 3: TIME SOLVER */
     function initSolverDefaults() {
       const saved = JSON.parse(localStorage.getItem('solverState')) || { start: '10:45', h: 4, m: 30, end: '15:15' };
       document.getElementById('solver-start-input').value = saved.start;
