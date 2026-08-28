@@ -2,58 +2,98 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>TimeSuite &mdash; Apple Design Time Studio</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>TimeCalc &mdash; Smart Minimalist Time Utility</title>
   <style>
     :root {
       --bg-primary: #F5F7FA;
-      --bg-card: rgba(255, 255, 255, 0.9);
+      --bg-card: rgba(255, 255, 255, 0.92);
       --bg-card-solid: #FFFFFF;
       --bg-box: #F2F4F7;
       --accent-blue: #0071E3;
       --accent-blue-hover: #0077ED;
-      --accent-blue-light: #EBF3FC;
-      --accent-blue-glow: rgba(0, 113, 227, 0.18);
+      --accent-blue-light: rgba(0, 113, 227, 0.08);
+      --accent-blue-glow: rgba(0, 113, 227, 0.22);
       --accent-red: #FF3B30;
       --accent-red-light: rgba(255, 59, 48, 0.16);
       --text-main: #1D1D1F;
       --text-muted: #86868B;
       --text-sub: #424245;
       --border-subtle: rgba(0, 0, 0, 0.08);
-      --border-focus: rgba(0, 113, 227, 0.45);
+      --border-focus: rgba(0, 113, 227, 0.55);
       --btn-subtle-bg: rgba(0, 0, 0, 0.05);
       --stepper-bg: #FFFFFF;
       --stepper-color: #333336;
-      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
-      --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.06);
-      --shadow-float: 0 16px 36px rgba(0, 113, 227, 0.12);
-      --radius-sm: 10px;
-      --radius-md: 16px;
-      --radius-lg: 24px;
+      --popover-bg: rgba(255, 255, 255, 0.98);
+      --popover-backdrop: rgba(0, 0, 0, 0.52);
+      --scrollbar-thumb: rgba(0, 0, 0, 0.2);
+      --scrollbar-thumb-hover: rgba(0, 0, 0, 0.35);
+      --shadow-sm: 0 3px 10px rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 12px 36px rgba(0, 0, 0, 0.08);
+      --shadow-float: 0 20px 48px rgba(0, 113, 227, 0.18);
+      --shadow-popover: 0 32px 72px rgba(0, 0, 0, 0.28);
+      --radius-sm: 12px;
+      --radius-md: 18px;
+      --radius-lg: 28px;
       --radius-full: 9999px;
       --font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Helvetica Neue", Helvetica, Arial, sans-serif;
     }
 
-    /* Dark Mode */
     body.dark-mode {
       --bg-primary: #121214;
-      --bg-card: rgba(28, 28, 30, 0.92);
+      --bg-card: rgba(28, 28, 30, 0.94);
       --bg-card-solid: #1C1C1E;
-      --bg-box: #242428;
-      --accent-blue-light: rgba(0, 113, 227, 0.22);
-      --accent-blue-glow: rgba(0, 113, 227, 0.3);
+      --bg-box: #252529;
+      --accent-blue-light: rgba(10, 132, 255, 0.14);
+      --accent-blue-glow: rgba(0, 113, 227, 0.45);
       --accent-red: #FF453A;
-      --accent-red-light: rgba(255, 69, 58, 0.2);
+      --accent-red-light: rgba(255, 69, 58, 0.22);
       --text-main: #F5F5F7;
-      --text-muted: #8E8E93;
-      --text-sub: #C7C7CC;
-      --border-subtle: rgba(255, 255, 255, 0.1);
-      --border-focus: rgba(10, 132, 255, 0.5);
-      --btn-subtle-bg: rgba(255, 255, 255, 0.08);
+      --text-muted: #98989D;
+      --text-sub: #D1D1D6;
+      --border-subtle: rgba(255, 255, 255, 0.12);
+      --border-focus: rgba(10, 132, 255, 0.65);
+      --btn-subtle-bg: rgba(255, 255, 255, 0.1);
       --stepper-bg: #2C2C2E;
       --stepper-color: #E5E5EA;
-      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
-      --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.4);
+      --popover-bg: rgba(28, 28, 30, 0.98);
+      --popover-backdrop: rgba(0, 0, 0, 0.78);
+      --scrollbar-thumb: rgba(255, 255, 255, 0.2);
+      --scrollbar-thumb-hover: rgba(255, 255, 255, 0.4);
+      --shadow-sm: 0 3px 10px rgba(0, 0, 0, 0.35);
+      --shadow-md: 0 12px 36px rgba(0, 0, 0, 0.5);
+      --shadow-popover: 0 32px 72px rgba(0, 0, 0, 0.85);
+    }
+
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: var(--scrollbar-thumb);
+      border-radius: var(--radius-full);
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--scrollbar-thumb-hover);
+    }
+
+    .ts-drum-list-wrapper,
+    .ts-my-year-strip,
+    .ts-pills-carousel,
+    .ts-day-strip-scroll {
+      scrollbar-width: none !important;
+      -ms-overflow-style: none !important;
+    }
+    .ts-drum-list-wrapper::-webkit-scrollbar,
+    .ts-my-year-strip::-webkit-scrollbar,
+    .ts-pills-carousel::-webkit-scrollbar,
+    .ts-day-strip-scroll::-webkit-scrollbar {
+      display: none !important;
+      width: 0 !important;
+      height: 0 !important;
     }
 
     * {
@@ -69,9 +109,10 @@
       background-color: var(--bg-primary);
       color: var(--text-main);
       min-height: 100vh;
-      padding-top: 96px;
-      padding-bottom: 60px;
+      padding-top: 108px;
+      padding-bottom: 72px;
       overflow-x: hidden;
+      font-size: 16px;
     }
 
     /* Top Navigation */
@@ -80,23 +121,23 @@
       top: 0;
       left: 0;
       right: 0;
-      height: 72px;
+      height: 84px;
       background: var(--bg-card);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
       border-bottom: 1px solid var(--border-subtle);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 32px;
+      padding: 0 36px;
       z-index: 1000;
     }
 
     .brand {
       display: flex;
       align-items: center;
-      gap: 10px;
-      font-size: 20px;
+      gap: 12px;
+      font-size: 22px;
       font-weight: 700;
       letter-spacing: -0.5px;
       color: var(--text-main);
@@ -104,26 +145,25 @@
     }
 
     .brand-icon {
-      width: 34px;
-      height: 34px;
-      background: linear-gradient(135deg, var(--accent-blue), #5AC8FA);
-      border-radius: 10px;
+      width: 42px;
+      height: 42px;
+      background: linear-gradient(135deg, var(--accent-blue), #005bb5);
+      border-radius: 12px;
       display: flex;
       align-items: center;
       justify-content: center;
       color: #FFF;
-      font-size: 16px;
-      box-shadow: 0 4px 12px var(--accent-blue-glow);
+      box-shadow: 0 4px 14px var(--accent-blue-glow);
     }
 
-    /* Top Sliding Pill Group */
     .nav-pill-group {
       display: flex;
       background: var(--btn-subtle-bg);
-      padding: 4px;
+      padding: 5px;
       border-radius: var(--radius-full);
       position: relative;
       align-items: center;
+      gap: 2px;
     }
 
     .nav-pill-indicator {
@@ -138,15 +178,15 @@
 
     body.dark-mode .nav-pill-indicator {
       background: #2C2C2E;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
     }
 
     .nav-pill-btn {
       border: none;
       background: transparent !important;
-      padding: 9px 18px;
-      font-size: 13.5px;
-      font-weight: 500;
+      padding: 11px 22px;
+      font-size: 15px;
+      font-weight: 600;
       color: var(--text-sub);
       border-radius: var(--radius-full);
       cursor: pointer;
@@ -156,43 +196,71 @@
       white-space: nowrap;
     }
 
-    .nav-pill-btn:hover {
-      color: var(--text-main);
+    .nav-pill-btn:hover { color: var(--text-main); }
+    .nav-pill-btn.active { color: var(--accent-blue); font-weight: 700; }
+
+    .nav-right-controls {
+      display: flex;
+      align-items: center;
+      gap: 12px;
     }
 
-    .nav-pill-btn.active {
-      color: var(--accent-blue);
+    .input-mode-switcher {
+      display: flex;
+      background: var(--btn-subtle-bg);
+      padding: 4px;
+      border-radius: var(--radius-full);
+      border: 1px solid var(--border-subtle);
+    }
+
+    .input-mode-btn {
+      border: none;
+      background: transparent;
+      padding: 8px 14px;
+      font-size: 13.5px;
       font-weight: 600;
+      color: var(--text-sub);
+      border-radius: var(--radius-full);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
     }
 
-    /* Dark Mode Toggle */
+    .input-mode-btn.active {
+      background: var(--bg-card-solid);
+      color: var(--accent-blue);
+      box-shadow: var(--shadow-sm);
+    }
+
     .theme-toggle-btn {
       background: var(--btn-subtle-bg);
       border: 1px solid var(--border-subtle);
       color: var(--text-main);
-      width: 40px;
-      height: 40px;
+      width: 44px;
+      height: 44px;
       border-radius: 50%;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 17px;
+      font-size: 18px;
       flex-shrink: 0;
       transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     .theme-toggle-btn:hover {
-      transform: scale(1.06);
+      transform: scale(1.08);
       background: var(--accent-blue-light);
       color: var(--accent-blue);
     }
 
-    /* Content Area & Clean Fade-In */
+    /* Container */
     .container {
-      max-width: 1040px;
+      max-width: 1260px;
       margin: 0 auto;
-      padding: 0 20px;
+      padding: 0 28px;
       position: relative;
     }
 
@@ -207,42 +275,44 @@
     }
 
     @keyframes pureFadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     .glass-card {
       background: var(--bg-card-solid);
       border: 1px solid var(--border-subtle);
       border-radius: var(--radius-lg);
-      padding: 32px;
+      padding: 42px 38px;
       box-shadow: var(--shadow-md);
-      margin-bottom: 24px;
+      margin-bottom: 28px;
     }
 
     .section-title {
-      font-size: 24px;
+      font-size: 28px;
       font-weight: 700;
-      letter-spacing: -0.5px;
-      margin-bottom: 4px;
+      letter-spacing: -0.6px;
+      margin-bottom: 6px;
     }
 
     .section-desc {
-      font-size: 14.5px;
+      font-size: 16px;
       color: var(--text-muted);
-      margin-bottom: 22px;
-      line-height: 1.4;
+      margin-bottom: 28px;
+      line-height: 1.5;
     }
 
-    /* Sub-Switch Bar */
+    /* Sub-Switch */
     .sub-switch-bar {
       position: relative;
       display: inline-flex;
+      width: 100%;
+      max-width: 440px;
       background: var(--btn-subtle-bg);
-      padding: 4px;
+      padding: 5px;
       border-radius: var(--radius-full);
-      margin-bottom: 22px;
-      gap: 2px;
+      margin-bottom: 28px;
+      gap: 3px;
     }
 
     .sub-indicator {
@@ -258,82 +328,121 @@
     .sub-switch-btn {
       position: relative;
       z-index: 2;
-      padding: 8px 18px;
+      flex: 1;
+      padding: 10px 18px;
       border: none;
       background: transparent !important;
-      font-size: 13px;
-      font-weight: 500;
+      font-size: 14px;
+      font-weight: 600;
       color: var(--text-sub);
       border-radius: var(--radius-full);
       cursor: pointer;
       transition: color 0.25s ease;
+      text-align: center;
       white-space: nowrap;
     }
 
-    .sub-switch-btn.active {
-      color: #FFFFFF;
-      font-weight: 600;
-    }
+    .sub-switch-btn.active { color: #FFFFFF; font-weight: 700; }
 
-    /* Form Inputs */
+    /* Form Controls */
     .form-group {
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 8px;
     }
 
     .form-label {
-      font-size: 12px;
-      font-weight: 600;
+      font-size: 13px;
+      font-weight: 700;
       color: var(--text-muted);
       text-transform: uppercase;
-      letter-spacing: 0.6px;
+      letter-spacing: 0.7px;
     }
 
-    input[type="text"],
-    input[type="number"],
-    input[type="time"],
-    input[type="datetime-local"] {
+    input[type="number"], input[type="text"], input[type="time"], input[type="datetime-local"], select {
       width: 100%;
-      padding: 11px 14px;
-      font-size: 16px;
-      font-weight: 500;
+      padding: 14px 18px;
+      font-size: 17px;
+      font-weight: 600;
       color: var(--text-main);
       background: var(--bg-card-solid);
-      border: 1px solid var(--border-subtle);
+      border: 1.5px solid var(--border-subtle);
       border-radius: var(--radius-sm);
       outline: none;
       transition: border-color 0.2s, box-shadow 0.2s;
     }
 
-    input:focus {
+    select {
+      appearance: none;
+      cursor: pointer;
+      padding-right: 36px;
+      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      background-size: 18px;
+    }
+
+    input:focus, select:focus {
       border-color: var(--accent-blue);
-      box-shadow: 0 0 0 3.5px var(--accent-blue-glow);
+      box-shadow: 0 0 0 4px var(--accent-blue-glow);
     }
 
-    /* Error Shake Animation for Date Input */
-    @keyframes inputErrorShake {
-      0%, 100% { transform: translateX(0); }
-      20%, 60% { transform: translateX(-6px); }
-      40%, 80% { transform: translateX(6px); }
+    .custom-input-trigger {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      padding: 15px 20px;
+      min-height: 56px;
+      background: var(--bg-card-solid);
+      border: 1.5px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      outline: none;
     }
 
-    .input-error-shake {
-      animation: inputErrorShake 0.42s ease-in-out !important;
-      border-color: var(--accent-red) !important;
-      box-shadow: 0 0 0 3.5px var(--accent-red-light) !important;
+    .custom-input-trigger:hover, .custom-input-trigger:focus-visible {
+      border-color: var(--accent-blue);
+      box-shadow: 0 0 0 4px var(--accent-blue-glow);
+      background: var(--accent-blue-light);
     }
 
-    /* Status & Feedback Toast/Alert */
+    .custom-input-trigger.active {
+      border-color: var(--accent-blue);
+      box-shadow: 0 0 0 4px var(--accent-blue-glow);
+    }
+
+    .trigger-text-val {
+      font-size: 18px;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+      color: var(--text-main);
+      letter-spacing: -0.2px;
+    }
+
+    .trigger-icon-badge {
+      font-size: 18px;
+      color: var(--accent-blue);
+      display: flex;
+      align-items: center;
+    }
+
+    body.mode-manual .custom-input-trigger { display: none !important; }
+    body.mode-manual .manual-native-input { display: block !important; }
+    body.mode-wheel .custom-input-trigger { display: flex !important; }
+    body.mode-wheel .manual-native-input { display: none !important; }
+
     .switch-feedback-toast {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
+      gap: 8px;
       background: var(--accent-red-light);
       color: var(--accent-red);
-      padding: 6px 12px;
+      padding: 8px 16px;
       border-radius: var(--radius-full);
-      font-size: 12px;
+      font-size: 13px;
       font-weight: 600;
       margin-top: 10px;
       opacity: 0;
@@ -350,11 +459,11 @@
     .btn-subtle {
       background: var(--btn-subtle-bg);
       color: var(--text-main);
-      padding: 9px 14px;
-      font-size: 13px;
-      font-weight: 600;
-      border-radius: 8px;
-      border: 1px solid var(--border-subtle);
+      padding: 12px 18px;
+      font-size: 14px;
+      font-weight: 700;
+      border-radius: var(--radius-sm);
+      border: 1.5px solid var(--border-subtle);
       cursor: pointer;
       flex-shrink: 0;
     }
@@ -365,110 +474,106 @@
       border-color: var(--accent-blue-glow);
     }
 
-    /* MODE 1: COUNTDOWN & SINCE */
+    /* MODE 1: COUNTDOWN */
     .countdown-display {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 14px;
-      margin: 24px 0;
+      gap: 18px;
+      margin: 32px 0;
     }
-
     .countdown-unit {
       background: var(--accent-blue-light);
       border-radius: var(--radius-md);
-      padding: 20px 14px;
+      padding: 28px 20px;
       text-align: center;
-      position: relative;
     }
-
     .countdown-num {
-      font-size: 42px;
-      font-weight: 700;
+      font-size: 52px;
+      font-weight: 800;
       color: var(--accent-blue);
       letter-spacing: -1.5px;
       line-height: 1;
-      margin-bottom: 6px;
+      margin-bottom: 8px;
       font-variant-numeric: tabular-nums;
     }
-
     .countdown-tag {
-      font-size: 11.5px;
+      font-size: 13px;
       text-transform: uppercase;
-      font-weight: 600;
+      font-weight: 700;
       color: var(--text-sub);
-      letter-spacing: 0.6px;
+      letter-spacing: 0.8px;
     }
 
     .presets-row {
       display: flex;
       flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 14px;
+      gap: 10px;
+      margin-top: 18px;
     }
-
     .preset-chip {
       background: var(--btn-subtle-bg);
-      padding: 7px 14px;
-      font-size: 12.5px;
+      padding: 10px 18px;
+      font-size: 13.5px;
+      font-weight: 600;
       border-radius: var(--radius-full);
       cursor: pointer;
       color: var(--text-sub);
       border: 1px solid transparent;
       transition: all 0.2s;
     }
-
     .preset-chip:hover {
       background: var(--accent-blue-light);
       color: var(--accent-blue);
       border-color: var(--accent-blue-glow);
     }
 
-    /* MODE 2: CONVERTER (Completely Isolated Grid) */
+    /* MODE 2: CONVERTER GRID */
     .converter-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 14px;
-      margin-top: 20px;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin-top: 28px;
     }
-
-    .conv-cell-form {
-      display: block;
-      margin: 0;
-      padding: 0;
-    }
-
+    .conv-cell-form { display: block; margin: 0; padding: 0; }
     .conv-card {
       background: var(--bg-box);
-      border: 1px solid var(--border-subtle);
+      border: 2px solid var(--border-subtle);
       border-radius: var(--radius-md);
-      padding: 16px 18px;
-      transition: transform 0.2s, box-shadow 0.2s;
+      padding: 24px 26px;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
     }
-
+    .conv-card:hover {
+      border-color: var(--accent-blue);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-sm);
+    }
     .conv-card:focus-within {
       background: var(--bg-card-solid);
       border-color: var(--accent-blue);
-      box-shadow: var(--shadow-sm);
+      box-shadow: 0 0 0 4px var(--accent-blue-glow);
+      transform: translateY(-2px);
     }
-
     .conv-card label {
       display: flex;
       justify-content: space-between;
-      font-size: 11.5px;
-      font-weight: 600;
+      font-size: 13px;
+      font-weight: 700;
       color: var(--text-muted);
       text-transform: uppercase;
-      margin-bottom: 6px;
+      letter-spacing: 0.6px;
     }
-
     .conv-input {
-      font-size: 20px !important;
-      font-weight: 600 !important;
+      font-size: 30px !important;
+      font-weight: 800 !important;
       color: var(--text-main) !important;
-      padding: 4px 0 !important;
+      padding: 8px 0 !important;
       border: none !important;
       background: transparent !important;
       box-shadow: none !important;
+      letter-spacing: -0.5px;
     }
 
     /* MODE 3: TIME SOLVER */
@@ -477,12 +582,11 @@
       display: flex;
       flex-direction: row;
       background: var(--btn-subtle-bg);
-      padding: 5px;
+      padding: 6px;
       border-radius: var(--radius-full);
-      margin-bottom: 24px;
-      gap: 2px;
+      margin-bottom: 28px;
+      gap: 3px;
     }
-
     .mode-indicator {
       position: absolute;
       background: var(--accent-blue);
@@ -492,16 +596,15 @@
       pointer-events: none;
       z-index: 1;
     }
-
     .mode-switch-btn {
       position: relative;
       z-index: 2;
       flex: 1;
-      padding: 11px 14px;
+      padding: 13px 18px;
       border: none;
       background: transparent !important;
-      font-size: 13.5px;
-      font-weight: 500;
+      font-size: 14.5px;
+      font-weight: 600;
       color: var(--text-sub);
       border-radius: var(--radius-full);
       cursor: pointer;
@@ -509,219 +612,777 @@
       text-align: center;
       line-height: 1.3;
     }
+    .mode-switch-btn.active { color: #FFFFFF; font-weight: 700; }
 
-    .mode-switch-btn.active {
-      color: #FFFFFF;
-      font-weight: 600;
-    }
-
-    /* Solver Equation Layout */
     .solver-equation-container {
       display: flex;
       flex-direction: row;
       align-items: stretch;
-      gap: 12px;
+      gap: 16px;
       justify-content: space-between;
     }
-
     .solver-box {
       flex: 1;
       background: var(--bg-box);
-      border: 1.5px solid var(--border-subtle);
+      border: 2px solid var(--border-subtle);
       border-radius: var(--radius-md);
-      padding: 18px;
+      padding: 24px;
       position: relative;
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      gap: 14px;
+      gap: 18px;
     }
-
     .solver-box.highlight {
       background: var(--accent-blue-light);
       border-color: var(--accent-blue);
-      box-shadow: 0 4px 18px var(--accent-blue-glow);
+      box-shadow: 0 6px 26px var(--accent-blue-glow);
     }
 
     @keyframes gentleShake {
       0%, 100% { transform: translateX(0); }
-      20%, 60% { transform: translateX(-5px); }
-      40%, 80% { transform: translateX(5px); }
+      20%, 60% { transform: translateX(-6px); }
+      40%, 80% { transform: translateX(6px); }
     }
-
-    .solver-box.shake {
-      animation: gentleShake 0.4s ease-in-out;
-    }
+    .solver-box.shake { animation: gentleShake 0.4s ease-in-out; }
 
     .solver-target-badge {
       position: absolute;
-      top: 14px;
-      right: 14px;
+      top: 16px;
+      right: 16px;
       background: var(--accent-blue);
       color: #FFF;
-      font-size: 10px;
+      font-size: 11px;
       text-transform: uppercase;
-      font-weight: 700;
-      padding: 3px 8px;
+      font-weight: 800;
+      padding: 4px 10px;
       border-radius: var(--radius-full);
-      letter-spacing: 0.4px;
+      letter-spacing: 0.5px;
     }
-
     .equation-operator {
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 26px;
-      font-weight: 600;
+      font-size: 32px;
+      font-weight: 700;
       color: var(--text-muted);
       user-select: none;
-      padding: 0 2px;
+      padding: 0 4px;
     }
-
     .input-row-with-btn {
       display: flex;
-      gap: 8px;
-      margin-top: 8px;
+      gap: 10px;
+      margin-top: 10px;
       align-items: center;
     }
-
     .duration-inputs {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 8px;
-      margin-top: 8px;
+      gap: 10px;
+      margin-top: 10px;
     }
-
-    /* Steppers Grid */
     .stepper-row {
       display: grid;
       grid-template-columns: repeat(6, 1fr);
-      gap: 4px;
-      margin-top: 10px;
+      gap: 6px;
+      margin-top: 12px;
     }
-
     .stepper-btn {
       width: 100%;
       min-width: 0;
       background: var(--stepper-bg);
-      border: 1px solid var(--border-subtle);
+      border: 1.5px solid var(--border-subtle);
       color: var(--stepper-color);
-      font-size: 11px;
-      font-weight: 600;
-      padding: 7px 0;
-      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 700;
+      padding: 11px 0;
+      border-radius: 8px;
       cursor: pointer;
       transition: all 0.15s ease;
       text-align: center;
     }
-
     .stepper-btn:hover {
       background: var(--accent-blue);
       color: #FFFFFF;
       border-color: var(--accent-blue);
     }
-
     .field-hint-tip {
-      font-size: 11.5px;
+      font-size: 12.5px;
       color: var(--accent-red);
       margin-top: 8px;
-      min-height: 16px;
-      font-weight: 500;
+      min-height: 18px;
+      font-weight: 600;
       line-height: 1.3;
     }
 
-    .day-wrap-badge {
-      display: inline-flex;
-      align-items: center;
-      background: rgba(0, 113, 227, 0.14);
-      color: var(--accent-blue);
-      font-size: 11px;
-      font-weight: 700;
-      padding: 2px 7px;
-      border-radius: 6px;
-      margin-left: 6px;
-      vertical-align: middle;
-    }
-
     .result-callout {
-      margin-top: 24px;
+      margin-top: 32px;
       background: linear-gradient(135deg, #0071E3, #005bb5);
       border-radius: var(--radius-md);
-      padding: 24px 18px;
+      padding: 32px 24px;
       color: white;
       text-align: center;
       box-shadow: var(--shadow-float);
+      position: relative;
     }
-
     .result-callout .sub {
-      font-size: 12px;
+      font-size: 13px;
       text-transform: uppercase;
-      letter-spacing: 0.8px;
-      opacity: 0.85;
-      font-weight: 600;
-      margin-bottom: 4px;
-    }
-
-    .result-callout .val {
-      font-size: 34px;
+      letter-spacing: 0.9px;
+      opacity: 0.88;
       font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .result-callout .val {
+      font-size: 44px;
+      font-weight: 800;
       letter-spacing: -0.5px;
       display: flex;
       align-items: center;
       justify-content: center;
       flex-wrap: wrap;
-      gap: 6px;
+      gap: 8px;
     }
-
-    .result-callout .val .day-wrap-badge {
-      background: rgba(255, 255, 255, 0.25);
-      color: #FFFFFF;
-      font-size: 12.5px;
-      padding: 3px 9px;
-    }
-
     .result-callout .desc {
-      font-size: 13.5px;
-      opacity: 0.92;
-      margin-top: 4px;
-      line-height: 1.4;
+      font-size: 15px;
+      opacity: 0.94;
+      margin-top: 8px;
+      line-height: 1.45;
     }
 
-    @media (max-width: 820px) {
+    .clipboard-btn {
+      margin-top: 16px;
+      background: rgba(255, 255, 255, 0.18);
+      border: 1.5px solid rgba(255, 255, 255, 0.35);
+      color: #FFF;
+      padding: 9px 22px;
+      font-size: 13.5px;
+      font-weight: 700;
+      border-radius: var(--radius-full);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .clipboard-btn:hover { background: rgba(255, 255, 255, 0.32); }
+
+    /* Centered Modal / Bottom Sheet */
+    .ts-picker-scrim {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: var(--popover-backdrop);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      z-index: 2000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .ts-picker-scrim.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .ts-picker-modal {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.96);
+      background: var(--popover-bg);
+      backdrop-filter: blur(36px);
+      -webkit-backdrop-filter: blur(36px);
+      border: 1.5px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-popover);
+      z-index: 2100;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      padding: 28px;
+      max-width: 480px;
+      width: calc(100vw - 40px);
+      max-height: calc(100vh - 48px);
+      overflow-y: auto;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.22s ease, transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .ts-picker-modal.wide-mode {
+      max-width: 840px;
+    }
+
+    .ts-picker-modal.visible {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translate(-50%, -50%) scale(1);
+    }
+
+    .ts-picker-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border-subtle);
+      padding-bottom: 14px;
+    }
+
+    .ts-picker-title-preview {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .ts-picker-title-preview .label {
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.9px;
+      color: var(--accent-blue);
+    }
+
+    .ts-picker-title-preview .live-val {
+      font-size: 38px;
+      font-weight: 800;
+      color: var(--text-main);
+      letter-spacing: -1.2px;
+      font-variant-numeric: tabular-nums;
+      line-height: 1.05;
+    }
+
+    .ts-picker-done-btn {
+      background: var(--accent-blue);
+      color: #FFF;
+      border: none;
+      padding: 10px 24px;
+      font-size: 15px;
+      font-weight: 700;
+      border-radius: var(--radius-full);
+      cursor: pointer;
+      transition: background 0.15s, transform 0.1s;
+    }
+    .ts-picker-done-btn:hover { background: var(--accent-blue-hover); transform: scale(1.03); }
+    .ts-picker-done-btn:active { transform: scale(0.97); }
+
+    .ts-pills-carousel {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding: 2px 0 8px 0;
+    }
+
+    .ts-speed-pill {
+      background: var(--btn-subtle-bg);
+      border: 1.5px solid var(--border-subtle);
+      color: var(--text-sub);
+      padding: 9px 16px;
+      font-size: 13.5px;
+      font-weight: 700;
+      border-radius: var(--radius-full);
+      white-space: nowrap;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      flex-shrink: 0;
+    }
+    .ts-speed-pill:hover, .ts-speed-pill:active {
+      background: var(--accent-blue-light);
+      color: var(--accent-blue);
+      border-color: var(--accent-blue-glow);
+    }
+
+    .ts-picker-body-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .ts-picker-modal.wide-mode .ts-picker-body-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      align-items: stretch;
+    }
+
+    .ts-calendar-box {
+      background: var(--bg-box);
+      border: 1.5px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .ts-calendar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .ts-cal-month-title-btn {
+      background: var(--bg-card-solid);
+      border: 1.5px solid var(--border-subtle);
+      padding: 8px 18px;
+      border-radius: var(--radius-full);
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-main);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 42px;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.18s ease;
+    }
+    .ts-cal-month-title-btn:hover {
+      background: var(--accent-blue-light);
+      color: var(--accent-blue);
+      border-color: var(--accent-blue);
+      transform: translateY(-1px);
+    }
+
+    .ts-cal-nav-btn {
+      background: var(--bg-card-solid);
+      border: 1.5px solid var(--border-subtle);
+      border-radius: 10px;
+      width: 38px;
+      height: 38px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 16px;
+      color: var(--text-main);
+      transition: all 0.15s;
+    }
+    .ts-cal-nav-btn:hover { background: var(--accent-blue-light); color: var(--accent-blue); }
+
+    .ts-month-year-popover {
+      position: absolute;
+      top: 58px;
+      left: 12px;
+      right: 12px;
+      bottom: 12px;
+      background: var(--bg-card-solid);
+      border: 2px solid var(--border-focus);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-md);
+      z-index: 50;
+      padding: 16px;
+      display: none;
+      flex-direction: column;
+      gap: 14px;
+      animation: pureFadeIn 0.2s ease;
+    }
+    .ts-month-year-popover.open { display: flex; }
+
+    .ts-my-year-strip {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding: 4px 2px 8px 2px;
+      margin-bottom: 2px;
+      cursor: grab;
+    }
+    .ts-my-year-strip:active { cursor: grabbing; }
+
+    .ts-my-year-chip {
+      padding: 10px 20px;
+      min-height: 42px;
+      background: var(--bg-box);
+      border: 1.5px solid var(--border-subtle);
+      border-radius: var(--radius-full);
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-sub);
+      cursor: pointer;
+      flex-shrink: 0;
+      user-select: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .ts-my-year-chip:hover {
+      background: var(--accent-blue-light);
+      color: var(--accent-blue);
+    }
+    .ts-my-year-chip.active {
+      background: var(--accent-blue);
+      color: #FFF;
+      border-color: var(--accent-blue);
+      box-shadow: 0 4px 12px var(--accent-blue-glow);
+    }
+
+    .ts-my-month-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      flex: 1;
+    }
+    .ts-my-month-chip {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg-box);
+      border: 1.5px solid var(--border-subtle);
+      border-radius: 10px;
+      font-size: 14.5px;
+      font-weight: 700;
+      color: var(--text-main);
+      cursor: pointer;
+      min-height: 42px;
+      transition: all 0.15s;
+    }
+    .ts-my-month-chip:hover { background: var(--accent-blue-light); color: var(--accent-blue); }
+    .ts-my-month-chip.active {
+      background: var(--accent-blue);
+      color: #FFF;
+      border-color: var(--accent-blue);
+      font-weight: 800;
+    }
+
+    .ts-calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 4px;
+      text-align: center;
+    }
+
+    .ts-cal-day-label {
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--text-muted);
+      padding-bottom: 6px;
+    }
+
+    .ts-cal-cell {
+      height: 38px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14.5px;
+      font-weight: 600;
+      border-radius: 8px;
+      cursor: pointer;
+      color: var(--text-main);
+      transition: all 0.15s;
+    }
+    .ts-cal-cell:hover { background: var(--accent-blue-light); color: var(--accent-blue); }
+    .ts-cal-cell.selected {
+      background: var(--accent-blue) !important;
+      color: #FFFFFF !important;
+      font-weight: 800;
+    }
+    .ts-cal-cell.empty { pointer-events: none; opacity: 0; }
+
+    .ts-day-strip-scroll {
+      display: none;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+    }
+
+    .ts-day-chip {
+      background: var(--bg-box);
+      border: 1.5px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      padding: 10px 14px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      cursor: pointer;
+      min-width: 64px;
+      flex-shrink: 0;
+    }
+    .ts-day-chip .d-tag { font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; }
+    .ts-day-chip .d-num { font-size: 16px; font-weight: 800; color: var(--text-main); }
+    .ts-day-chip.selected { background: var(--accent-blue); border-color: var(--accent-blue); }
+    .ts-day-chip.selected .d-tag, .ts-day-chip.selected .d-num { color: #FFF; }
+
+    .ts-drum-stage-card {
+      position: relative;
+      background: var(--bg-box);
+      border: 1.5px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 14px 18px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .ts-drum-stage-titles {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      text-align: center;
+      margin-bottom: 6px;
+    }
+
+    .ts-drum-stage-titles .col-h {
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
+
+    .ts-drum-columns-stage {
+      position: relative;
+      height: 250px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+    }
+
+    @keyframes lensPulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.015); }
+      100% { transform: scale(1); }
+    }
+
+    .ts-drum-center-lens {
+      position: absolute;
+      top: calc(50% - 28px);
+      left: 6px;
+      right: 6px;
+      height: 56px;
+      background: var(--accent-blue-light);
+      border: 1.5px solid var(--accent-blue);
+      border-radius: 14px;
+      box-shadow: 0 0 0 1px rgba(0, 113, 227, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .ts-drum-center-lens.pulse {
+      animation: lensPulse 0.18s ease-out;
+    }
+
+    .ts-drum-list-wrapper {
+      position: relative;
+      height: 250px;
+      overflow-y: scroll;
+      scroll-snap-type: y mandatory;
+      -webkit-mask-image: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.85) 24%, black 50%, rgba(0,0,0,0.85) 76%, transparent 100%);
+      mask-image: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.85) 24%, black 50%, rgba(0,0,0,0.85) 76%, transparent 100%);
+      padding: 97px 0;
+      z-index: 2;
+      cursor: grab;
+      touch-action: pan-y;
+    }
+    .ts-drum-list-wrapper:active { cursor: grabbing; }
+
+    .ts-drum-item {
+      height: 56px;
+      min-height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      font-weight: 600;
+      font-variant-numeric: tabular-nums;
+      color: var(--text-muted);
+      cursor: pointer;
+      scroll-snap-align: center;
+      transition: transform 0.12s ease, font-size 0.12s ease, color 0.12s ease, opacity 0.12s ease;
+      user-select: none;
+      opacity: 0.35;
+      transform: scale(0.86);
+    }
+
+    .ts-drum-list-wrapper.is-fast-scrolling .ts-drum-item {
+      transition: none !important;
+    }
+
+    .ts-drum-item:hover {
+      opacity: 0.85;
+      color: var(--text-main);
+      transform: scale(0.96);
+    }
+
+    .ts-drum-item.selected {
+      color: var(--accent-blue);
+      font-size: 34px;
+      font-weight: 800;
+      opacity: 1;
+      transform: scale(1.12);
+      letter-spacing: -0.6px;
+    }
+
+    body.dark-mode .ts-drum-item.selected {
+      color: #FFFFFF;
+      text-shadow: 0 0 16px var(--accent-blue-glow);
+    }
+
+    .ts-precision-bar-centered {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      background: var(--bg-box);
+      border: 1.5px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 14px 18px;
+    }
+
+    .ts-precision-bar-centered .p-label {
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.7px;
+    }
+
+    .ts-precision-actions-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      width: 100%;
+    }
+
+    .ts-prec-btn {
+      flex: 1;
+      max-width: 100px;
+      height: 48px;
+      background: var(--bg-card-solid);
+      border: 2px solid var(--border-subtle);
+      color: var(--text-main);
+      font-size: 15px;
+      font-weight: 800;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .ts-prec-btn:hover {
+      background: var(--accent-blue-light);
+      border-color: var(--accent-blue);
+      color: var(--accent-blue);
+      transform: translateY(-2px);
+    }
+
+    .ts-prec-btn:active {
+      transform: translateY(1px) scale(0.97);
+    }
+
+    /* Responsive Mobile Overrides */
+    @media (max-width: 860px) {
       body {
-        padding-top: 86px;
+        padding-top: 136px;
+        padding-bottom: 40px;
       }
+      
       .top-nav {
-        padding: 0 14px;
-        height: 66px;
+        padding: 10px 16px;
+        height: auto;
+        min-height: 118px;
+        flex-wrap: wrap;
+        align-content: center;
+        gap: 10px 0;
       }
+
+      .brand {
+        font-size: 19px;
+      }
+
       .brand-icon {
-        width: 30px;
-        height: 30px;
-        font-size: 15px;
-      }
-      .brand span {
-        display: none;
-      }
-      .nav-pill-btn {
-        padding: 8px 12px;
-        font-size: 12.5px;
-      }
-      .theme-toggle-btn {
         width: 36px;
         height: 36px;
-        font-size: 15px;
+      }
+
+      .nav-pill-group {
+        order: 3;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        padding: 4px;
+      }
+
+      .nav-pill-btn {
+        flex: 1;
+        padding: 9px 8px;
+        font-size: 13px;
+        text-align: center;
+      }
+
+      .input-mode-btn {
+        padding: 6px 12px;
+        font-size: 12.5px;
+      }
+
+      .theme-toggle-btn {
+        width: 38px;
+        height: 38px;
+        font-size: 16px;
+      }
+
+      .container {
+        padding: 0 16px;
+      }
+
+      .glass-card {
+        padding: 26px 18px;
+        border-radius: 22px;
+        margin-bottom: 20px;
+      }
+
+      .section-title {
+        font-size: 23px;
+      }
+
+      .section-desc {
+        font-size: 14.5px;
+        margin-bottom: 20px;
+      }
+
+      .sub-switch-bar {
+        width: 100%;
+        max-width: 100%;
+        margin-bottom: 22px;
+      }
+
+      .sub-switch-btn {
+        padding: 9px 10px;
+        font-size: 13px;
+      }
+
+      .countdown-display {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+        margin: 24px 0;
+      }
+
+      .countdown-unit {
+        padding: 18px 12px;
+      }
+
+      .countdown-num {
+        font-size: 38px;
+      }
+
+      .converter-grid {
+        grid-template-columns: 1fr;
+        gap: 14px;
       }
 
       .solver-equation-container {
         flex-direction: column;
-        gap: 8px;
+        gap: 12px;
       }
 
       .equation-operator {
-        font-size: 20px;
-        padding: 2px 0;
+        font-size: 24px;
+        padding: 0;
       }
 
       .mode-switch-bar {
@@ -735,85 +1396,123 @@
       }
 
       .mode-switch-btn {
-        padding: 10px 12px;
+        padding: 11px 14px;
+        font-size: 13.5px;
+      }
+
+      .stepper-btn {
+        padding: 13px 0;
         font-size: 13px;
       }
 
-      .glass-card {
-        padding: 22px 16px;
-        border-radius: var(--radius-md);
+      .result-callout {
+        padding: 24px 16px;
       }
 
-      .container {
-        padding: 0 12px;
+      .result-callout .val {
+        font-size: 34px;
       }
 
-      .section-title {
-        font-size: 21px;
+      .ts-picker-modal {
+        top: auto !important;
+        left: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+        transform: translateY(100%) !important;
+        width: 100vw !important;
+        max-width: 100vw !important;
+        max-height: 85vh !important;
+        border-radius: 28px 28px 0 0 !important;
+        padding: 24px 18px calc(24px + env(safe-area-inset-bottom, 0px)) 18px !important;
       }
 
-      .countdown-display {
-        grid-template-columns: 1fr 1fr;
-        gap: 10px;
+      .ts-picker-modal.visible {
+        transform: translateY(0) !important;
       }
 
-      .countdown-unit {
-        padding: 16px 10px;
+      .ts-picker-modal.wide-mode .ts-picker-body-grid {
+        display: flex;
+        flex-direction: column;
       }
 
-      .countdown-num {
-        font-size: 36px;
-      }
+      .ts-calendar-box { display: none; }
+      .ts-day-strip-scroll { display: flex; }
+      .ts-prec-btn { height: 48px; font-size: 15px; }
     }
   </style>
 </head>
-<body>
+<body class="mode-wheel">
 
-  <!-- Top Apple Navigation -->
   <header class="top-nav">
     <div class="brand">
-      <div class="brand-icon">⏱</div>
-      <span>TimeSuite</span>
+      <div class="brand-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="9"></circle>
+          <polyline points="12 7 12 12 15.5 13.5"></polyline>
+        </svg>
+      </div>
+      <span>TimeCalc</span>
     </div>
 
-    <!-- Sliding Menu Group -->
-    <nav class="nav-pill-group" id="nav-pill-group">
+    <nav class="nav-pill-group" id="nav-pill-group" role="tablist">
       <div class="nav-pill-indicator" id="nav-indicator"></div>
-      <button class="nav-pill-btn active" onclick="switchMainTab('countdown-tab', this)">Countdown / Since</button>
-      <button class="nav-pill-btn" onclick="switchMainTab('converter-tab', this)">Converter</button>
-      <button class="nav-pill-btn" onclick="switchMainTab('solver-tab', this)">Time Solver</button>
+      <button class="nav-pill-btn js-tab-btn active" data-target="countdown-tab" role="tab" aria-selected="true" aria-controls="countdown-tab">Countdown / Since</button>
+      <button class="nav-pill-btn js-tab-btn" data-target="converter-tab" role="tab" aria-selected="false" aria-controls="converter-tab">Converter</button>
+      <button class="nav-pill-btn js-tab-btn" data-target="solver-tab" role="tab" aria-selected="false" aria-controls="solver-tab">Time Solver</button>
     </nav>
 
-    <!-- Dark Mode Toggle -->
-    <button class="theme-toggle-btn" id="theme-toggle" onclick="toggleTheme()" title="Toggle Dark / Light Mode">
-      🌙
-    </button>
+    <div class="nav-right-controls">
+      <div class="input-mode-switcher" title="Switch between Touch Drum Wheel and Direct Typing">
+        <button class="input-mode-btn active" id="btn-mode-wheel">🎛️ Wheel</button>
+        <button class="input-mode-btn" id="btn-mode-manual">⌨️ Type</button>
+      </div>
+      <button class="theme-toggle-btn" id="theme-toggle" title="Toggle Dark / Light Mode">🌙</button>
+    </div>
   </header>
 
   <main class="container">
-
     <!-- MODE 1: COUNTDOWN / SINCE -->
-    <section id="countdown-tab" class="tab-pane active">
+    <section id="countdown-tab" class="tab-pane active" role="tabpanel">
       <div class="glass-card">
         <div class="section-title" id="cd-title">Target Date Countdown</div>
         <div class="section-desc" id="cd-desc">Select a target date and time to track time remaining down to the second.</div>
 
-        <!-- Sub-Mode Switcher: Countdown (Future) vs Since (Past) -->
         <div class="sub-switch-bar" id="cd-sub-switch-bar">
           <div class="sub-indicator" id="cd-sub-indicator"></div>
-          <button class="sub-switch-btn active" id="btn-sub-cd" onclick="setCountdownSubMode('countdown')">Countdown (Future)</button>
-          <button class="sub-switch-btn" id="btn-sub-since" onclick="setCountdownSubMode('since')">Time Since (Past)</button>
+          <button class="sub-switch-btn js-cd-sub-btn active" id="btn-sub-cd" data-mode="countdown">Countdown (Future)</button>
+          <button class="sub-switch-btn js-cd-sub-btn" id="btn-sub-since" data-mode="since">Time Since (Past)</button>
         </div>
 
-        <div class="form-group" style="max-width: 320px;">
-          <label class="form-label" id="cd-input-label">Target Date & Time</label>
-          <input type="datetime-local" id="countdown-target-input" onchange="updateCountdownTarget(true)" />
-          <div id="cd-feedback-toast" class="switch-feedback-toast"></div>
+        <div style="display: flex; gap: 14px; flex-wrap: wrap;">
+          <div class="form-group" style="flex: 1 1 240px;">
+            <label class="form-label" id="cd-input-label" for="countdown-target-input">Target Date & Time</label>
+            
+            <div class="custom-input-trigger" id="trigger-cd-target" tabindex="0" role="button" aria-haspopup="dialog" aria-label="Select Target Date and Time">
+              <span class="trigger-text-val" id="disp-cd-target">Loading...</span>
+              <span class="trigger-icon-badge">📅</span>
+            </div>
+
+            <input type="datetime-local" class="manual-native-input" id="countdown-target-input" />
+            <div id="cd-feedback-toast" class="switch-feedback-toast"></div>
+          </div>
+
+          <div class="form-group" style="flex: 1 1 220px;">
+            <label class="form-label" for="timezone-select">Target Timezone</label>
+            <select id="timezone-select">
+              <option value="local">My System Time (Local)</option>
+              <option value="-12">Baker Island (UTC -12)</option>
+              <option value="-8">Pacific Time (UTC -8)</option>
+              <option value="-5">Eastern Time (UTC -5)</option>
+              <option value="0">UTC / GMT</option>
+              <option value="1">Central European Time (UTC +1)</option>
+              <option value="5.5">India Standard Time (UTC +5:30)</option>
+              <option value="9">Japan Standard Time (UTC +9)</option>
+              <option value="10">Aust. Eastern Time (UTC +10)</option>
+            </select>
+          </div>
         </div>
 
-        <div class="presets-row" id="presets-container">
-          <!-- Dynamically populated presets -->
-        </div>
+        <div class="presets-row" id="presets-container"></div>
 
         <div class="countdown-display">
           <div class="countdown-unit">
@@ -833,224 +1532,980 @@
             <div class="countdown-tag">Seconds</div>
           </div>
         </div>
-
-        <div id="countdown-meta" style="font-size: 13px; color: var(--text-muted); text-align: center;">
-          Calculating...
-        </div>
+        <div id="countdown-meta" style="font-size: 14px; color: var(--text-muted); text-align: center; font-weight: 500;">Calculating...</div>
       </div>
     </section>
 
-    <!-- MODE 2: CONVERTER (Completely Separated Independent Cells) -->
-    <section id="converter-tab" class="tab-pane">
+    <!-- MODE 2: CONVERTER -->
+    <section id="converter-tab" class="tab-pane" role="tabpanel">
       <div class="glass-card">
         <div class="section-title">Synchronized Unit Converter</div>
         <div class="section-desc">Type any value into any box. All units from seconds to months update immediately in real time.</div>
 
         <div class="converter-grid">
-          
-          <form class="conv-cell-form" onsubmit="handleFormSubmit(event, 'conv-sec', 'sec')">
+          <form class="conv-cell-form">
             <div class="conv-card">
-              <label>Seconds <span>sec</span></label>
-              <input type="number" step="any" inputmode="decimal" enterkeyhint="done" class="conv-input" id="conv-sec" 
-                     onfocus="handleConvFocus(this)" 
-                     onblur="handleConvBlur(this, 'sec')" 
-                     onkeydown="handleConvKeyDown(event, this, 'sec')"
-                     oninput="handleConvInput('sec', this.value)" placeholder="0" />
+              <label for="conv-sec">Seconds <span>sec</span></label>
+              <input type="number" step="any" inputmode="decimal" class="conv-input" id="conv-sec" data-unit="sec" placeholder="0" />
             </div>
           </form>
-
-          <form class="conv-cell-form" onsubmit="handleFormSubmit(event, 'conv-min', 'min')">
+          <form class="conv-cell-form">
             <div class="conv-card">
-              <label>Minutes <span>min</span></label>
-              <input type="number" step="any" inputmode="decimal" enterkeyhint="done" class="conv-input" id="conv-min" 
-                     onfocus="handleConvFocus(this)" 
-                     onblur="handleConvBlur(this, 'min')" 
-                     onkeydown="handleConvKeyDown(event, this, 'min')"
-                     oninput="handleConvInput('min', this.value)" placeholder="0" />
+              <label for="conv-min">Minutes <span>min</span></label>
+              <input type="number" step="any" inputmode="decimal" class="conv-input" id="conv-min" data-unit="min" placeholder="0" />
             </div>
           </form>
-
-          <form class="conv-cell-form" onsubmit="handleFormSubmit(event, 'conv-hr', 'hr')">
+          <form class="conv-cell-form">
             <div class="conv-card">
-              <label>Hours <span>hr</span></label>
-              <input type="number" step="any" inputmode="decimal" enterkeyhint="done" class="conv-input" id="conv-hr" 
-                     onfocus="handleConvFocus(this)" 
-                     onblur="handleConvBlur(this, 'hr')" 
-                     onkeydown="handleConvKeyDown(event, this, 'hr')"
-                     oninput="handleConvInput('hr', this.value)" placeholder="0" />
+              <label for="conv-hr">Hours <span>hr</span></label>
+              <input type="number" step="any" inputmode="decimal" class="conv-input" id="conv-hr" data-unit="hr" placeholder="0" />
             </div>
           </form>
-
-          <form class="conv-cell-form" onsubmit="handleFormSubmit(event, 'conv-day', 'day')">
+          <form class="conv-cell-form">
             <div class="conv-card">
-              <label>Days <span>d</span></label>
-              <input type="number" step="any" inputmode="decimal" enterkeyhint="done" class="conv-input" id="conv-day" 
-                     onfocus="handleConvFocus(this)" 
-                     onblur="handleConvBlur(this, 'day')" 
-                     onkeydown="handleConvKeyDown(event, this, 'day')"
-                     oninput="handleConvInput('day', this.value)" placeholder="0" />
+              <label for="conv-day">Days <span>d</span></label>
+              <input type="number" step="any" inputmode="decimal" class="conv-input" id="conv-day" data-unit="day" placeholder="0" />
             </div>
           </form>
-
-          <form class="conv-cell-form" onsubmit="handleFormSubmit(event, 'conv-wk', 'wk')">
+          <form class="conv-cell-form">
             <div class="conv-card">
-              <label>Weeks <span>wk</span></label>
-              <input type="number" step="any" inputmode="decimal" enterkeyhint="done" class="conv-input" id="conv-wk" 
-                     onfocus="handleConvFocus(this)" 
-                     onblur="handleConvBlur(this, 'wk')" 
-                     onkeydown="handleConvKeyDown(event, this, 'wk')"
-                     oninput="handleConvInput('wk', this.value)" placeholder="0" />
+              <label for="conv-wk">Weeks <span>wk</span></label>
+              <input type="number" step="any" inputmode="decimal" class="conv-input" id="conv-wk" data-unit="wk" placeholder="0" />
             </div>
           </form>
-
-          <form class="conv-cell-form" onsubmit="handleFormSubmit(event, 'conv-mo', 'mo')">
+          <form class="conv-cell-form">
             <div class="conv-card">
-              <label>Months <span>mo (avg)</span></label>
-              <input type="number" step="any" inputmode="decimal" enterkeyhint="done" class="conv-input" id="conv-mo" 
-                   onfocus="handleConvFocus(this)" 
-                   onblur="handleConvBlur(this, 'mo')" 
-                   onkeydown="handleConvKeyDown(event, this, 'mo')"
-                   oninput="handleConvInput('mo', this.value)" placeholder="0" />
+              <label for="conv-mo">Months <span>mo (avg)</span></label>
+              <input type="number" step="any" inputmode="decimal" class="conv-input" id="conv-mo" data-unit="mo" placeholder="0" />
             </div>
           </form>
-
-        </div>
-
-        <div style="margin-top: 18px; font-size: 12px; color: var(--text-muted); text-align: right;">
-          * Standard month calculated at 30.4375 days (365.25 / 12).
         </div>
       </div>
     </section>
 
-    <!-- MODE 3: TIME SOLVER (START + DURATION = END) -->
-    <section id="solver-tab" class="tab-pane">
+    <!-- MODE 3: TIME SOLVER -->
+    <section id="solver-tab" class="tab-pane" role="tabpanel">
       <div class="glass-card">
         <div class="section-title">3-Point Time Solver</div>
-        <div class="section-desc">Select what to solve. You can type into any field at any time.</div>
+        <div class="section-desc">Select what to solve. You can interact with any field at any time.</div>
 
-        <!-- Mode Selector Bar -->
         <div class="mode-switch-bar" id="mode-switch-bar">
           <div class="mode-indicator" id="mode-indicator"></div>
-          <button class="mode-switch-btn active" id="btn-mode-start" onclick="setSolverMode('start')">
-            Solve Start Time (End &minus; Duration)
-          </button>
-          <button class="mode-switch-btn" id="btn-mode-dur" onclick="setSolverMode('dur')">
-            Solve Duration (End &minus; Start)
-          </button>
-          <button class="mode-switch-btn" id="btn-mode-end" onclick="setSolverMode('end')">
-            Solve End Time (Start &plus; Duration)
-          </button>
+          <button class="mode-switch-btn js-solver-mode-btn active" id="btn-mode-start" data-mode="start">Solve Start Time</button>
+          <button class="mode-switch-btn js-solver-mode-btn" id="btn-mode-dur" data-mode="dur">Solve Duration</button>
+          <button class="mode-switch-btn js-solver-mode-btn" id="btn-mode-end" data-mode="end">Solve End Time</button>
         </div>
 
-        <!-- Visual Formula Equation Layout -->
         <div class="solver-equation-container">
-          
           <!-- Box 1: Start Time -->
-          <div class="solver-box" id="box-start" onclick="handleBoxClick('start')">
+          <div class="solver-box js-solver-box" id="box-start" data-field="start">
             <div>
-              <div class="form-label">Start Time</div>
+              <label class="form-label" for="solver-start-input">Start Time</label>
               <div id="badge-start"></div>
               <div class="input-row-with-btn">
-                <input type="time" id="solver-start-input" value="10:45" onfocus="handleFieldInteraction('start')" oninput="handleFieldInput('start')" />
-                <button type="button" class="btn-subtle" title="Set to Current Time" onclick="setCurrentTimeToStart(event)">Now</button>
+                <div class="custom-input-trigger" id="trigger-solver-start" tabindex="0" role="button" aria-haspopup="dialog" aria-label="Select Start Time">
+                  <span class="trigger-text-val" id="disp-solver-start">10:45</span>
+                  <span class="trigger-icon-badge">🕒</span>
+                </div>
+                <input type="time" class="manual-native-input js-solver-input" id="solver-start-input" data-field="start" value="10:45" />
+                <button type="button" class="btn-subtle js-time-now-btn" data-target="solver-start-input" data-field="start" title="Set to Current Time">Now</button>
               </div>
             </div>
-
-            <!-- Steppers for Start Time -->
             <div>
               <div class="stepper-row">
-                <button type="button" class="stepper-btn" onclick="adjustTime('solver-start-input', -60, 'start', event)">&minus;1h</button>
-                <button type="button" class="stepper-btn" onclick="adjustTime('solver-start-input', -15, 'start', event)">&minus;15m</button>
-                <button type="button" class="stepper-btn" onclick="adjustTime('solver-start-input', -1, 'start', event)">&minus;1m</button>
-                <button type="button" class="stepper-btn" onclick="adjustTime('solver-start-input', 1, 'start', event)">&plus;1m</button>
-                <button type="button" class="stepper-btn" onclick="adjustTime('solver-start-input', 15, 'start', event)">&plus;15m</button>
-                <button type="button" class="stepper-btn" onclick="adjustTime('solver-start-input', 60, 'start', event)">&plus;1h</button>
+                <button type="button" class="stepper-btn js-stepper-time" data-target="solver-start-input" data-val="-60" data-field="start">&minus;1h</button>
+                <button type="button" class="stepper-btn js-stepper-time" data-target="solver-start-input" data-val="-15" data-field="start">&minus;15m</button>
+                <button type="button" class="stepper-btn js-stepper-time" data-target="solver-start-input" data-val="-1" data-field="start">&minus;1m</button>
+                <button type="button" class="stepper-btn js-stepper-time" data-target="solver-start-input" data-val="1" data-field="start">&plus;1m</button>
+                <button type="button" class="stepper-btn js-stepper-time" data-target="solver-start-input" data-val="15" data-field="start">&plus;15m</button>
+                <button type="button" class="stepper-btn js-stepper-time" data-target="solver-start-input" data-val="60" data-field="start">&plus;1h</button>
               </div>
               <div id="hint-start" class="field-hint-tip"></div>
             </div>
           </div>
 
-          <!-- Operator + -->
           <div class="equation-operator">&plus;</div>
 
           <!-- Box 2: Duration -->
-          <div class="solver-box" id="box-dur" onclick="handleBoxClick('dur')">
+          <div class="solver-box js-solver-box" id="box-dur" data-field="dur">
             <div>
-              <div class="form-label">Duration</div>
+              <label class="form-label" for="solver-dur-h">Duration</label>
               <div id="badge-dur"></div>
-              <div class="duration-inputs">
-                <input type="number" min="0" max="999" id="solver-dur-h" placeholder="Hours" value="4" onfocus="handleFieldInteraction('dur')" oninput="handleFieldInput('dur')" />
-                <input type="number" min="0" max="59" id="solver-dur-m" placeholder="Mins" value="30" onfocus="handleFieldInteraction('dur')" oninput="handleFieldInput('dur')" />
+              
+              <div class="custom-input-trigger" id="trigger-solver-dur" tabindex="0" role="button" aria-haspopup="dialog" aria-label="Select Duration">
+                <span class="trigger-text-val" id="disp-solver-dur">4h 30m</span>
+                <span class="trigger-icon-badge">⏳</span>
+              </div>
+
+              <div class="duration-inputs manual-native-input">
+                <input type="number" min="0" max="999" class="js-solver-input" id="solver-dur-h" placeholder="Hours" data-field="dur" value="4" />
+                <input type="number" min="0" max="59" class="js-solver-input" id="solver-dur-m" placeholder="Mins" data-field="dur" value="30" />
               </div>
             </div>
-
-            <!-- Steppers for Duration -->
             <div>
               <div class="stepper-row">
-                <button type="button" class="stepper-btn" onclick="adjustDuration(-60, event)">&minus;1h</button>
-                <button type="button" class="stepper-btn" onclick="adjustDuration(-15, event)">&minus;15m</button>
-                <button type="button" class="stepper-btn" onclick="adjustDuration(-1, event)">&minus;1m</button>
-                <button type="button" class="stepper-btn" onclick="adjustDuration(1, event)">&plus;1m</button>
-                <button type="button" class="stepper-btn" onclick="adjustDuration(15, event)">&plus;15m</button>
-                <button type="button" class="stepper-btn" onclick="adjustDuration(60, event)">&plus;1h</button>
+                <button type="button" class="stepper-btn js-stepper-dur" data-val="-60">&minus;1h</button>
+                <button type="button" class="stepper-btn js-stepper-dur" data-val="-15">&minus;15m</button>
+                <button type="button" class="stepper-btn js-stepper-dur" data-val="-1">&minus;1m</button>
+                <button type="button" class="stepper-btn js-stepper-dur" data-val="1">&plus;1m</button>
+                <button type="button" class="stepper-btn js-stepper-dur" data-val="15">&plus;15m</button>
+                <button type="button" class="stepper-btn js-stepper-dur" data-val="60">&plus;1h</button>
               </div>
               <div id="hint-dur" class="field-hint-tip"></div>
             </div>
           </div>
 
-          <!-- Operator = -->
           <div class="equation-operator">&equals;</div>
 
           <!-- Box 3: End Time -->
-          <div class="solver-box" id="box-end" onclick="handleBoxClick('end')">
+          <div class="solver-box js-solver-box" id="box-end" data-field="end">
             <div>
-              <div class="form-label">End Time</div>
+              <label class="form-label" for="solver-end-input">End Time</label>
               <div id="badge-end"></div>
               <div class="input-row-with-btn">
-                <input type="time" id="solver-end-input" value="15:15" onfocus="handleFieldInteraction('end')" oninput="handleFieldInput('end')" />
-                <button type="button" class="btn-subtle" title="Set to Current Time" onclick="setCurrentTimeToEnd(event)">Now</button>
+                <div class="custom-input-trigger" id="trigger-solver-end" tabindex="0" role="button" aria-haspopup="dialog" aria-label="Select End Time">
+                  <span class="trigger-text-val" id="disp-solver-end">15:15</span>
+                  <span class="trigger-icon-badge">🕒</span>
+                </div>
+                <input type="time" class="manual-native-input js-solver-input" id="solver-end-input" data-field="end" value="15:15" />
+                <button type="button" class="btn-subtle js-time-now-btn" data-target="solver-end-input" data-field="end" title="Set to Current Time">Now</button>
               </div>
             </div>
-
-            <!-- Steppers for End Time -->
             <div>
               <div class="stepper-row">
-                <button type="button" class="stepper-btn" onclick="adjustTime('solver-end-input', -60, 'end', event)">&minus;1h</button>
-                <button type="button" class="stepper-btn" onclick="adjustTime('solver-end-input', -15, 'end', event)">&minus;15m</button>
-                <button type="button" class="stepper-btn" onclick="adjustTime('solver-end-input', -1, 'end', event)">&minus;1m</button>
-                <button type="button" class="stepper-btn" onclick="adjustTime('solver-end-input', 1, 'end', event)">&plus;1m</button>
-                <button type="button" class="stepper-btn" onclick="adjustTime('solver-end-input', 15, 'end', event)">&plus;15m</button>
-                <button type="button" class="stepper-btn" onclick="adjustTime('solver-end-input', 60, 'end', event)">&plus;1h</button>
+                <button type="button" class="stepper-btn js-stepper-time" data-target="solver-end-input" data-val="-60" data-field="end">&minus;1h</button>
+                <button type="button" class="stepper-btn js-stepper-time" data-target="solver-end-input" data-val="-15" data-field="end">&minus;15m</button>
+                <button type="button" class="stepper-btn js-stepper-time" data-target="solver-end-input" data-val="-1" data-field="end">&minus;1m</button>
+                <button type="button" class="stepper-btn js-stepper-time" data-target="solver-end-input" data-val="1" data-field="end">&plus;1m</button>
+                <button type="button" class="stepper-btn js-stepper-time" data-target="solver-end-input" data-val="15" data-field="end">&plus;15m</button>
+                <button type="button" class="stepper-btn js-stepper-time" data-target="solver-end-input" data-val="60" data-field="end">&plus;1h</button>
               </div>
               <div id="hint-end" class="field-hint-tip"></div>
             </div>
           </div>
-
         </div>
 
-        <!-- Big Highlight Banner -->
         <div class="result-callout">
           <div class="sub" id="callout-subtitle">Calculated Start Time</div>
           <div class="val" id="callout-value">
-            <span id="callout-time-text">10:45</span>
+            <span id="callout-time-text">--:--</span>
             <span id="callout-day-badge"></span>
           </div>
-          <div class="desc" id="callout-explanation">To finish by 15:15 with a 4h 30m duration, Start Time must be 10:45.</div>
+          <div class="desc" id="callout-explanation">Initializing...</div>
+          <button class="clipboard-btn" id="btn-copy-result">📋 Copy Result</button>
         </div>
 
       </div>
     </section>
-
   </main>
 
+  <!-- Centered Modal / Bottom Sheet -->
+  <div class="ts-picker-scrim" id="ts-picker-scrim"></div>
+  <div class="ts-picker-modal" id="ts-picker-modal" role="dialog" aria-modal="true" aria-label="Time Selector">
+    <div class="ts-picker-header">
+      <div class="ts-picker-title-preview">
+        <span class="label" id="picker-title-lbl">Quick Select</span>
+        <span class="live-val" id="picker-live-display">12:00</span>
+      </div>
+      <button class="ts-picker-done-btn" id="btn-picker-done">Done</button>
+    </div>
+
+    <div class="ts-pills-carousel" id="picker-speed-pills"></div>
+
+    <div class="ts-picker-body-grid">
+      
+      <!-- Date Section -->
+      <div id="picker-date-section" style="display: none;">
+        <div class="ts-calendar-box">
+          <div class="ts-calendar-header">
+            <button class="ts-cal-nav-btn" id="cal-prev-month">&lsaquo;</button>
+            <button class="ts-cal-month-title-btn" id="cal-month-title-btn">August 2026 ▾</button>
+            <button class="ts-cal-nav-btn" id="cal-next-month">&rsaquo;</button>
+          </div>
+
+          <div class="ts-month-year-popover" id="ts-month-year-popover">
+            <div class="ts-my-year-strip" id="ts-my-year-strip"></div>
+            <div class="ts-my-month-grid" id="ts-my-month-grid"></div>
+          </div>
+
+          <div class="ts-calendar-grid" id="cal-grid"></div>
+        </div>
+
+        <div class="ts-day-strip-scroll" id="day-strip-scroll"></div>
+      </div>
+
+      <!-- Time & Precision Section -->
+      <div style="display: flex; flex-direction: column; gap: 14px;">
+        <div class="ts-drum-stage-card">
+          <div class="ts-drum-stage-titles">
+            <div class="col-h" id="col-h-hours">Hours</div>
+            <div class="col-h" id="col-h-mins">Minutes</div>
+          </div>
+
+          <div class="ts-drum-columns-stage">
+            <div class="ts-drum-center-lens" id="ts-drum-center-lens"></div>
+            <div class="ts-drum-list-wrapper" id="drum-hours-list"></div>
+            <div class="ts-drum-list-wrapper" id="drum-mins-list"></div>
+          </div>
+        </div>
+
+        <div class="ts-precision-bar-centered">
+          <span class="p-label">Fine Precision Tuning</span>
+          <div class="ts-precision-actions-row">
+            <button class="ts-prec-btn" id="btn-fine-sub-5">&minus;5m</button>
+            <button class="ts-prec-btn" id="btn-fine-sub-1">&minus;1m</button>
+            <button class="ts-prec-btn" id="btn-fine-add-1">&plus;1m</button>
+            <button class="ts-prec-btn" id="btn-fine-add-5">&plus;5m</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
   <script>
-    /* THEME / DARK MODE */
+    /* 1. APP STATE & PERSISTENCE */
+    const AppState = {
+      activeTab: localStorage.getItem('activeTab') || 'countdown-tab',
+      inputMode: localStorage.getItem('inputUIMode') || 'wheel',
+      countdown: {
+        mode: 'countdown',
+        targetTimestamp: null,
+        intervalId: null,
+        toastTimeout: null
+      },
+      solver: {
+        mode: localStorage.getItem('solverMode') || 'start'
+      },
+      converter: {
+        lastUnit: localStorage.getItem('convLastUnit') || 'hr',
+        lastVal: localStorage.getItem('convLastVal') || '2.5'
+      }
+    };
+
+    const SECONDS_MAP = { sec: 1, min: 60, hr: 3600, day: 86400, wk: 604800, mo: 2629800 };
+
+    /* 2. TIME PICKER ENGINE */
+    const TimePickerEngine = {
+      activeTrigger: null,
+      activeType: 'time',
+      activeInputId: null,
+      selectedDate: new Date(),
+      selectedHour: 12,
+      selectedMin: 0,
+      calViewDate: new Date(),
+      isMonthYearPopoverOpen: false,
+      lastPulseTimestamp: 0,
+
+      init() {
+        this.scrim = document.getElementById('ts-picker-scrim');
+        this.modal = document.getElementById('ts-picker-modal');
+        this.liveDisplay = document.getElementById('picker-live-display');
+        this.pillsContainer = document.getElementById('picker-speed-pills');
+        this.dateSection = document.getElementById('picker-date-section');
+        this.hoursDrum = document.getElementById('drum-hours-list');
+        this.minsDrum = document.getElementById('drum-mins-list');
+        this.lens = document.getElementById('ts-drum-center-lens');
+        this.monthYearPopover = document.getElementById('ts-month-year-popover');
+        this.yearStrip = document.getElementById('ts-my-year-strip');
+        
+        this.scrim.addEventListener('click', () => this.close());
+        document.getElementById('btn-picker-done').addEventListener('click', () => this.close());
+        
+        document.getElementById('cal-prev-month').addEventListener('click', () => {
+          this.calViewDate.setMonth(this.calViewDate.getMonth() - 1);
+          this.renderDesktopCalendar();
+        });
+        document.getElementById('cal-next-month').addEventListener('click', () => {
+          this.calViewDate.setMonth(this.calViewDate.getMonth() + 1);
+          this.renderDesktopCalendar();
+        });
+        document.getElementById('cal-month-title-btn').addEventListener('click', () => this.toggleMonthYearPopover());
+
+        this.yearStrip.addEventListener('wheel', (e) => {
+          e.preventDefault();
+          this.yearStrip.scrollLeft += e.deltaY;
+        }, { passive: false });
+
+        this.setupYearStripDrag();
+
+        document.getElementById('btn-fine-sub-5').addEventListener('click', () => this.adjustMinute(-5));
+        document.getElementById('btn-fine-sub-1').addEventListener('click', () => this.adjustMinute(-1));
+        document.getElementById('btn-fine-add-1').addEventListener('click', () => this.adjustMinute(1));
+        document.getElementById('btn-fine-add-5').addEventListener('click', () => this.adjustMinute(5));
+
+        window.addEventListener('keydown', (e) => {
+          if (!this.modal.classList.contains('visible')) return;
+          if (e.key === 'Escape' || e.key === 'Enter') this.close();
+          if (e.key === 'ArrowUp') { e.preventDefault(); this.adjustMinute(1); }
+          if (e.key === 'ArrowDown') { e.preventDefault(); this.adjustMinute(-1); }
+        });
+
+        this.setupDrumDragAndScroll(this.hoursDrum, 'hour');
+        this.setupDrumDragAndScroll(this.minsDrum, 'min');
+
+        this.bindTrigger('trigger-solver-start', 'solver-start-input', 'time');
+        this.bindTrigger('trigger-solver-end', 'solver-end-input', 'time');
+        this.bindTrigger('trigger-solver-dur', 'solver-dur', 'duration');
+        this.bindTrigger('trigger-cd-target', 'countdown-target-input', 'datetime');
+      },
+
+      bindTrigger(triggerId, inputId, type) {
+        const trigger = document.getElementById(triggerId);
+        if (!trigger) return;
+        trigger.addEventListener('click', (e) => {
+          e.stopPropagation();
+          if (AppState.inputMode === 'wheel') {
+            this.open(trigger, inputId, type);
+          }
+        });
+      },
+
+      open(triggerEl, inputId, type) {
+        this.activeTrigger = triggerEl;
+        this.activeInputId = inputId;
+        this.activeType = type;
+        this.isMonthYearPopoverOpen = false;
+        this.monthYearPopover.classList.remove('open');
+
+        if (type === 'time') {
+          this.modal.classList.remove('wide-mode');
+          this.dateSection.style.display = 'none';
+          document.getElementById('picker-title-lbl').textContent = "Select Time";
+          document.getElementById('col-h-hours').textContent = "Hours (00 - 23)";
+          document.getElementById('col-h-mins').textContent = "Minutes (5m Steps)";
+          const currentVal = document.getElementById(inputId).value;
+          const [h, m] = currentVal ? currentVal.split(':').map(Number) : [12, 0];
+          this.selectedHour = isNaN(h) ? 12 : h;
+          this.selectedMin = isNaN(m) ? 0 : m;
+        } else if (type === 'duration') {
+          this.modal.classList.remove('wide-mode');
+          this.dateSection.style.display = 'none';
+          document.getElementById('picker-title-lbl').textContent = "Select Duration";
+          document.getElementById('col-h-hours').textContent = "Hours";
+          document.getElementById('col-h-mins').textContent = "Minutes";
+          const h = parseInt(document.getElementById('solver-dur-h').value || 0, 10);
+          const m = parseInt(document.getElementById('solver-dur-m').value || 0, 10);
+          this.selectedHour = isNaN(h) ? 0 : h;
+          this.selectedMin = isNaN(m) ? 0 : m;
+        } else {
+          this.modal.classList.add('wide-mode');
+          this.dateSection.style.display = 'block';
+          document.getElementById('picker-title-lbl').textContent = "Select Target Date & Time";
+          document.getElementById('col-h-hours').textContent = "Hours (00 - 23)";
+          document.getElementById('col-h-mins').textContent = "Minutes (5m Steps)";
+          const currentVal = document.getElementById(inputId).value;
+          const d = currentVal ? new Date(currentVal) : new Date();
+          this.selectedDate = isNaN(d.getTime()) ? new Date() : d;
+          this.calViewDate = new Date(this.selectedDate.getTime());
+          this.selectedHour = this.selectedDate.getHours();
+          this.selectedMin = this.selectedDate.getMinutes();
+        }
+
+        this.renderSpeedPills();
+        this.renderHoursDrum();
+        this.renderMinutesDrum();
+        if (type === 'datetime') {
+          this.renderDesktopCalendar();
+          this.renderMobileDayStrip();
+        }
+
+        this.scrim.classList.add('visible');
+        this.modal.classList.add('visible');
+        triggerEl.classList.add('active');
+        this.updateLiveDisplay();
+
+        setTimeout(() => {
+          this.scrollToCentered(this.hoursDrum, this.selectedHour, false, false);
+          this.scrollToCentered(this.minsDrum, this.selectedMin, true, false);
+        }, 30);
+      },
+
+      close() {
+        this.scrim.classList.remove('visible');
+        this.modal.classList.remove('visible');
+        this.monthYearPopover.classList.remove('open');
+        this.isMonthYearPopoverOpen = false;
+        if (this.activeTrigger) this.activeTrigger.classList.remove('active');
+      },
+
+      renderSpeedPills() {
+        this.pillsContainer.innerHTML = '';
+        let pills = [];
+
+        if (this.activeType === 'time') {
+          pills = [
+            { label: 'Now', action: () => this.setToNow() },
+            { label: ':00 Top of Hr', action: () => { this.selectedMin = 0; this.commitChange(); } },
+            { label: '+15m', action: () => this.adjustMinute(15) },
+            { label: '+30m', action: () => this.adjustMinute(30) },
+            { label: '+1h', action: () => { this.selectedHour = (this.selectedHour + 1) % 24; this.commitChange(); } },
+            { label: '-15m', action: () => this.adjustMinute(-15) },
+            { label: '-1h', action: () => { this.selectedHour = (this.selectedHour + 23) % 24; this.commitChange(); } }
+          ];
+        } else if (this.activeType === 'duration') {
+          pills = [
+            { label: '30 min', action: () => { this.selectedHour = 0; this.selectedMin = 30; this.commitChange(); } },
+            { label: '1 hour', action: () => { this.selectedHour = 1; this.selectedMin = 0; this.commitChange(); } },
+            { label: '1h 30m', action: () => { this.selectedHour = 1; this.selectedMin = 30; this.commitChange(); } },
+            { label: '2 hours', action: () => { this.selectedHour = 2; this.selectedMin = 0; this.commitChange(); } },
+            { label: '4 hours', action: () => { this.selectedHour = 4; this.selectedMin = 0; this.commitChange(); } },
+            { label: '8 hours', action: () => { this.selectedHour = 8; this.selectedMin = 0; this.commitChange(); } }
+          ];
+        } else {
+          pills = [
+            { label: 'Now', action: () => this.setToNow() },
+            { label: 'Today End (23:59)', action: () => { this.selectedHour = 23; this.selectedMin = 59; this.commitChange(); } },
+            { label: 'Tomorrow 09:00', action: () => { this.selectedDate.setDate(this.selectedDate.getDate() + 1); this.selectedHour = 9; this.selectedMin = 0; this.commitChange(); } },
+            { label: 'Friday (17:00)', action: () => { const now = new Date(); const diff = (5 - now.getDay() + 7) % 7 || 7; this.selectedDate.setDate(now.getDate() + diff); this.selectedHour = 17; this.selectedMin = 0; this.commitChange(); } },
+            { label: '+1 Day', action: () => { this.selectedDate.setDate(this.selectedDate.getDate() + 1); this.commitChange(); } },
+            { label: '+1 Hour', action: () => { this.selectedHour = (this.selectedHour + 1) % 24; this.commitChange(); } }
+          ];
+        }
+
+        pills.forEach(p => {
+          const btn = document.createElement('button');
+          btn.className = 'ts-speed-pill';
+          btn.textContent = p.label;
+          btn.addEventListener('click', (e) => { e.stopPropagation(); p.action(); });
+          this.pillsContainer.appendChild(btn);
+        });
+      },
+
+      renderHoursDrum() {
+        this.hoursDrum.innerHTML = '';
+        const maxH = this.activeType === 'duration' ? 48 : 24;
+        for (let i = 0; i < maxH; i++) {
+          const item = document.createElement('div');
+          item.className = `ts-drum-item ${i === this.selectedHour ? 'selected' : ''}`;
+          item.dataset.val = i;
+          item.textContent = String(i).padStart(2, '0');
+          
+          item.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const prev = this.selectedHour;
+            this.selectedHour = i;
+            this.scrollToCentered(this.hoursDrum, i);
+            this.commitChange();
+            if (prev !== i) this.triggerLensFeedback();
+          });
+          
+          this.hoursDrum.appendChild(item);
+        }
+      },
+
+      renderMinutesDrum() {
+        this.minsDrum.innerHTML = '';
+        const offset = this.selectedMin % 5;
+        for (let i = 0; i < 12; i++) {
+          const minVal = (i * 5 + offset) % 60;
+          const item = document.createElement('div');
+          const isSelected = minVal === this.selectedMin;
+          item.className = `ts-drum-item ${isSelected ? 'selected' : ''}`;
+          item.dataset.val = minVal;
+          item.textContent = String(minVal).padStart(2, '0');
+
+          item.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const prev = this.selectedMin;
+            this.selectedMin = minVal;
+            this.scrollToCentered(this.minsDrum, minVal, true);
+            this.commitChange();
+            if (prev !== minVal) this.triggerLensFeedback();
+          });
+
+          this.minsDrum.appendChild(item);
+        }
+      },
+
+      triggerLensFeedback() {
+        const now = Date.now();
+        if (now - this.lastPulseTimestamp < 140) return;
+        this.lastPulseTimestamp = now;
+
+        if (!this.lens) return;
+        this.lens.classList.remove('pulse');
+        void this.lens.offsetWidth;
+        this.lens.classList.add('pulse');
+      },
+
+      scrollToCentered(container, targetVal, isMinute = false, triggerFeedback = false) {
+        const targetEl = container.querySelector(`.ts-drum-item[data-val="${targetVal}"]`);
+        if (!targetEl) return;
+
+        const targetScrollTop = targetEl.offsetTop - (container.clientHeight / 2) + (targetEl.clientHeight / 2);
+        container.scrollTo({ top: targetScrollTop, behavior: 'smooth' });
+        this.updateActiveDrumVisuals(container);
+        if (triggerFeedback) this.triggerLensFeedback();
+      },
+
+      setupDrumDragAndScroll(container, type) {
+        let isPointerDown = false;
+        let isDragging = false;
+        let startY = 0;
+        let startScrollTop = 0;
+        let scrollSettledTimeout = null;
+        let wheelDeltaAccumulator = 0;
+        let lastWheelTime = 0;
+        let wheelVelocity = 1;
+        const DRAG_THRESHOLD = 5;
+
+        container.addEventListener('pointerdown', (e) => {
+          isPointerDown = true;
+          isDragging = false;
+          startY = e.clientY;
+          startScrollTop = container.scrollTop;
+        });
+
+        container.addEventListener('pointermove', (e) => {
+          if (!isPointerDown) return;
+          const deltaY = e.clientY - startY;
+          if (Math.abs(deltaY) > DRAG_THRESHOLD) {
+            isDragging = true;
+            container.classList.add('is-fast-scrolling');
+            container.scrollTop = startScrollTop - deltaY;
+            this.updateActiveDrumVisuals(container);
+          }
+        });
+
+        const handlePointerEnd = () => {
+          if (!isPointerDown) return;
+          isPointerDown = false;
+
+          if (isDragging) {
+            isDragging = false;
+            this.snapDrumToNearest(container, type);
+          }
+        };
+
+        container.addEventListener('pointerup', handlePointerEnd);
+        container.addEventListener('pointercancel', handlePointerEnd);
+
+        container.addEventListener('wheel', (e) => {
+          e.preventDefault();
+          const now = Date.now();
+          const dt = now - lastWheelTime;
+          lastWheelTime = now;
+
+          if (dt < 65) {
+            wheelVelocity = Math.min(2.8, wheelVelocity + 0.3);
+          } else {
+            wheelVelocity = Math.max(1.0, wheelVelocity - 0.4);
+          }
+
+          wheelDeltaAccumulator += e.deltaY;
+          const dynamicThreshold = Math.max(45, 95 / wheelVelocity);
+
+          if (Math.abs(wheelDeltaAccumulator) >= dynamicThreshold) {
+            const dir = wheelDeltaAccumulator > 0 ? 1 : -1;
+            const step = dir * Math.round(wheelVelocity);
+            wheelDeltaAccumulator = 0;
+
+            if (type === 'hour') {
+              const maxH = TimePickerEngine.activeType === 'duration' ? 48 : 24;
+              const prev = TimePickerEngine.selectedHour;
+              TimePickerEngine.selectedHour = (TimePickerEngine.selectedHour + step + maxH * 10) % maxH;
+              if (prev !== TimePickerEngine.selectedHour) {
+                TimePickerEngine.scrollToCentered(TimePickerEngine.hoursDrum, TimePickerEngine.selectedHour, false, false);
+                TimePickerEngine.commitChange(false);
+                TimePickerEngine.triggerLensFeedback();
+              }
+            } else {
+              const prev = TimePickerEngine.selectedMin;
+              TimePickerEngine.adjustMinute(step * 5);
+              if (prev !== TimePickerEngine.selectedMin) {
+                TimePickerEngine.triggerLensFeedback();
+              }
+            }
+          }
+
+          clearTimeout(scrollSettledTimeout);
+          scrollSettledTimeout = setTimeout(() => {
+            container.classList.remove('is-fast-scrolling');
+            wheelDeltaAccumulator = 0;
+            wheelVelocity = 1;
+          }, 110);
+        }, { passive: false });
+
+        container.addEventListener('scroll', () => {
+          this.updateActiveDrumVisuals(container);
+          clearTimeout(scrollSettledTimeout);
+          scrollSettledTimeout = setTimeout(() => {
+            container.classList.remove('is-fast-scrolling');
+            if (!isPointerDown && !isDragging) this.snapDrumToNearest(container, type);
+          }, 90);
+        });
+      },
+
+      snapDrumToNearest(container, type) {
+        const centerPos = container.scrollTop + (container.clientHeight / 2);
+        let closestItem = null;
+        let minDiff = Infinity;
+
+        container.querySelectorAll('.ts-drum-item').forEach(item => {
+          const itemCenter = item.offsetTop + (item.clientHeight / 2);
+          const diff = Math.abs(centerPos - itemCenter);
+          if (diff < minDiff) {
+            minDiff = diff;
+            closestItem = item;
+          }
+        });
+
+        if (closestItem) {
+          const val = parseInt(closestItem.dataset.val, 10);
+          if (type === 'hour') {
+            if (this.selectedHour !== val) {
+              this.selectedHour = val;
+              this.commitChange(false);
+              this.triggerLensFeedback();
+            }
+          } else {
+            if (this.selectedMin !== val) {
+              this.selectedMin = val;
+              this.commitChange(false);
+              this.triggerLensFeedback();
+            }
+          }
+        }
+      },
+
+      updateActiveDrumVisuals(container) {
+        const centerPos = container.scrollTop + (container.clientHeight / 2);
+        container.querySelectorAll('.ts-drum-item').forEach(item => {
+          const itemCenter = item.offsetTop + (item.clientHeight / 2);
+          const diff = Math.abs(centerPos - itemCenter);
+
+          if (diff < 28) {
+            item.classList.add('selected');
+          } else {
+            item.classList.remove('selected');
+          }
+        });
+      },
+
+      setupYearStripDrag() {
+        const strip = this.yearStrip;
+        let isDown = false;
+        let startX;
+        let scrollLeft;
+
+        strip.addEventListener('mousedown', (e) => {
+          isDown = true;
+          startX = e.pageX - strip.offsetLeft;
+          scrollLeft = strip.scrollLeft;
+        });
+        strip.addEventListener('mouseleave', () => { isDown = false; });
+        strip.addEventListener('mouseup', () => { isDown = false; });
+        strip.addEventListener('mousemove', (e) => {
+          if (!isDown) return;
+          e.preventDefault();
+          const x = e.pageX - strip.offsetLeft;
+          const walk = (x - startX) * 1.5;
+          strip.scrollLeft = scrollLeft - walk;
+        });
+      },
+
+      toggleMonthYearPopover() {
+        this.isMonthYearPopoverOpen = !this.isMonthYearPopoverOpen;
+        if (this.isMonthYearPopoverOpen) {
+          this.renderMonthYearPicker();
+          this.monthYearPopover.classList.add('open');
+        } else {
+          this.monthYearPopover.classList.remove('open');
+        }
+      },
+
+      renderMonthYearPicker() {
+        const yearStrip = this.yearStrip;
+        const monthGrid = document.getElementById('ts-my-month-grid');
+        yearStrip.innerHTML = '';
+        monthGrid.innerHTML = '';
+
+        const currentYear = this.calViewDate.getFullYear();
+        const currentMonth = this.calViewDate.getMonth();
+
+        for (let y = 1980; y <= 2060; y++) {
+          const chip = document.createElement('div');
+          chip.className = `ts-my-year-chip ${y === currentYear ? 'active' : ''}`;
+          chip.textContent = y;
+          chip.addEventListener('click', (e) => {
+            e.stopPropagation();
+            this.calViewDate.setFullYear(y);
+            this.renderMonthYearPicker();
+          });
+          yearStrip.appendChild(chip);
+        }
+
+        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        months.forEach((m, idx) => {
+          const chip = document.createElement('div');
+          chip.className = `ts-my-month-chip ${idx === currentMonth ? 'active' : ''}`;
+          chip.textContent = m;
+          chip.addEventListener('click', (e) => {
+            e.stopPropagation();
+            this.calViewDate.setMonth(idx);
+            this.selectedDate.setFullYear(this.calViewDate.getFullYear(), idx);
+            this.renderDesktopCalendar();
+            this.toggleMonthYearPopover();
+            this.commitChange();
+          });
+          monthGrid.appendChild(chip);
+        });
+
+        setTimeout(() => {
+          const activeY = yearStrip.querySelector('.active');
+          if (activeY) yearStrip.scrollLeft = activeY.offsetLeft - (yearStrip.clientWidth / 2) + (activeY.clientWidth / 2);
+        }, 10);
+      },
+
+      renderDesktopCalendar() {
+        const grid = document.getElementById('cal-grid');
+        grid.innerHTML = '';
+        const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+        document.getElementById('cal-month-title-btn').innerHTML = `${months[this.calViewDate.getMonth()]} ${this.calViewDate.getFullYear()} ▾`;
+
+        ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'].forEach(d => {
+          const lbl = document.createElement('div');
+          lbl.className = 'ts-cal-day-label';
+          lbl.textContent = d;
+          grid.appendChild(lbl);
+        });
+
+        const firstDay = new Date(this.calViewDate.getFullYear(), this.calViewDate.getMonth(), 1).getDay();
+        const daysInMonth = new Date(this.calViewDate.getFullYear(), this.calViewDate.getMonth() + 1, 0).getDate();
+
+        for (let i = 0; i < firstDay; i++) {
+          const empty = document.createElement('div');
+          empty.className = 'ts-cal-cell empty';
+          grid.appendChild(empty);
+        }
+
+        for (let day = 1; day <= daysInMonth; day++) {
+          const cell = document.createElement('div');
+          const isSel = this.selectedDate.getDate() === day &&
+                        this.selectedDate.getMonth() === this.calViewDate.getMonth() &&
+                        this.selectedDate.getFullYear() === this.calViewDate.getFullYear();
+          cell.className = `ts-cal-cell ${isSel ? 'selected' : ''}`;
+          cell.textContent = day;
+          cell.addEventListener('click', () => {
+            this.selectedDate.setFullYear(this.calViewDate.getFullYear(), this.calViewDate.getMonth(), day);
+            this.commitChange();
+          });
+          grid.appendChild(cell);
+        }
+      },
+
+      renderMobileDayStrip() {
+        const strip = document.getElementById('day-strip-scroll');
+        strip.innerHTML = '';
+        const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+        const base = new Date();
+
+        for (let i = -1; i <= 14; i++) {
+          const d = new Date(base.getFullYear(), base.getMonth(), base.getDate() + i);
+          const isSel = d.toDateString() === this.selectedDate.toDateString();
+          const chip = document.createElement('div');
+          chip.className = `ts-day-chip ${isSel ? 'selected' : ''}`;
+          
+          let tag = daysOfWeek[d.getDay()];
+          if (i === 0) tag = 'Today';
+          if (i === 1) tag = 'Tmrw';
+
+          chip.innerHTML = `<span class="d-tag">${tag}</span><span class="d-num">${d.getDate()}</span>`;
+          chip.addEventListener('click', () => {
+            this.selectedDate.setFullYear(d.getFullYear(), d.getMonth(), d.getDate());
+            this.commitChange();
+          });
+          strip.appendChild(chip);
+        }
+      },
+
+      adjustMinute(delta) {
+        if (this.activeType === 'duration') {
+          let total = this.selectedHour * 60 + this.selectedMin + delta;
+          total = Math.max(0, total);
+          this.selectedHour = Math.floor(total / 60);
+          this.selectedMin = total % 60;
+        } else {
+          let total = this.selectedHour * 60 + this.selectedMin + delta;
+          total = ((total % 1440) + 1440) % 1440;
+          this.selectedHour = Math.floor(total / 60);
+          this.selectedMin = total % 60;
+        }
+        this.renderMinutesDrum();
+        this.commitChange();
+      },
+
+      setToNow() {
+        const now = new Date();
+        this.selectedDate = new Date();
+        this.calViewDate = new Date();
+        this.selectedHour = now.getHours();
+        this.selectedMin = now.getMinutes();
+        this.renderMinutesDrum();
+        this.commitChange();
+      },
+
+      commitChange(shouldScrollDrums = true) {
+        const hStr = String(this.selectedHour).padStart(2, '0');
+        const mStr = String(this.selectedMin).padStart(2, '0');
+
+        if (this.activeType === 'time') {
+          const timeVal = `${hStr}:${mStr}`;
+          document.getElementById(this.activeInputId).value = timeVal;
+          if (this.activeTrigger) {
+            this.activeTrigger.querySelector('.trigger-text-val').textContent = timeVal;
+          }
+          handleFieldInput(this.activeTrigger.dataset.field || (this.activeInputId.includes('start') ? 'start' : 'end'));
+        } else if (this.activeType === 'duration') {
+          document.getElementById('solver-dur-h').value = this.selectedHour;
+          document.getElementById('solver-dur-m').value = this.selectedMin;
+          document.getElementById('disp-solver-dur').textContent = `${this.selectedHour}h ${mStr}m`;
+          handleFieldInput('dur');
+        } else {
+          this.selectedDate.setHours(this.selectedHour, this.selectedMin, 0, 0);
+          const isoVal = new Date(this.selectedDate.getTime() - (this.selectedDate.getTimezoneOffset() * 60000)).toISOString().slice(0, 16);
+          document.getElementById(this.activeInputId).value = isoVal;
+          this.updateCountdownTriggerDisplay(isoVal);
+          updateCountdownTarget(true);
+        }
+
+        this.updateLiveDisplay();
+        if (this.activeType === 'datetime') {
+          this.renderDesktopCalendar();
+          this.renderMobileDayStrip();
+        }
+
+        if (shouldScrollDrums) {
+          this.scrollToCentered(this.hoursDrum, this.selectedHour, false, false);
+          this.scrollToCentered(this.minsDrum, this.selectedMin, true, false);
+        }
+      },
+
+      updateLiveDisplay() {
+        const hStr = String(this.selectedHour).padStart(2, '0');
+        const mStr = String(this.selectedMin).padStart(2, '0');
+        if (this.activeType === 'time') {
+          this.liveDisplay.textContent = `${hStr}:${mStr}`;
+        } else if (this.activeType === 'duration') {
+          this.liveDisplay.textContent = `${this.selectedHour}h ${mStr}m`;
+        } else {
+          const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+          this.liveDisplay.textContent = `${months[this.selectedDate.getMonth()]} ${this.selectedDate.getDate()}, ${hStr}:${mStr}`;
+        }
+      },
+
+      updateCountdownTriggerDisplay(isoStr) {
+        if (!isoStr) return;
+        const d = new Date(isoStr);
+        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        const hStr = String(d.getHours()).padStart(2, '0');
+        const mStr = String(d.getMinutes()).padStart(2, '0');
+        document.getElementById('disp-cd-target').textContent = `${months[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()} — ${hStr}:${mStr}`;
+      }
+    };
+
+    /* 3. APP INITIALIZATION & EVENT BINDINGS */
+    document.addEventListener('DOMContentLoaded', () => {
+      TimePickerEngine.init();
+      bindEvents();
+      initTheme();
+      initInputMode();
+      initTabs();
+      initSolverDefaults();
+      initCountdownDefault();
+      
+      convertFrom(AppState.converter.lastUnit, AppState.converter.lastVal);
+      setTimeout(updateIndicators, 60);
+    });
+
+    function bindEvents() {
+      document.getElementById('theme-toggle').addEventListener('click', toggleTheme);
+      window.addEventListener('resize', updateIndicators);
+
+      document.getElementById('btn-mode-wheel').addEventListener('click', () => setInputMode('wheel'));
+      document.getElementById('btn-mode-manual').addEventListener('click', () => setInputMode('manual'));
+
+      document.querySelectorAll('.js-tab-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => switchMainTab(e.target.dataset.target, e.target));
+      });
+
+      document.querySelectorAll('.js-cd-sub-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => setCountdownSubMode(e.target.dataset.mode));
+      });
+      document.getElementById('timezone-select').addEventListener('change', () => updateCountdownTarget(true));
+      document.getElementById('countdown-target-input').addEventListener('input', () => {
+        TimePickerEngine.updateCountdownTriggerDisplay(document.getElementById('countdown-target-input').value);
+        updateCountdownTarget(true);
+      });
+
+      document.querySelectorAll('.conv-cell-form').forEach(form => form.addEventListener('submit', (e) => e.preventDefault()));
+      document.querySelectorAll('.conv-input').forEach(input => {
+        input.addEventListener('input', (e) => handleConvInput(e.target.dataset.unit, e.target.value));
+        input.addEventListener('focus', (e) => handleConvFocus(e.target));
+        input.addEventListener('blur', (e) => handleConvBlur(e.target, e.target.dataset.unit));
+        input.addEventListener('keydown', handleConvKeyDown);
+      });
+
+      document.querySelectorAll('.js-solver-mode-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => setSolverMode(e.target.dataset.mode));
+      });
+      document.querySelectorAll('.js-solver-box').forEach(box => {
+        box.addEventListener('click', (e) => {
+          if (!e.target.closest('.stepper-btn') && !e.target.closest('.custom-input-trigger') && !e.target.closest('button')) {
+            handleBoxInteraction(box.dataset.field);
+          }
+        });
+      });
+
+      document.getElementById('solver-start-input').addEventListener('input', (e) => {
+        document.getElementById('disp-solver-start').textContent = e.target.value;
+        handleFieldInput('start');
+      });
+      document.getElementById('solver-end-input').addEventListener('input', (e) => {
+        document.getElementById('disp-solver-end').textContent = e.target.value;
+        handleFieldInput('end');
+      });
+      document.getElementById('solver-dur-h').addEventListener('input', () => syncDurationFromDirectInputs());
+      document.getElementById('solver-dur-m').addEventListener('input', () => syncDurationFromDirectInputs());
+
+      document.querySelectorAll('.js-time-now-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => { e.stopPropagation(); setCurrentTime(btn.dataset.target, btn.dataset.field); });
+      });
+      document.querySelectorAll('.js-stepper-time').forEach(btn => {
+        btn.addEventListener('click', (e) => { e.stopPropagation(); adjustTime(btn.dataset.target, parseInt(btn.dataset.val), btn.dataset.field); });
+      });
+      document.querySelectorAll('.js-stepper-dur').forEach(btn => {
+        btn.addEventListener('click', (e) => { e.stopPropagation(); adjustDuration(parseInt(btn.dataset.val)); });
+      });
+
+      document.getElementById('btn-copy-result').addEventListener('click', copySolverResult);
+    }
+
+    function syncDurationFromDirectInputs() {
+      const h = parseInt(document.getElementById('solver-dur-h').value || 0, 10);
+      const m = parseInt(document.getElementById('solver-dur-m').value || 0, 10);
+      document.getElementById('disp-solver-dur').textContent = `${h}h ${String(m).padStart(2, '0')}m`;
+      handleFieldInput('dur');
+    }
+
+    function setInputMode(mode) {
+      AppState.inputMode = mode;
+      localStorage.setItem('inputUIMode', mode);
+      document.body.classList.remove('mode-wheel', 'mode-manual');
+      document.body.classList.add(`mode-${mode}`);
+      document.getElementById('btn-mode-wheel').classList.toggle('active', mode === 'wheel');
+      document.getElementById('btn-mode-manual').classList.toggle('active', mode === 'manual');
+    }
+    function initInputMode() {
+      setInputMode(AppState.inputMode);
+    }
+
     function toggleTheme() {
       const isDark = document.body.classList.toggle('dark-mode');
       document.getElementById('theme-toggle').textContent = isDark ? '☀️' : '🌙';
       localStorage.setItem('theme', isDark ? 'dark' : 'light');
     }
-
     function initTheme() {
       const saved = localStorage.getItem('theme');
       if (saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
@@ -1058,84 +2513,64 @@
         document.getElementById('theme-toggle').textContent = '☀️';
       }
     }
-
-    /* SLIDING INDICATORS */
+    function updateIndicators() {
+      updateNavIndicator();
+      updateModeIndicator();
+      updateCdSubIndicator();
+    }
     function updateNavIndicator() {
       const activeBtn = document.querySelector('.nav-pill-btn.active');
       const indicator = document.getElementById('nav-indicator');
       if (activeBtn && indicator) {
-        indicator.style.left = `${activeBtn.offsetLeft}px`;
-        indicator.style.top = `${activeBtn.offsetTop}px`;
-        indicator.style.width = `${activeBtn.offsetWidth}px`;
-        indicator.style.height = `${activeBtn.offsetHeight}px`;
+        indicator.style.left = `${activeBtn.offsetLeft}px`; indicator.style.top = `${activeBtn.offsetTop}px`;
+        indicator.style.width = `${activeBtn.offsetWidth}px`; indicator.style.height = `${activeBtn.offsetHeight}px`;
       }
     }
-
     function updateModeIndicator() {
       const activeBtn = document.querySelector('.mode-switch-btn.active');
       const indicator = document.getElementById('mode-indicator');
       if (activeBtn && indicator) {
-        indicator.style.left = `${activeBtn.offsetLeft}px`;
-        indicator.style.top = `${activeBtn.offsetTop}px`;
-        indicator.style.width = `${activeBtn.offsetWidth}px`;
-        indicator.style.height = `${activeBtn.offsetHeight}px`;
+        indicator.style.left = `${activeBtn.offsetLeft}px`; indicator.style.top = `${activeBtn.offsetTop}px`;
+        indicator.style.width = `${activeBtn.offsetWidth}px`; indicator.style.height = `${activeBtn.offsetHeight}px`;
       }
     }
-
     function updateCdSubIndicator() {
       const activeBtn = document.querySelector('.sub-switch-btn.active');
       const indicator = document.getElementById('cd-sub-indicator');
       if (activeBtn && indicator) {
-        indicator.style.left = `${activeBtn.offsetLeft}px`;
-        indicator.style.top = `${activeBtn.offsetTop}px`;
-        indicator.style.width = `${activeBtn.offsetWidth}px`;
-        indicator.style.height = `${activeBtn.offsetHeight}px`;
+        indicator.style.left = `${activeBtn.offsetLeft}px`; indicator.style.top = `${activeBtn.offsetTop}px`;
+        indicator.style.width = `${activeBtn.offsetWidth}px`; indicator.style.height = `${activeBtn.offsetHeight}px`;
       }
     }
-
     function switchMainTab(tabId, el) {
       document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
-      document.querySelectorAll('.nav-pill-btn').forEach(b => b.classList.remove('active'));
-      
-      el.classList.add('active');
-      const targetPane = document.getElementById(tabId);
-      targetPane.classList.add('active');
-
-      updateNavIndicator();
-      if (tabId === 'solver-tab') {
-        setTimeout(updateModeIndicator, 30);
-      } else if (tabId === 'countdown-tab') {
-        setTimeout(updateCdSubIndicator, 30);
-      }
+      document.querySelectorAll('.nav-pill-btn').forEach(b => { b.classList.remove('active'); b.setAttribute('aria-selected', 'false'); });
+      el.classList.add('active'); el.setAttribute('aria-selected', 'true');
+      document.getElementById(tabId).classList.add('active');
+      localStorage.setItem('activeTab', tabId);
+      updateIndicators();
+    }
+    function initTabs() {
+      const tabToActivate = document.querySelector(`.js-tab-btn[data-target="${AppState.activeTab}"]`);
+      if (tabToActivate) switchMainTab(AppState.activeTab, tabToActivate);
     }
 
-    /* MODE 1: COUNTDOWN & SINCE */
-    let cdSubMode = 'countdown';
-    let countdownInterval = null;
-    let targetTimestamp = null;
-    let toastTimeout = null;
-
     function setCountdownSubMode(mode, fromAutoSwitch = false) {
-      cdSubMode = mode;
-      document.querySelectorAll('.sub-switch-btn').forEach(b => b.classList.remove('active'));
-      
-      const activeBtn = (mode === 'countdown') ? document.getElementById('btn-sub-cd') : document.getElementById('btn-sub-since');
-      activeBtn.classList.add('active');
+      AppState.countdown.mode = mode;
+      document.querySelectorAll('.js-cd-sub-btn').forEach(b => b.classList.remove('active'));
+      document.querySelector(`.js-cd-sub-btn[data-mode="${mode}"]`).classList.add('active');
       updateCdSubIndicator();
 
       const titleEl = document.getElementById('cd-title');
       const descEl = document.getElementById('cd-desc');
-      const labelEl = document.getElementById('cd-input-label');
-
+      
       if (mode === 'countdown') {
         titleEl.textContent = "Target Date Countdown";
         descEl.textContent = "Select a target date and time to track time remaining down to the second.";
-        labelEl.textContent = "Target Date & Time (Future)";
         if (!fromAutoSwitch) initCountdownDefault();
       } else {
         titleEl.textContent = "Time Since (Elapsed)";
-        descEl.textContent = "Select a past date and time to track how long it has been since then down to the second.";
-        labelEl.textContent = "Past Date & Time (Since)";
+        descEl.textContent = "Select a past date and time to track how long it has been since then.";
         if (!fromAutoSwitch) initSinceDefault();
       }
       renderPresets();
@@ -1143,464 +2578,301 @@
 
     function renderPresets() {
       const container = document.getElementById('presets-container');
-      if (cdSubMode === 'countdown') {
-        container.innerHTML = `
-          <span style="font-size: 12px; color: var(--text-muted); align-self: center; margin-right: 4px;">Presets:</span>
-          <div class="preset-chip" onclick="setPreset('today-end')">End of Day (23:59)</div>
-          <div class="preset-chip" onclick="setPreset('tomorrow-9')">Tomorrow (09:00)</div>
-          <div class="preset-chip" onclick="setPreset('weekend')">Friday (17:00)</div>
-          <div class="preset-chip" onclick="setPreset('new-year')">New Year</div>
-        `;
-      } else {
-        container.innerHTML = `
-          <span style="font-size: 12px; color: var(--text-muted); align-self: center; margin-right: 4px;">Presets:</span>
-          <div class="preset-chip" onclick="setPreset('today-start')">Start of Today (00:00)</div>
-          <div class="preset-chip" onclick="setPreset('yesterday')">Yesterday This Time</div>
-          <div class="preset-chip" onclick="setPreset('month-start')">Start of Month</div>
-          <div class="preset-chip" onclick="setPreset('year-start')">Start of Year</div>
-        `;
-      }
+      container.innerHTML = `<span style="font-size: 13px; font-weight: 600; color: var(--text-muted); align-self: center; margin-right: 6px;">Presets:</span>`;
+      
+      const presets = AppState.countdown.mode === 'countdown' 
+        ? [{id:'today-end', label:'End of Day'}, {id:'tomorrow-9', label:'Tomorrow (9AM)'}, {id:'weekend', label:'Friday (5PM)'}]
+        : [{id:'today-start', label:'Start of Today'}, {id:'yesterday', label:'Yesterday'}, {id:'month-start', label:'Start of Month'}];
+      
+      presets.forEach(p => {
+        const btn = document.createElement('div');
+        btn.className = 'preset-chip';
+        btn.textContent = p.label;
+        btn.addEventListener('click', () => applyPreset(p.id));
+        container.appendChild(btn);
+      });
+    }
+
+    function applyPreset(type) {
+      const now = new Date();
+      let t = new Date();
+      if (type === 'today-end') t.setHours(23, 59, 59, 999);
+      else if (type === 'tomorrow-9') { t.setDate(t.getDate() + 1); t.setHours(9, 0, 0, 0); }
+      else if (type === 'weekend') { const diff = (5 - now.getDay() + 7) % 7 || 7; t.setDate(now.getDate() + diff); t.setHours(17, 0, 0, 0); }
+      else if (type === 'today-start') t.setHours(0, 0, 0, 0);
+      else if (type === 'yesterday') t.setDate(t.getDate() - 1);
+      else if (type === 'month-start') t = new Date(now.getFullYear(), now.getMonth(), 1, 0, 0, 0);
+
+      document.getElementById('timezone-select').value = 'local';
+      const iso = new Date(t.getTime() - (t.getTimezoneOffset() * 60000)).toISOString().slice(0, 16);
+      document.getElementById('countdown-target-input').value = iso;
+      TimePickerEngine.updateCountdownTriggerDisplay(iso);
+      updateCountdownTarget(false);
     }
 
     function initCountdownDefault() {
-      const def = new Date(Date.now() + 6 * 3600 * 1000);
-      const iso = new Date(def.getTime() - (def.getTimezoneOffset() * 60000)).toISOString().slice(0, 16);
+      const d = new Date(Date.now() + 6 * 3600000);
+      const iso = new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
       document.getElementById('countdown-target-input').value = iso;
+      TimePickerEngine.updateCountdownTriggerDisplay(iso);
       updateCountdownTarget(false);
     }
-
     function initSinceDefault() {
-      const def = new Date(Date.now() - 24 * 3600 * 1000);
-      const iso = new Date(def.getTime() - (def.getTimezoneOffset() * 60000)).toISOString().slice(0, 16);
+      const d = new Date(Date.now() - 24 * 3600000);
+      const iso = new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
       document.getElementById('countdown-target-input').value = iso;
-      updateCountdownTarget(false);
-    }
-
-    function setPreset(type) {
-      const now = new Date();
-      let target = new Date();
-
-      if (type === 'today-end') {
-        target.setHours(23, 59, 59, 999);
-      } else if (type === 'tomorrow-9') {
-        target.setDate(target.getDate() + 1);
-        target.setHours(9, 0, 0, 0);
-      } else if (type === 'weekend') {
-        const day = now.getDay();
-        const diff = (5 - day + 7) % 7 || 7;
-        target.setDate(now.getDate() + diff);
-        target.setHours(17, 0, 0, 0);
-      } else if (type === 'new-year') {
-        target = new Date(now.getFullYear() + 1, 0, 1, 0, 0, 0);
-      } else if (type === 'today-start') {
-        target.setHours(0, 0, 0, 0);
-      } else if (type === 'yesterday') {
-        target.setDate(target.getDate() - 1);
-      } else if (type === 'month-start') {
-        target = new Date(now.getFullYear(), now.getMonth(), 1, 0, 0, 0);
-      } else if (type === 'year-start') {
-        target = new Date(now.getFullYear(), 0, 1, 0, 0, 0);
-      }
-
-      const iso = new Date(target.getTime() - (target.getTimezoneOffset() * 60000)).toISOString().slice(0, 16);
-      document.getElementById('countdown-target-input').value = iso;
+      TimePickerEngine.updateCountdownTriggerDisplay(iso);
       updateCountdownTarget(false);
     }
 
     function showAutoSwitchFeedback(msg) {
-      const inputEl = document.getElementById('countdown-target-input');
+      const triggerEl = document.getElementById('trigger-cd-target');
       const toastEl = document.getElementById('cd-feedback-toast');
-
-      // Trigger red border shake
-      inputEl.classList.remove('input-error-shake');
-      void inputEl.offsetWidth; // Force reflow
-      inputEl.classList.add('input-error-shake');
-      setTimeout(() => inputEl.classList.remove('input-error-shake'), 1200);
-
-      // Show toast message
-      toastEl.innerHTML = `⚠️ ${msg}`;
-      toastEl.classList.add('show');
-
-      if (toastTimeout) clearTimeout(toastTimeout);
-      toastTimeout = setTimeout(() => {
-        toastEl.classList.remove('show');
-      }, 3500);
+      triggerEl.classList.remove('input-error-shake'); void triggerEl.offsetWidth; triggerEl.classList.add('input-error-shake');
+      setTimeout(() => triggerEl.classList.remove('input-error-shake'), 1200);
+      toastEl.innerHTML = `⚠️ ${msg}`; toastEl.classList.add('show');
+      if (AppState.countdown.toastTimeout) clearTimeout(AppState.countdown.toastTimeout);
+      AppState.countdown.toastTimeout = setTimeout(() => toastEl.classList.remove('show'), 3500);
     }
 
     function updateCountdownTarget(isUserInput = false) {
-      const inputEl = document.getElementById('countdown-target-input');
-      const val = inputEl.value;
-      if (!val) return;
-      targetTimestamp = new Date(val).getTime();
+      const inputStr = document.getElementById('countdown-target-input').value;
+      const tzVal = document.getElementById('timezone-select').value;
+      if (!inputStr) return;
+
+      if (tzVal === 'local') {
+        AppState.countdown.targetTimestamp = new Date(inputStr).getTime();
+      } else {
+        const [year, month, day, hour, min] = inputStr.split(/[-T:]/).map(Number);
+        const assumedUtc = Date.UTC(year, month - 1, day, hour, min);
+        AppState.countdown.targetTimestamp = assumedUtc - (parseFloat(tzVal) * 3600 * 1000);
+      }
 
       if (isUserInput) {
         const now = Date.now();
-        // If user was in Countdown mode but picked a past date -> Auto-switch to Since
-        if (cdSubMode === 'countdown' && targetTimestamp < now - 1000) {
-          setCountdownSubMode('since', true);
-          showAutoSwitchFeedback("Input incorrect: switched to Time Since mode");
-        }
-        // If user was in Since mode but picked a future date -> Auto-switch to Countdown
-        else if (cdSubMode === 'since' && targetTimestamp > now + 1000) {
-          setCountdownSubMode('countdown', true);
-          showAutoSwitchFeedback("Input incorrect: switched to Countdown mode");
+        if (AppState.countdown.mode === 'countdown' && AppState.countdown.targetTimestamp < now - 1000) {
+          setCountdownSubMode('since', true); showAutoSwitchFeedback("Input past: switched to Since mode");
+        } else if (AppState.countdown.mode === 'since' && AppState.countdown.targetTimestamp > now + 1000) {
+          setCountdownSubMode('countdown', true); showAutoSwitchFeedback("Input future: switched to Countdown mode");
         }
       }
 
+      if (AppState.countdown.intervalId) clearInterval(AppState.countdown.intervalId);
       renderCountdownTick();
-
-      if (countdownInterval) clearInterval(countdownInterval);
-      countdownInterval = setInterval(renderCountdownTick, 1000);
+      AppState.countdown.intervalId = setInterval(renderCountdownTick, 1000);
     }
 
     function renderCountdownTick() {
-      if (!targetTimestamp) return;
+      if (!AppState.countdown.targetTimestamp) return;
       const now = Date.now();
+      const isCd = AppState.countdown.mode === 'countdown';
+      const diff = isCd ? AppState.countdown.targetTimestamp - now : now - AppState.countdown.targetTimestamp;
 
-      if (cdSubMode === 'countdown') {
-        const diff = targetTimestamp - now;
-        if (diff <= 0) {
-          document.getElementById('cd-days').textContent = '00';
-          document.getElementById('cd-hours').textContent = '00';
-          document.getElementById('cd-mins').textContent = '00';
-          document.getElementById('cd-secs').textContent = '00';
-          document.getElementById('countdown-meta').textContent = 'Target date & time reached.';
-          return;
-        }
-
-        const totalSecs = Math.floor(diff / 1000);
-        const days = Math.floor(totalSecs / 86400);
-        const hours = Math.floor((totalSecs % 86400) / 3600);
-        const mins = Math.floor((totalSecs % 3600) / 60);
-        const secs = totalSecs % 60;
-
-        document.getElementById('cd-days').textContent = String(days).padStart(2, '0');
-        document.getElementById('cd-hours').textContent = String(hours).padStart(2, '0');
-        document.getElementById('cd-mins').textContent = String(mins).padStart(2, '0');
-        document.getElementById('cd-secs').textContent = String(secs).padStart(2, '0');
-
-        document.getElementById('countdown-meta').textContent = 
-          `Total remaining: ${totalSecs.toLocaleString()} seconds (${(totalSecs / 3600).toFixed(2)} hours)`;
-      } else {
-        const diff = now - targetTimestamp;
-        if (diff < 0) {
-          document.getElementById('cd-days').textContent = '00';
-          document.getElementById('cd-hours').textContent = '00';
-          document.getElementById('cd-mins').textContent = '00';
-          document.getElementById('cd-secs').textContent = '00';
-          document.getElementById('countdown-meta').textContent = 'Selected date is in the future. Switch to Countdown.';
-          return;
-        }
-
-        const totalSecs = Math.floor(diff / 1000);
-        const days = Math.floor(totalSecs / 86400);
-        const hours = Math.floor((totalSecs % 86400) / 3600);
-        const mins = Math.floor((totalSecs % 3600) / 60);
-        const secs = totalSecs % 60;
-
-        document.getElementById('cd-days').textContent = String(days).padStart(2, '0');
-        document.getElementById('cd-hours').textContent = String(hours).padStart(2, '0');
-        document.getElementById('cd-mins').textContent = String(mins).padStart(2, '0');
-        document.getElementById('cd-secs').textContent = String(secs).padStart(2, '0');
-
-        document.getElementById('countdown-meta').textContent = 
-          `Total elapsed: ${totalSecs.toLocaleString()} seconds (${(totalSecs / 3600).toFixed(2)} hours ago)`;
+      if (diff <= 0) {
+        ['cd-days', 'cd-hours', 'cd-mins', 'cd-secs'].forEach(id => document.getElementById(id).textContent = '00');
+        document.getElementById('countdown-meta').textContent = 'Target reached.';
+        return;
       }
+
+      const totalSecs = Math.floor(diff / 1000);
+      document.getElementById('cd-days').textContent = String(Math.floor(totalSecs / 86400)).padStart(2, '0');
+      document.getElementById('cd-hours').textContent = String(Math.floor((totalSecs % 86400) / 3600)).padStart(2, '0');
+      document.getElementById('cd-mins').textContent = String(Math.floor((totalSecs % 3600) / 60)).padStart(2, '0');
+      document.getElementById('cd-secs').textContent = String(totalSecs % 60).padStart(2, '0');
+      document.getElementById('countdown-meta').textContent = `Total ${isCd ? 'remaining' : 'elapsed'}: ${totalSecs.toLocaleString()} seconds`;
     }
-
-    /* MODE 2: CONVERTER (Isolated Forms + Clean Precision Math) */
-    const SECONDS_MAP = {
-      sec: 1,
-      min: 60,
-      hr: 3600,
-      day: 86400,
-      wk: 604800,
-      mo: 2629800
-    };
-
-    let activeSourceUnit = null;
 
     function handleConvFocus(el) {
       el.dataset.prevVal = el.value;
       el.value = '';
     }
-
     function handleConvInput(unit, valStr) {
-      activeSourceUnit = unit;
+      AppState.converter.lastUnit = unit;
+      AppState.converter.lastVal = valStr;
+      localStorage.setItem('convLastUnit', unit);
+      localStorage.setItem('convLastVal', valStr);
       convertFrom(unit, valStr);
     }
-
     function handleConvBlur(el, unit) {
-      if (el.value.trim() === '') {
-        if (el.dataset.prevVal !== undefined && el.dataset.prevVal !== '') {
-          el.value = el.dataset.prevVal;
-          convertFrom(unit, el.value);
-        }
-      }
-      activeSourceUnit = null;
-    }
-
-    function handleConvKeyDown(e, el, unit) {
-      if (e.key === 'Enter' || e.keyCode === 13) {
-        e.preventDefault();
-        e.stopPropagation();
-        el.blur();
+      if (el.value.trim() === '' && el.dataset.prevVal) {
+        el.value = el.dataset.prevVal;
+        convertFrom(unit, el.value);
       }
     }
-
-    function handleFormSubmit(e, inputId, unit) {
-      e.preventDefault();
-      e.stopPropagation();
-      const el = document.getElementById(inputId);
-      if (el) {
-        el.blur();
-      }
-      return false;
+    function handleConvKeyDown(e) {
+      if (e.key === 'Enter') { e.preventDefault(); e.target.blur(); }
     }
-
-    function cleanFloat(val) {
-      if (isNaN(val)) return '';
-      const precise = parseFloat(Number(val.toPrecision(10)));
-      return precise;
-    }
-
+    function cleanFloat(val) { return isNaN(val) ? '' : parseFloat(Number(val.toPrecision(10))); }
     function convertFrom(sourceUnit, valStr) {
+      const sourceEl = document.getElementById(`conv-${sourceUnit}`);
+      if (sourceEl && sourceEl.value !== valStr) sourceEl.value = valStr;
+
       if (valStr === '' || isNaN(valStr)) {
-        Object.keys(SECONDS_MAP).forEach(unit => {
-          if (unit !== sourceUnit) document.getElementById(`conv-${unit}`).value = '';
-        });
+        Object.keys(SECONDS_MAP).forEach(u => { if (u !== sourceUnit) document.getElementById(`conv-${u}`).value = ''; });
         return;
       }
-
-      const val = parseFloat(valStr);
-      const totalSeconds = val * SECONDS_MAP[sourceUnit];
-
-      Object.keys(SECONDS_MAP).forEach(unit => {
-        if (unit !== sourceUnit) {
-          const converted = totalSeconds / SECONDS_MAP[unit];
-          const cleaned = cleanFloat(converted);
-          const targetEl = document.getElementById(`conv-${unit}`);
-          targetEl.value = cleaned;
-          targetEl.dataset.prevVal = cleaned;
+      const totalSecs = parseFloat(valStr) * SECONDS_MAP[sourceUnit];
+      Object.keys(SECONDS_MAP).forEach(u => {
+        if (u !== sourceUnit) {
+          const cvt = cleanFloat(totalSecs / SECONDS_MAP[u]);
+          document.getElementById(`conv-${u}`).value = cvt;
+          document.getElementById(`conv-${u}`).dataset.prevVal = cvt;
         }
       });
     }
 
-    /* MODE 3: TIME SOLVER */
-    let currentSolverMode = 'start';
+    function initSolverDefaults() {
+      const saved = JSON.parse(localStorage.getItem('solverState')) || { start: '10:45', h: 4, m: 30, end: '15:15' };
+      document.getElementById('solver-start-input').value = saved.start;
+      document.getElementById('disp-solver-start').textContent = saved.start;
+      document.getElementById('solver-dur-h').value = saved.h;
+      document.getElementById('solver-dur-m').value = saved.m;
+      document.getElementById('disp-solver-dur').textContent = `${saved.h}h ${String(saved.m).padStart(2,'0')}m`;
+      document.getElementById('solver-end-input').value = saved.end;
+      document.getElementById('disp-solver-end').textContent = saved.end;
+      setSolverMode(AppState.solver.mode);
+    }
+    function saveSolverState() {
+      localStorage.setItem('solverState', JSON.stringify({
+        start: document.getElementById('solver-start-input').value,
+        h: document.getElementById('solver-dur-h').value,
+        m: document.getElementById('solver-dur-m').value,
+        end: document.getElementById('solver-end-input').value
+      }));
+    }
 
     function setSolverMode(mode) {
-      currentSolverMode = mode;
-
-      document.querySelectorAll('.mode-switch-btn').forEach(b => b.classList.remove('active'));
-      const activeBtn = document.getElementById(`btn-mode-${mode}`);
-      activeBtn.classList.add('active');
-
+      AppState.solver.mode = mode;
+      localStorage.setItem('solverMode', mode);
+      document.querySelectorAll('.js-solver-mode-btn').forEach(b => b.classList.remove('active'));
+      document.querySelector(`.js-solver-mode-btn[data-mode="${mode}"]`).classList.add('active');
       updateModeIndicator();
 
       ['start', 'dur', 'end'].forEach(m => {
         const box = document.getElementById(`box-${m}`);
         const badge = document.getElementById(`badge-${m}`);
-        const hint = document.getElementById(`hint-${m}`);
-        const isTarget = (m === mode);
-
-        hint.innerHTML = '';
+        document.getElementById(`hint-${m}`).innerHTML = '';
         box.classList.remove('shake');
-
-        if (isTarget) {
-          box.classList.add('highlight');
-          badge.innerHTML = '<span class="solver-target-badge">Solving</span>';
+        if (m === mode) {
+          box.classList.add('highlight'); badge.innerHTML = '<span class="solver-target-badge">Solving</span>';
         } else {
-          box.classList.remove('highlight');
-          badge.innerHTML = '';
+          box.classList.remove('highlight'); badge.innerHTML = '';
         }
       });
-
       runInteractiveSolver();
     }
 
-    function timeStringToMinutes(str) {
-      if (!str) return null;
-      const [h, m] = str.split(':').map(Number);
-      return h * 60 + m;
-    }
-
-    function minutesToTimeString(totalMins) {
-      let normalized = ((totalMins % 1440) + 1440) % 1440;
-      const h = Math.floor(normalized / 60);
-      const m = normalized % 60;
-      return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
-    }
-
-    function setCurrentTimeToStart(e) {
-      if (e) e.stopPropagation();
+    function setCurrentTime(inputId, fieldType) {
       const now = new Date();
-      const hh = String(now.getHours()).padStart(2, '0');
-      const mm = String(now.getMinutes()).padStart(2, '0');
-      document.getElementById('solver-start-input').value = `${hh}:${mm}`;
-      handleFieldInput('start');
-    }
-
-    function setCurrentTimeToEnd(e) {
-      if (e) e.stopPropagation();
-      const now = new Date();
-      const hh = String(now.getHours()).padStart(2, '0');
-      const mm = String(now.getMinutes()).padStart(2, '0');
-      document.getElementById('solver-end-input').value = `${hh}:${mm}`;
-      handleFieldInput('end');
-    }
-
-    function adjustTime(inputId, deltaMinutes, fieldType, e) {
-      if (e) e.stopPropagation();
-      const input = document.getElementById(inputId);
-      let mins = timeStringToMinutes(input.value) || 0;
-      mins += deltaMinutes;
-      input.value = minutesToTimeString(mins);
+      const valStr = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+      document.getElementById(inputId).value = valStr;
+      const dispId = fieldType === 'start' ? 'disp-solver-start' : 'disp-solver-end';
+      document.getElementById(dispId).textContent = valStr;
       handleFieldInput(fieldType);
     }
-
-    function adjustDuration(deltaMinutes, e) {
-      if (e) e.stopPropagation();
-      let h = parseInt(document.getElementById('solver-dur-h').value || 0, 10);
-      let m = parseInt(document.getElementById('solver-dur-m').value || 0, 10);
-      let total = Math.max(0, (h * 60 + m) + deltaMinutes);
-
-      document.getElementById('solver-dur-h').value = Math.floor(total / 60);
-      document.getElementById('solver-dur-m').value = total % 60;
+    function adjustTime(inputId, deltaMins, fieldType) {
+      const input = document.getElementById(inputId);
+      if (!input.value) return;
+      const [h, m] = input.value.split(':').map(Number);
+      let tMins = h * 60 + m + deltaMins;
+      tMins = ((tMins % 1440) + 1440) % 1440;
+      const valStr = `${String(Math.floor(tMins/60)).padStart(2,'0')}:${String(tMins%60).padStart(2,'0')}`;
+      input.value = valStr;
+      const dispId = fieldType === 'start' ? 'disp-solver-start' : 'disp-solver-end';
+      document.getElementById(dispId).textContent = valStr;
+      handleFieldInput(fieldType);
+    }
+    function adjustDuration(deltaMins) {
+      const hEl = document.getElementById('solver-dur-h'), mEl = document.getElementById('solver-dur-m');
+      const total = Math.max(0, (parseInt(hEl.value||0)*60 + parseInt(mEl.value||0)) + deltaMins);
+      const resH = Math.floor(total/60), resM = total%60;
+      hEl.value = resH;
+      mEl.value = resM;
+      document.getElementById('disp-solver-dur').textContent = `${resH}h ${String(resM).padStart(2,'0')}m`;
       handleFieldInput('dur');
     }
 
-    function handleFieldInteraction(fieldType) {
-      if (currentSolverMode === fieldType) {
-        triggerShakeAndWarning(fieldType);
+    function handleBoxInteraction(fieldType) {
+      if (AppState.solver.mode === fieldType) {
+        const box = document.getElementById(`box-${fieldType}`);
+        box.classList.remove('shake'); void box.offsetWidth; box.classList.add('shake');
+        
+        window._tempSolverSwitch = (newMode) => setSolverMode(newMode);
+        let altMode = fieldType === 'start' ? 'end' : (fieldType === 'end' ? 'start' : 'end');
+        let altName = altMode === 'start' ? 'Start Time' : (altMode === 'end' ? 'End Time' : 'Duration');
+        document.getElementById(`hint-${fieldType}`).innerHTML = `⚠️ Solving this. <span onclick="_tempSolverSwitch('${altMode}')" style="font-weight:700; text-decoration:underline; cursor:pointer;">Solve ${altName} instead</span>`;
       }
-    }
-
-    function handleBoxClick(fieldType) {
-      if (currentSolverMode === fieldType) {
-        triggerShakeAndWarning(fieldType);
-      }
-    }
-
-    function triggerShakeAndWarning(fieldType) {
-      const box = document.getElementById(`box-${fieldType}`);
-      const hint = document.getElementById(`hint-${fieldType}`);
-      
-      box.classList.remove('shake');
-      void box.offsetWidth;
-      box.classList.add('shake');
-
-      let alternateMode = (fieldType === 'start') ? 'end' : (fieldType === 'end' ? 'start' : 'end');
-      let alternateName = (alternateMode === 'start') ? 'Start Time' : (alternateMode === 'end' ? 'End Time' : 'Duration');
-
-      hint.innerHTML = `⚠️ Currently solving this. <span onclick="setSolverMode('${alternateMode}')" style="font-weight:700; text-decoration:underline; cursor:pointer;">Click to solve ${alternateName} instead</span>`;
     }
 
     function handleFieldInput(fieldType) {
-      if (currentSolverMode === fieldType) {
-        triggerShakeAndWarning(fieldType);
-      } else {
-        document.getElementById(`hint-${currentSolverMode}`).innerHTML = '';
+      if (AppState.solver.mode === fieldType) handleBoxInteraction(fieldType);
+      else {
+        document.getElementById(`hint-${AppState.solver.mode}`).innerHTML = '';
         runInteractiveSolver();
       }
     }
 
-    function runInteractiveSolver() {
-      const startVal = document.getElementById('solver-start-input').value;
-      const endVal = document.getElementById('solver-end-input').value;
-      const durH = parseInt(document.getElementById('solver-dur-h').value || 0, 10);
-      const durM = parseInt(document.getElementById('solver-dur-m').value || 0, 10);
-      const durationMins = Math.max(0, durH * 60 + durM);
-
-      const calloutSubtitle = document.getElementById('callout-subtitle');
-      const calloutTimeText = document.getElementById('callout-time-text');
-      const calloutDayBadge = document.getElementById('callout-day-badge');
-      const calloutExplanation = document.getElementById('callout-explanation');
-
-      calloutDayBadge.innerHTML = '';
-
-      if (currentSolverMode === 'start') {
-        calloutSubtitle.textContent = "Calculated Start Time";
-        const endMins = timeStringToMinutes(endVal);
-        if (endMins !== null) {
-          const rawStartMins = endMins - durationMins;
-          const resultStr = minutesToTimeString(rawStartMins);
-          document.getElementById('solver-start-input').value = resultStr;
-          calloutTimeText.textContent = resultStr;
-
-          let dayOffset = Math.floor(rawStartMins / 1440);
-          if (dayOffset < 0) {
-            const badgeHtml = `<span class="day-wrap-badge">${dayOffset} Day${Math.abs(dayOffset) > 1 ? 's' : ''}</span>`;
-            calloutDayBadge.innerHTML = badgeHtml;
-            calloutExplanation.textContent = `To end at ${endVal} with a ${durH}h ${durM}m duration, Start Time is ${resultStr} (${Math.abs(dayOffset)} day${Math.abs(dayOffset) > 1 ? 's' : ''} prior).`;
-          } else {
-            calloutExplanation.textContent = `To end at ${endVal} with a ${durH}h ${durM}m duration, Start Time must be ${resultStr}.`;
-          }
-        }
-      } else if (currentSolverMode === 'dur') {
-        calloutSubtitle.textContent = "Calculated Duration";
-        const startMins = timeStringToMinutes(startVal);
-        const endMins = timeStringToMinutes(endVal);
-        if (startMins !== null && endMins !== null) {
-          let diff = endMins - startMins;
-          let isNextDay = false;
-          if (diff < 0) {
-            diff += 1440;
-            isNextDay = true;
-          }
-          const resH = Math.floor(diff / 60);
-          const resM = diff % 60;
-          document.getElementById('solver-dur-h').value = resH;
-          document.getElementById('solver-dur-m').value = resM;
-          calloutTimeText.textContent = `${resH}h ${String(resM).padStart(2, '0')}m`;
-          
-          if (isNextDay) {
-            const badgeHtml = `<span class="day-wrap-badge">Overnight (+1 Day)</span>`;
-            calloutDayBadge.innerHTML = badgeHtml;
-            calloutExplanation.textContent = `From ${startVal} to ${endVal} (next day), duration is ${resH} hours and ${resM} minutes (${(diff / 60).toFixed(2)} hrs).`;
-          } else {
-            calloutExplanation.textContent = `From ${startVal} to ${endVal}, duration is ${resH} hours and ${resM} minutes (${(diff / 60).toFixed(2)} hrs).`;
-          }
-        }
-      } else if (currentSolverMode === 'end') {
-        calloutSubtitle.textContent = "Calculated End Time";
-        const startMins = timeStringToMinutes(startVal);
-        if (startMins !== null) {
-          const rawEndMins = startMins + durationMins;
-          const resultStr = minutesToTimeString(rawEndMins);
-          document.getElementById('solver-end-input').value = resultStr;
-          calloutTimeText.textContent = resultStr;
-
-          let dayOffset = Math.floor(rawEndMins / 1440);
-          if (dayOffset > 0) {
-            const badgeHtml = `<span class="day-wrap-badge">+${dayOffset} Day${dayOffset > 1 ? 's' : ''}</span>`;
-            calloutDayBadge.innerHTML = badgeHtml;
-            calloutExplanation.textContent = `Starting at ${startVal} for ${durH}h ${durM}m finishes at ${resultStr} (+${dayOffset} day${dayOffset > 1 ? 's' : ''} later).`;
-          } else {
-            calloutExplanation.textContent = `Starting at ${startVal} for ${durH}h ${durM}m finishes at ${resultStr}.`;
-          }
-        }
-      }
+    function timeStrMins(str) { return str ? str.split(':').map(Number).reduce((h, m) => h*60+m) : null; }
+    function minsToStr(tm) { 
+      const nm = ((tm % 1440) + 1440) % 1440; 
+      return `${String(Math.floor(nm/60)).padStart(2,'0')}:${String(nm%60).padStart(2,'0')}`;
     }
 
-    window.addEventListener('DOMContentLoaded', () => {
-      initTheme();
-      renderPresets();
-      initCountdownDefault();
-      convertFrom('hr', '2.5');
-      setSolverMode('start');
-      setTimeout(() => {
-        updateNavIndicator();
-        updateModeIndicator();
-        updateCdSubIndicator();
-      }, 50);
-    });
+    function runInteractiveSolver() {
+      const stVal = document.getElementById('solver-start-input').value;
+      const endVal = document.getElementById('solver-end-input').value;
+      const dH = parseInt(document.getElementById('solver-dur-h').value || 0, 10);
+      const dM = parseInt(document.getElementById('solver-dur-m').value || 0, 10);
+      const durMins = Math.max(0, dH*60 + dM);
 
-    window.addEventListener('resize', () => {
-      updateNavIndicator();
-      updateModeIndicator();
-      updateCdSubIndicator();
-    });
+      const stMins = timeStrMins(stVal), enMins = timeStrMins(endVal);
+      const tText = document.getElementById('callout-time-text'), tBadge = document.getElementById('callout-day-badge'), expl = document.getElementById('callout-explanation');
+      
+      document.getElementById('callout-subtitle').textContent = `Calculated ${AppState.solver.mode === 'dur' ? 'Duration' : AppState.solver.mode === 'start' ? 'Start Time' : 'End Time'}`;
+      tBadge.innerHTML = '';
+
+      if (AppState.solver.mode === 'start' && enMins !== null) {
+        const resMins = enMins - durMins;
+        const resStr = minsToStr(resMins);
+        document.getElementById('solver-start-input').value = resStr;
+        document.getElementById('disp-solver-start').textContent = resStr;
+        tText.textContent = resStr;
+        const dOff = Math.floor(resMins/1440);
+        if (dOff < 0) tBadge.innerHTML = `<span class="day-wrap-badge">${dOff} Day(s)</span>`;
+        expl.textContent = `To end at ${endVal} with a ${dH}h ${dM}m duration, Start Time must be ${resStr}.`;
+      } 
+      else if (AppState.solver.mode === 'dur' && stMins !== null && enMins !== null) {
+        let diff = enMins - stMins;
+        const isNext = diff < 0; if (isNext) diff += 1440;
+        const resH = Math.floor(diff/60), resM = diff%60;
+        document.getElementById('solver-dur-h').value = resH;
+        document.getElementById('solver-dur-m').value = resM;
+        document.getElementById('disp-solver-dur').textContent = `${resH}h ${String(resM).padStart(2,'0')}m`;
+        tText.textContent = `${resH}h ${String(resM).padStart(2,'0')}m`;
+        if (isNext) tBadge.innerHTML = `<span class="day-wrap-badge">Overnight (+1 Day)</span>`;
+        expl.textContent = `From ${stVal} to ${endVal}, duration is ${resH}h ${resM}m.`;
+      } 
+      else if (AppState.solver.mode === 'end' && stMins !== null) {
+        const resMins = stMins + durMins;
+        const resStr = minsToStr(resMins);
+        document.getElementById('solver-end-input').value = resStr;
+        document.getElementById('disp-solver-end').textContent = resStr;
+        tText.textContent = resStr;
+        const dOff = Math.floor(resMins/1440);
+        if (dOff > 0) tBadge.innerHTML = `<span class="day-wrap-badge">+${dOff} Day(s)</span>`;
+        expl.textContent = `Starting at ${stVal} for ${dH}h ${dM}m finishes at ${resStr}.`;
+      }
+      saveSolverState();
+    }
+
+    function copySolverResult() {
+      const textToCopy = document.getElementById('callout-explanation').textContent;
+      navigator.clipboard.writeText(textToCopy).then(() => {
+        const btn = document.getElementById('btn-copy-result');
+        btn.textContent = "✅ Copied!";
+        setTimeout(() => btn.textContent = "📋 Copy Result", 2000);
+      });
+    }
   </script>
 </body>
 </html>
