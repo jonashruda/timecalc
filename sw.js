@@ -1,4 +1,4 @@
-const CACHE_NAME = 'timecalc-v2';
+const CACHE_NAME = 'timecalc-v3';
 const ASSETS = [
   './',
   './index.html',
