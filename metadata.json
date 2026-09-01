@@ -1,0 +1,6 @@
+{
+  "name": "TimeCalc",
+  "description": "Smart minimalist time utility and calculator for time differences, durations, and conversions.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

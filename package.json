@@ -1,0 +1,15 @@
+{
+  "name": "timecalc",
+  "version": "1.0.0",
+  "description": "Smart Minimalist Time Utility",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "dev": "node server.js",
+    "build": "echo 'No build required for static site'",
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.21.2"
+  }
+}
