@@ -366,36 +366,74 @@
       transform: rotate(15deg);
     }
 
-    .haptics-toggle-btn {
-      background: var(--btn-subtle-bg);
-      border: 1px solid var(--border-subtle);
-      color: var(--text-muted);
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 18px;
-      flex-shrink: 0;
-      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    /* Start Here / First Input Pulsing Beacon & Outward Waves */
+    .start-action-beacon {
+      position: relative !important;
+      border-color: var(--accent-blue) !important;
+      animation: startBeaconPulse 2.2s cubic-bezier(0.4, 0, 0.2, 1) infinite !important;
+      box-shadow: 0 0 0 0 rgba(0, 113, 227, 0.45), 0 0 18px rgba(0, 113, 227, 0.25) !important;
     }
 
-    .haptics-toggle-btn svg {
-      display: block;
-      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    .start-action-beacon::before,
+    .start-action-beacon::after {
+      content: '';
+      position: absolute;
+      inset: -4px;
+      border-radius: inherit;
+      border: 2px solid var(--accent-blue);
+      pointer-events: none;
+      z-index: 1;
+      opacity: 0;
+      animation: startWaveOutward 2.4s cubic-bezier(0.1, 0.4, 0.6, 1) infinite;
     }
 
-    .haptics-toggle-btn.active {
-      color: var(--accent-blue);
-      background: var(--accent-blue-light);
-      border-color: rgba(0, 113, 227, 0.35);
+    .start-action-beacon::after {
+      animation-delay: 1.2s;
     }
 
-    .haptics-toggle-btn:hover {
-      transform: scale(1.08);
-      color: var(--accent-blue);
+    @keyframes startBeaconPulse {
+      0%, 100% {
+        box-shadow: 0 0 0 0 rgba(0, 113, 227, 0.45), 0 0 16px rgba(0, 113, 227, 0.2);
+        border-color: var(--accent-blue);
+      }
+      50% {
+        box-shadow: 0 0 0 5px rgba(0, 113, 227, 0.22), 0 0 24px rgba(0, 113, 227, 0.42);
+        border-color: #0077ED;
+      }
+    }
+
+    @keyframes startWaveOutward {
+      0% {
+        transform: scale(0.99);
+        opacity: 0.9;
+      }
+      40% {
+        opacity: 0.45;
+      }
+      100% {
+        transform: scale(1.05, 1.25);
+        opacity: 0;
+      }
+    }
+
+    /* Start guide chip beacon */
+    .preset-chip.start-chip-beacon {
+      position: relative;
+      border-color: var(--accent-blue) !important;
+      background: var(--accent-blue-light) !important;
+      color: var(--accent-blue) !important;
+      font-weight: 700;
+      animation: startBeaconPulse 2.2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+    }
+
+    .preset-chip.start-chip-beacon::before {
+      content: '';
+      position: absolute;
+      inset: -3px;
+      border-radius: inherit;
+      border: 1.5px solid var(--accent-blue);
+      pointer-events: none;
+      animation: startWaveOutward 2.4s cubic-bezier(0.1, 0.4, 0.6, 1) infinite;
     }
 
     /* Layout Containers */
@@ -2131,16 +2169,6 @@
           <span>Type</span>
         </button>
       </div>
-      <button class="haptics-toggle-btn active" id="btn-haptics-toggle" title="Haptic Feedback (Vibration) On/Off" aria-label="Toggle Haptic Feedback" aria-pressed="true">
-        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <rect x="6" y="3" width="12" height="18" rx="2" ry="2"></rect>
-          <line x1="11" y1="17" x2="13" y2="17"></line>
-          <path d="M2 8c0-1.5.5-2.5 1-3"></path>
-          <path d="M2 16c0 1.5.5 2.5 1 3"></path>
-          <path d="M22 8c0-1.5-.5-2.5-1-3"></path>
-          <path d="M22 16c0 1.5-.5 2.5-1 3"></path>
-        </svg>
-      </button>
       <button class="theme-toggle-btn" id="theme-toggle" title="Toggle Dark / Light Mode" aria-label="Toggle Dark / Light Mode">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="theme-icon-moon" aria-hidden="true">
           <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
@@ -2170,7 +2198,7 @@
           <div class="form-group">
             <label class="form-label" id="cd-input-label" for="countdown-target-input">Target Date & Time</label>
             
-            <div class="custom-input-trigger" id="trigger-cd-target" tabindex="0" role="button" aria-haspopup="dialog" aria-label="Select Target Date and Time">
+            <div class="custom-input-trigger start-action-beacon" id="trigger-cd-target" tabindex="0" role="button" aria-haspopup="dialog" aria-label="Select Target Date and Time">
               <span class="trigger-text-val" id="disp-cd-target">Select target date & time</span>
               <span class="trigger-icon-badge" aria-hidden="true">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -2182,7 +2210,7 @@
               </span>
             </div>
 
-            <input type="datetime-local" class="manual-native-input" id="countdown-target-input" />
+            <input type="datetime-local" class="manual-native-input start-action-beacon" id="countdown-target-input" />
             <div id="cd-feedback-toast" class="switch-feedback-toast"></div>
           </div>
 
@@ -3156,59 +3184,23 @@
       return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
     }
 
-    /* 1.5 HAPTIC FEEDBACK CONTROLLER */
-    const Haptics = {
-      enabled: localStorage.getItem('hapticsEnabled') !== 'false',
+    /* 1.5 START BEACON & ONBOARDING CONTROLLER */
+    function initStartBeacons() {
+      const cdTrigger = document.getElementById('trigger-cd-target');
+      const cdNative = document.getElementById('countdown-target-input');
+      if (cdTrigger) cdTrigger.classList.add('start-action-beacon');
+      if (cdNative) cdNative.classList.add('start-action-beacon');
 
-      toggle() {
-        this.enabled = !this.enabled;
-        localStorage.setItem('hapticsEnabled', this.enabled ? 'true' : 'false');
-        this.updateUI();
-        if (this.enabled) {
-          this.success();
-        }
-      },
+      // Highlight the first quick preset chip so the user sees all ways to start
+      const firstPreset = document.querySelector('.preset-chip');
+      if (firstPreset) firstPreset.classList.add('start-chip-beacon');
+    }
 
-      updateUI() {
-        const btn = document.getElementById('btn-haptics-toggle');
-        if (btn) {
-          btn.classList.toggle('active', this.enabled);
-          btn.setAttribute('aria-pressed', this.enabled ? 'true' : 'false');
-          btn.title = this.enabled ? 'Haptic Feedback (Vibration): Enabled' : 'Haptic Feedback (Vibration): Disabled';
-          btn.innerHTML = this.enabled ? Icons.vibrate : Icons.vibrateOff;
-        }
-      },
-
-      // Light subtle tap for general buttons, chips, pill toggles, stepper clicks (10ms)
-      tap() {
-        if (!this.enabled || !navigator.vibrate) return;
-        try { navigator.vibrate(10); } catch (_) {}
-      },
-
-      // Light tick for rotational scroll, fine step adjustment, wheel snap (14ms)
-      tick() {
-        if (!this.enabled || !navigator.vibrate) return;
-        try { navigator.vibrate(14); } catch (_) {}
-      },
-
-      // Tactile selection for tab switches, mode toggles, operators, theme changes (18ms)
-      selection() {
-        if (!this.enabled || !navigator.vibrate) return;
-        try { navigator.vibrate(18); } catch (_) {}
-      },
-
-      // Distinct double-pulse for copying results or applying presets ([15, 45, 20])
-      success() {
-        if (!this.enabled || !navigator.vibrate) return;
-        try { navigator.vibrate([15, 45, 20]); } catch (_) {}
-      },
-
-      // Alert/shake pattern for invalid inputs or auto-switches ([25, 40, 30])
-      warning() {
-        if (!this.enabled || !navigator.vibrate) return;
-        try { navigator.vibrate([25, 40, 30]); } catch (_) {}
-      }
-    };
+    function dismissStartBeacons() {
+      document.querySelectorAll('.start-action-beacon, .start-chip-beacon').forEach(el => {
+        el.classList.remove('start-action-beacon', 'start-chip-beacon');
+      });
+    }
 
     /* 2. TIME & DATE PICKER ENGINE */
     const TimePickerEngine = {
@@ -3352,7 +3344,7 @@
         this.modal.classList.add('visible');
         triggerEl.classList.add('active');
         this.updateLiveDisplay();
-        Haptics.tap();
+        dismissStartBeacons();
 
         setTimeout(() => {
           this.scrollToCentered(this.hoursDrum, this.selectedHour, false, false);
@@ -3361,7 +3353,6 @@
       },
 
       close() {
-        Haptics.tap();
         this.scrim.classList.remove('visible');
         this.modal.classList.remove('visible');
         this.monthYearPopover.classList.remove('open');
@@ -3861,7 +3852,6 @@
       },
 
       triggerLensFeedback() {
-        Haptics.tick();
         if (this.lens) {
           this.lens.classList.remove('pulse');
           void this.lens.offsetWidth;
@@ -3876,10 +3866,10 @@
       bindEvents();
       initTheme();
       initInputMode();
-      Haptics.updateUI();
       initTabs();
       initSolverDefaults();
       initCountdownDefault();
+      initStartBeacons();
       
       convertFrom(AppState.converter.lastUnit, AppState.converter.lastVal);
       handleHashRouting();
@@ -3925,16 +3915,10 @@
     }
 
     function bindEvents() {
-      const hapticBtn = document.getElementById('btn-haptics-toggle');
-      if (hapticBtn) {
-        hapticBtn.addEventListener('click', () => Haptics.toggle());
-      }
-
-      // Fast responsive haptic feedback for touch and pointer interactions on mobile phones
+      // Dismiss start guidance beacons upon any user interaction with interactive elements
       document.addEventListener('pointerdown', (e) => {
-        const target = e.target.closest('button, [role="button"], [role="tab"], .preset-chip, .quick-chip, .durmath-quick-chip, .js-break-chip, .copy-fmt-pill, .clipboard-btn, .custom-input-trigger, .ts-drum-item, .ts-cal-cell:not(.empty), .ts-my-year-chip, .ts-my-month-chip, .unit-btn, .stepper-btn, .input-mode-btn, .theme-toggle-btn, .haptics-toggle-btn');
-        if (target && !target.disabled) {
-          Haptics.tap();
+        if (e.target.closest('button, [role="button"], [role="tab"], .preset-chip, .quick-chip, .durmath-quick-chip, .js-break-chip, .custom-input-trigger, input, select')) {
+          dismissStartBeacons();
         }
       }, { passive: true });
 
@@ -4131,7 +4115,6 @@
     }
 
     function setInputMode(mode) {
-      if (AppState.inputMode !== mode) Haptics.selection();
       AppState.inputMode = mode;
       localStorage.setItem('inputUIMode', mode);
       document.body.classList.remove('mode-wheel', 'mode-manual');
@@ -4144,8 +4127,6 @@
     }
 
     const Icons = {
-      vibrate: `<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="3" width="12" height="18" rx="2" ry="2"></rect><line x1="11" y1="17" x2="13" y2="17"></line><path d="M2 8c0-1.5.5-2.5 1-3"></path><path d="M2 16c0 1.5.5 2.5 1 3"></path><path d="M22 8c0-1.5-.5-2.5-1-3"></path><path d="M22 16c0 1.5-.5 2.5-1 3"></path></svg>`,
-      vibrateOff: `<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="3" width="12" height="18" rx="2" ry="2"></rect><line x1="11" y1="17" x2="13" y2="17"></line><line x1="2" y1="2" x2="22" y2="22"></line></svg>`,
       sun: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>`,
       moon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>`,
       alert: `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block; vertical-align:text-bottom; margin-right:4px;" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>`,
@@ -4156,7 +4137,6 @@
     };
 
     function toggleTheme() {
-      Haptics.selection();
       const isDark = document.body.classList.toggle('dark-mode');
       document.getElementById('theme-toggle').innerHTML = isDark ? Icons.sun : Icons.moon;
       localStorage.setItem('theme', isDark ? 'dark' : 'light');
@@ -4200,7 +4180,6 @@
       }
     }
     function switchMainTab(tabId, el) {
-      if (AppState.activeTab !== tabId) Haptics.selection();
       document.querySelectorAll('.tab-pane').forEach(p => {
         p.classList.remove('active');
         p.style.display = '';
@@ -4227,7 +4206,6 @@
     }
 
     function setCountdownSubMode(mode, fromAutoSwitch = false) {
-      if (!fromAutoSwitch && AppState.countdown.mode !== mode) Haptics.selection();
       AppState.countdown.mode = mode;
       document.querySelectorAll('.js-cd-sub-btn').forEach(b => b.classList.remove('active'));
       const activeBtn = document.querySelector(`.js-cd-sub-btn[data-mode="${mode}"]`);
@@ -4270,7 +4248,7 @@
     }
 
     function applyPreset(type) {
-      Haptics.success();
+      dismissStartBeacons();
       const now = new Date();
       let t = new Date();
       if (type === 'today-end') t.setHours(23, 59, 59, 999);
@@ -4303,7 +4281,6 @@
     }
 
     function showAutoSwitchFeedback(msg) {
-      Haptics.warning();
       const triggerEl = document.getElementById('trigger-cd-target');
       const toastEl = document.getElementById('cd-feedback-toast');
       triggerEl.classList.remove('input-error-shake'); void triggerEl.offsetWidth; triggerEl.classList.add('input-error-shake');
@@ -4465,7 +4442,6 @@
     }
 
     function setSolverSubMode(subMode, shouldRun = true) {
-      if (AppState.solver.subMode !== subMode) Haptics.selection();
       AppState.solver.subMode = subMode;
       localStorage.setItem('solverSubMode', subMode);
       
@@ -4490,7 +4466,6 @@
     }
 
     function setBreakMinutes(mins, shouldRun = true) {
-      if (AppState.solver.breakMinutes !== mins) Haptics.selection();
       AppState.solver.breakMinutes = mins;
       localStorage.setItem('solverBreakMins', mins);
 
@@ -4502,7 +4477,6 @@
     }
 
     function setDurMathOp(op, shouldRun = true) {
-      if (AppState.solver.durMath.op !== op) Haptics.selection();
       AppState.solver.durMath.op = op;
       localStorage.setItem('durMathOp', op);
 
@@ -4513,7 +4487,6 @@
     }
 
     function setSolverMode(mode, shouldRun = true) {
-      if (AppState.solver.mode !== mode) Haptics.selection();
       AppState.solver.mode = mode;
       localStorage.setItem('solverMode', mode);
       document.querySelectorAll('.js-solver-mode-btn').forEach(b => b.classList.remove('active'));
@@ -4791,7 +4764,6 @@
 
       if (!valToCopy) return;
 
-      Haptics.success();
       navigator.clipboard.writeText(valToCopy).then(() => {
         buttonEl.classList.add('copied');
         const tag = buttonEl.querySelector('.fmt-tag');
@@ -4806,7 +4778,6 @@
 
     function copySolverResult() {
       const textToCopy = document.getElementById('callout-explanation').textContent;
-      Haptics.success();
       navigator.clipboard.writeText(textToCopy).then(() => {
         const btn = document.getElementById('btn-copy-result');
         btn.innerHTML = `${Icons.check} <span>Copied!</span>`;
