@@ -7,6 +7,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="apple-touch-icon" href="./icon-192.png">
 
+<script src="./time-engine.js"></script>
 <script>
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
@@ -122,19 +123,106 @@
       background-color: var(--bg-primary);
       color: var(--text-main);
       min-height: 100vh;
-      padding-top: 108px;
+      padding-top: 0;
       padding-bottom: 72px;
       overflow-x: hidden;
       font-size: 16px;
+      position: relative;
     }
 
-    /* Top Navigation */
-    .top-nav {
+    /* Ambient Background Glow (Clockwise 60s Orbit) */
+    .ambient-bg-glow {
       position: fixed;
       top: 0;
       left: 0;
       right: 0;
-      height: 84px;
+      bottom: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+    .glow-rotator {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 140vmax;
+      height: 140vmax;
+      margin-left: -70vmax;
+      margin-top: -70vmax;
+      transform-origin: 50% 50%;
+      animation: rotateGlowClockwise 60s linear infinite;
+      pointer-events: none;
+      will-change: transform;
+    }
+    .glow-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(100px);
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      will-change: transform;
+    }
+
+    /* 4 Orbital nodes around the perimeter for vivid continuous movement */
+    .glow-orb-1 {
+      top: 12%;
+      left: 50%;
+      width: 780px;
+      height: 680px;
+      background: radial-gradient(circle, rgba(0, 122, 255, 0.22) 0%, rgba(0, 113, 227, 0.10) 45%, rgba(0, 113, 227, 0) 75%);
+    }
+    .glow-orb-2 {
+      top: 50%;
+      left: 88%;
+      width: 720px;
+      height: 640px;
+      background: radial-gradient(circle, rgba(94, 92, 230, 0.20) 0%, rgba(94, 92, 230, 0.08) 45%, rgba(94, 92, 230, 0) 75%);
+    }
+    .glow-orb-3 {
+      top: 88%;
+      left: 50%;
+      width: 800px;
+      height: 700px;
+      background: radial-gradient(circle, rgba(0, 199, 190, 0.18) 0%, rgba(50, 173, 230, 0.08) 45%, rgba(0, 199, 190, 0) 75%);
+    }
+    .glow-orb-4 {
+      top: 50%;
+      left: 12%;
+      width: 740px;
+      height: 640px;
+      background: radial-gradient(circle, rgba(88, 86, 214, 0.19) 0%, rgba(0, 122, 255, 0.08) 45%, rgba(88, 86, 214, 0) 75%);
+    }
+
+    /* Dark Mode Vibrant Glow */
+    body.dark-mode .glow-orb-1 {
+      background: radial-gradient(circle, rgba(10, 132, 255, 0.32) 0%, rgba(10, 132, 255, 0.14) 45%, rgba(10, 132, 255, 0) 75%);
+    }
+    body.dark-mode .glow-orb-2 {
+      background: radial-gradient(circle, rgba(142, 140, 255, 0.28) 0%, rgba(94, 92, 230, 0.12) 45%, rgba(94, 92, 230, 0) 75%);
+    }
+    body.dark-mode .glow-orb-3 {
+      background: radial-gradient(circle, rgba(100, 210, 255, 0.26) 0%, rgba(50, 173, 230, 0.11) 45%, rgba(100, 210, 255, 0) 75%);
+    }
+    body.dark-mode .glow-orb-4 {
+      background: radial-gradient(circle, rgba(191, 90, 242, 0.25) 0%, rgba(142, 140, 255, 0.11) 45%, rgba(191, 90, 242, 0) 75%);
+    }
+
+    @keyframes rotateGlowClockwise {
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* Top Navigation */
+    .top-nav {
+      position: sticky;
+      top: 0;
+      left: 0;
+      right: 0;
+      width: 100%;
       background: var(--bg-card);
       backdrop-filter: blur(24px);
       -webkit-backdrop-filter: blur(24px);
@@ -142,7 +230,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 36px;
+      padding: 16px 36px;
       z-index: 1000;
     }
 
@@ -282,7 +370,7 @@
     .container {
       max-width: 1260px;
       margin: 0 auto;
-      padding: 0 28px;
+      padding: 32px 28px 0 28px;
       position: relative;
     }
 
@@ -320,53 +408,145 @@
     .section-desc {
       font-size: 16px;
       color: var(--text-muted);
-      margin-bottom: 28px;
+      margin-bottom: 24px;
       line-height: 1.5;
     }
 
-    /* Sub-Switch */
-    .sub-switch-bar {
-      position: relative;
+    /* Next-Step Guidance Banners */
+    .step-guide-banner {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--accent-blue-light);
+      border: 1px solid var(--border-focus);
+      border-radius: var(--radius-sm);
+      padding: 12px 18px;
+      font-size: 13.5px;
+      color: var(--text-main);
+      margin-bottom: 22px;
+      line-height: 1.4;
+      animation: pureFadeIn 0.3s ease;
+    }
+    .step-guide-icon {
+      flex-shrink: 0;
+      color: var(--accent-blue);
       display: inline-flex;
-      width: 100%;
-      max-width: 440px;
+    }
+    .step-guide-banner strong {
+      color: var(--accent-blue);
+      font-weight: 700;
+    }
+
+    /* Unified Segmented Switch Controls */
+    .sub-switch-bar,
+    .solver-sub-nav,
+    .mode-switch-bar {
+      display: inline-flex;
       background: var(--btn-subtle-bg);
-      padding: 5px;
+      border: 1.5px solid var(--border-subtle);
       border-radius: var(--radius-full);
-      margin-bottom: 28px;
-      gap: 3px;
+      padding: 4px;
+      gap: 4px;
+      width: auto;
+      max-width: 100%;
+      position: relative;
     }
 
-    .sub-indicator {
-      position: absolute;
-      background: var(--accent-blue);
-      border-radius: var(--radius-full);
-      box-shadow: var(--shadow-sm);
-      transition: all 0.32s cubic-bezier(0.25, 1, 0.5, 1);
-      pointer-events: none;
-      z-index: 1;
+    .sub-switch-bar {
+      max-width: 440px;
+      width: 100%;
+      margin-bottom: 24px;
     }
 
-    .sub-switch-btn {
+    .solver-sub-nav {
+      max-width: 400px;
+      margin: 0 auto 24px auto;
+      display: flex;
+    }
+
+    .mode-switch-bar {
+      width: 100%;
+      margin-bottom: 24px;
+    }
+
+    .sub-switch-btn,
+    .solver-sub-nav-btn,
+    .mode-switch-btn {
       position: relative;
       z-index: 2;
       flex: 1;
       padding: 10px 18px;
       border: none;
-      background: transparent !important;
-      font-size: 14px;
+      background: transparent;
+      font-size: 13.5px;
       font-weight: 600;
       color: var(--text-sub);
       border-radius: var(--radius-full);
       cursor: pointer;
-      transition: color 0.25s ease;
+      transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
       text-align: center;
       white-space: nowrap;
+      text-decoration: none;
+      user-select: none;
     }
 
-    .sub-switch-btn.active { color: #FFFFFF; font-weight: 700; }
+    .sub-switch-btn:hover,
+    .solver-sub-nav-btn:hover,
+    .mode-switch-btn:hover {
+      color: var(--accent-blue);
+      background: var(--accent-blue-light);
+    }
+
+    .sub-switch-btn.active,
+    .solver-sub-nav-btn.active,
+    .mode-switch-btn.active {
+      background: var(--accent-blue) !important;
+      color: #FFFFFF !important;
+      font-weight: 700;
+      box-shadow: 0 2px 10px var(--accent-blue-glow);
+    }
+
+    /* Form Controls & Feedback */
+    .field-error-msg {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--accent-red-light);
+      border: 1px solid var(--accent-red);
+      color: var(--accent-red);
+      font-size: 13px;
+      font-weight: 600;
+      padding: 10px 14px;
+      border-radius: var(--radius-sm);
+      margin-top: 10px;
+      animation: pureFadeIn 0.25s ease;
+    }
+
+    .input-error {
+      border-color: var(--accent-red) !important;
+      box-shadow: 0 0 0 3px var(--accent-red-light) !important;
+    }
+
+    .durmath-box.error-state {
+      border-color: var(--accent-red);
+      background: var(--accent-red-light);
+    }
 
     /* Form Controls */
+    .form-row-grid {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      gap: 16px;
+      align-items: flex-start;
+      margin-bottom: 6px;
+    }
+    @media (max-width: 640px) {
+      .form-row-grid {
+        grid-template-columns: 1fr;
+        gap: 14px;
+      }
+    }
+
     .form-group {
       display: flex;
       flex-direction: column;
@@ -615,43 +795,6 @@
     }
 
     /* MODE 3: TIME SOLVER */
-    .mode-switch-bar {
-      position: relative;
-      display: flex;
-      flex-direction: row;
-      background: var(--btn-subtle-bg);
-      padding: 6px;
-      border-radius: var(--radius-full);
-      margin-bottom: 28px;
-      gap: 3px;
-    }
-    .mode-indicator {
-      position: absolute;
-      background: var(--accent-blue);
-      border-radius: var(--radius-full);
-      box-shadow: var(--shadow-sm);
-      transition: all 0.35s cubic-bezier(0.25, 1, 0.5, 1);
-      pointer-events: none;
-      z-index: 1;
-    }
-    .mode-switch-btn {
-      position: relative;
-      z-index: 2;
-      flex: 1;
-      padding: 13px 18px;
-      border: none;
-      background: transparent !important;
-      font-size: 14.5px;
-      font-weight: 600;
-      color: var(--text-sub);
-      border-radius: var(--radius-full);
-      cursor: pointer;
-      transition: color 0.25s ease;
-      text-align: center;
-      line-height: 1.3;
-    }
-    .mode-switch-btn.active { color: #FFFFFF; font-weight: 700; }
-
     .solver-equation-container {
       display: flex;
       flex-direction: row;
@@ -807,6 +950,261 @@
     }
     .clipboard-btn:hover { background: rgba(255, 255, 255, 0.32); }
     .clipboard-btn svg { flex-shrink: 0; }
+
+    /* Break Deduction Bar */
+    .break-deduction-bar {
+      margin-top: 18px;
+      padding: 12px 16px;
+      background: var(--bg-box);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      border: 1px solid var(--border-subtle);
+    }
+    .break-label {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-sub);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+    }
+    .break-chips-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+    }
+    .break-chip {
+      padding: 5px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      border-radius: var(--radius-full);
+      border: 1px solid var(--border-subtle);
+      background: var(--bg-card-solid);
+      color: var(--text-sub);
+      cursor: pointer;
+      transition: all 0.15s ease;
+      white-space: nowrap;
+    }
+    .break-chip:hover {
+      border-color: var(--accent-blue);
+      color: var(--accent-blue);
+    }
+    .break-chip.active {
+      background: var(--accent-blue);
+      color: #FFFFFF;
+      border-color: var(--accent-blue);
+      box-shadow: 0 2px 6px var(--accent-blue-glow);
+    }
+
+    /* Duration Math Grid */
+    .durmath-grid {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 16px;
+      align-items: center;
+      margin-top: 14px;
+    }
+    @media (max-width: 768px) {
+      .durmath-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    .durmath-box {
+      background: var(--bg-box);
+      border: 1.5px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      min-width: 0;
+    }
+    .durmath-box .stepper-row {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 4px;
+      margin-top: 10px;
+    }
+    .durmath-box .stepper-btn {
+      font-size: 11.5px;
+      font-weight: 700;
+      padding: 8px 0;
+      min-width: 0;
+      text-align: center;
+      white-space: nowrap;
+    }
+    .durmath-input {
+      width: 100%;
+      background: var(--bg-card-solid);
+      border: 1.5px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      padding: 12px 14px;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text-main);
+      transition: all 0.2s ease;
+    }
+    .durmath-input:focus {
+      outline: none;
+      border-color: var(--accent-blue);
+      box-shadow: 0 0 0 3px var(--accent-blue-glow);
+    }
+    .durmath-op-select {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      align-items: center;
+      justify-content: center;
+    }
+    @media (max-width: 768px) {
+      .durmath-op-select {
+        flex-direction: row;
+      }
+    }
+    .durmath-op-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: var(--radius-full);
+      border: 1.5px solid var(--border-subtle);
+      background: var(--bg-card-solid);
+      color: var(--text-main);
+      font-size: 20px;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s ease;
+    }
+    .durmath-op-btn:hover {
+      border-color: var(--accent-blue);
+      color: var(--accent-blue);
+    }
+    .durmath-op-btn.active {
+      background: var(--accent-blue);
+      color: #FFFFFF;
+      border-color: var(--accent-blue);
+      box-shadow: 0 3px 10px var(--accent-blue-glow);
+    }
+    .durmath-quick-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+      margin-top: 10px;
+    }
+    .durmath-quick-chip {
+      padding: 5px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      border-radius: var(--radius-full);
+      background: var(--btn-subtle-bg);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-sub);
+      cursor: pointer;
+      transition: all 0.15s ease;
+      white-space: nowrap;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1.2;
+    }
+    .durmath-quick-chip:hover {
+      background: var(--accent-blue-light);
+      color: var(--accent-blue);
+      border-color: var(--accent-blue);
+    }
+
+    /* Multi-Format Copy Tray in Callout */
+    .copy-formats-tray {
+      margin-top: 18px;
+      padding-top: 16px;
+      border-top: 1px solid rgba(255, 255, 255, 0.22);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+    .copy-tray-title {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      opacity: 0.85;
+    }
+    .copy-pills-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+    }
+    .copy-fmt-pill {
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: var(--radius-sm);
+      padding: 6px 12px;
+      color: #FFFFFF;
+      cursor: pointer;
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      transition: all 0.18s ease;
+      min-width: 80px;
+    }
+    .copy-fmt-pill:hover {
+      background: rgba(255, 255, 255, 0.28);
+      transform: translateY(-1px);
+    }
+    .copy-fmt-pill.copied {
+      background: rgba(52, 199, 89, 0.4) !important;
+      border-color: #34C759 !important;
+    }
+    .copy-fmt-pill .fmt-tag {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      opacity: 0.75;
+      font-weight: 700;
+    }
+    .copy-fmt-pill .fmt-val {
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    /* Keyboard Legend Bar */
+    .keyboard-legend-bar {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 24px;
+      padding: 12px 18px;
+      font-size: 12px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+    .kbd-hint {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+    kbd {
+      background: var(--btn-subtle-bg);
+      border: 1px solid var(--border-subtle);
+      border-radius: 4px;
+      padding: 2px 6px;
+      font-size: 11px;
+      font-family: inherit;
+      font-weight: 700;
+      color: var(--text-sub);
+      box-shadow: 0 1px 2px rgba(0,0,0,0.08);
+    }
 
     /* Centered Modal & Mobile Bottom Sheet */
     .ts-picker-scrim {
@@ -1324,17 +1722,148 @@
       transform: translateY(1px) scale(0.97);
     }
 
-    /* Fully Scaled Mobile Architecture */
+    /* Primary Action Buttons */
+    .btn-primary-action {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 13px 24px;
+      background: var(--accent-blue);
+      color: #FFFFFF;
+      font-size: 14.5px;
+      font-weight: 700;
+      border-radius: var(--radius-full);
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 4px 14px var(--accent-blue-glow);
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      text-decoration: none;
+    }
+    .btn-primary-action:hover {
+      background: var(--accent-blue-hover);
+      transform: translateY(-1px);
+    }
+
+    /* Site Footer & Description Section */
+    .site-footer {
+      width: 100%;
+      border-top: 1px solid var(--border-subtle);
+      background: var(--bg-card);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      margin-top: 60px;
+      padding: 50px 24px 36px 24px;
+      color: var(--text-sub);
+    }
+    .footer-container {
+      max-width: 980px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr 1fr;
+      gap: 36px;
+    }
+    @media (max-width: 768px) {
+      .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 28px;
+      }
+    }
+    .footer-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    .footer-brand-name {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--text-main);
+      letter-spacing: -0.3px;
+    }
+    .footer-desc {
+      font-size: 13.5px;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+    .footer-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .footer-chip {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 10px;
+      background: var(--bg-box);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-full);
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--text-sub);
+    }
+    .footer-col-title {
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--text-main);
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      margin-bottom: 14px;
+    }
+    .footer-links {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+    }
+    .footer-link-btn {
+      background: none;
+      border: none;
+      padding: 0;
+      font-size: 13.5px;
+      color: var(--text-muted);
+      cursor: pointer;
+      text-align: left;
+      font-weight: 500;
+      transition: color 0.15s ease;
+    }
+    .footer-link-btn:hover {
+      color: var(--accent-blue);
+    }
+    .footer-kbd-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .footer-bottom-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border-subtle);
+      font-size: 12.5px;
+      color: var(--text-muted);
+    }
     @media (max-width: 860px) {
       body {
-        padding-top: 136px;
+        padding-top: 0;
         padding-bottom: 40px;
       }
       
       .top-nav {
-        padding: 10px 16px;
+        padding: 12px 16px;
         height: auto;
-        min-height: 118px;
+        min-height: auto;
         flex-wrap: wrap;
         align-content: center;
         gap: 10px 0;
@@ -1369,7 +1898,9 @@
         font-size: 16px;
       }
 
-      .container { padding: 0 16px; }
+      .container {
+        padding: 20px 16px 0 16px;
+      }
 
       .glass-card {
         padding: 26px 18px;
@@ -1383,22 +1914,36 @@
       .sub-switch-bar {
         width: 100%;
         max-width: 100%;
-        margin-bottom: 22px;
+        margin-bottom: 20px;
+        display: flex;
       }
 
-      .sub-switch-btn { padding: 9px 10px; font-size: 13px; }
+      .solver-sub-nav {
+        width: 100%;
+        max-width: 100%;
+        margin: 0 0 20px 0;
+        display: flex;
+      }
+
+      .sub-switch-btn,
+      .solver-sub-nav-btn {
+        padding: 10px 8px;
+        font-size: 12.5px;
+        flex: 1;
+        text-align: center;
+      }
 
       .countdown-display {
         grid-template-columns: repeat(2, 1fr);
         gap: 12px;
-        margin: 24px 0;
+        margin: 20px 0;
       }
 
       .countdown-unit { padding: 18px 12px; }
 
       .converter-grid {
         grid-template-columns: 1fr;
-        gap: 14px;
+        gap: 12px;
       }
 
       .solver-equation-container {
@@ -1406,27 +1951,61 @@
         gap: 12px;
       }
 
-      .equation-operator { font-size: 24px; padding: 0; }
+      .solver-box {
+        padding: 18px 16px;
+      }
+
+      .equation-operator {
+        font-size: 24px;
+        padding: 2px 0;
+        line-height: 1;
+      }
 
       .mode-switch-bar {
-        flex-direction: column;
+        display: grid;
+        grid-template-columns: 1fr;
         border-radius: var(--radius-md);
         gap: 4px;
+        margin-bottom: 20px;
       }
 
       .mode-indicator { border-radius: var(--radius-sm); }
-      .mode-switch-btn { padding: 11px 14px; font-size: 13.5px; }
+      .mode-switch-btn { padding: 10px 12px; font-size: 13px; text-align: center; }
+
+      .break-deduction-bar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+      }
+
+      .durmath-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+
+      .durmath-box {
+        padding: 16px 14px;
+      }
+
+      .durmath-op-select {
+        flex-direction: row;
+        justify-content: center;
+        gap: 12px;
+        margin: 4px 0;
+      }
 
       .stepper-row {
         gap: 4px;
       }
 
       .stepper-btn {
-        padding: 11px 0;
+        padding: 10px 0;
         font-size: 12px;
       }
 
-      .result-callout { padding: 24px 16px; }
+      .result-callout { padding: 22px 14px; }
+      .copy-pills-row { gap: 6px; }
+      .copy-fmt-pill { padding: 6px 12px; font-size: 12px; }
 
       /* Mobile Modal Bottom Sheet */
       .ts-picker-modal {
@@ -1438,8 +2017,8 @@
         width: 100vw !important;
         max-width: 100vw !important;
         max-height: 90vh !important;
-        border-radius: 28px 28px 0 0 !important;
-        padding: 24px 18px calc(24px + env(safe-area-inset-bottom, 0px)) 18px !important;
+        border-radius: 24px 24px 0 0 !important;
+        padding: 20px 16px calc(20px + env(safe-area-inset-bottom, 0px)) 16px !important;
       }
 
       .ts-picker-modal.visible {
@@ -1459,6 +2038,16 @@
   </style>
 </head>
 <body class="mode-wheel">
+
+  <!-- Ambient Background Glow (Clockwise 60s Orbit) -->
+  <div class="ambient-bg-glow" aria-hidden="true">
+    <div class="glow-rotator">
+      <div class="glow-orb glow-orb-1"></div>
+      <div class="glow-orb glow-orb-2"></div>
+      <div class="glow-orb glow-orb-3"></div>
+      <div class="glow-orb glow-orb-4"></div>
+    </div>
+  </div>
 
   <header class="top-nav">
     <div class="brand">
@@ -1525,18 +2114,22 @@
         <div class="section-title" id="cd-title">Target Date Countdown</div>
         <div class="section-desc" id="cd-desc">Select a target date and time to track time remaining down to the second.</div>
 
+        <div class="step-guide-banner" id="cd-guide-banner">
+          <svg class="step-guide-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 16 16 12 12 8"></polyline><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+          <div><strong>Next Step:</strong> Click the date box below or select a quick preset to set your countdown target.</div>
+        </div>
+
         <div class="sub-switch-bar" id="cd-sub-switch-bar">
-          <div class="sub-indicator" id="cd-sub-indicator"></div>
           <button class="sub-switch-btn js-cd-sub-btn active" id="btn-sub-cd" data-mode="countdown">Countdown (Future)</button>
           <button class="sub-switch-btn js-cd-sub-btn" id="btn-sub-since" data-mode="since">Time Since (Past)</button>
         </div>
 
-        <div style="display: flex; gap: 14px; flex-wrap: wrap;">
-          <div class="form-group" style="flex: 1 1 240px;">
+        <div class="form-row-grid">
+          <div class="form-group">
             <label class="form-label" id="cd-input-label" for="countdown-target-input">Target Date & Time</label>
             
             <div class="custom-input-trigger" id="trigger-cd-target" tabindex="0" role="button" aria-haspopup="dialog" aria-label="Select Target Date and Time">
-              <span class="trigger-text-val" id="disp-cd-target">Loading...</span>
+              <span class="trigger-text-val" id="disp-cd-target">Select target date & time</span>
               <span class="trigger-icon-badge" aria-hidden="true">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
@@ -1551,7 +2144,7 @@
             <div id="cd-feedback-toast" class="switch-feedback-toast"></div>
           </div>
 
-          <div class="form-group" style="flex: 1 1 220px;">
+          <div class="form-group">
             <label class="form-label" for="timezone-select">Target Timezone</label>
             <select id="timezone-select">
               <option value="local">My System Time (Local)</option>
@@ -1587,7 +2180,7 @@
             <div class="countdown-tag">Seconds</div>
           </div>
         </div>
-        <div id="countdown-meta" style="font-size: 14px; color: var(--text-muted); text-align: center; font-weight: 500;">Calculating...</div>
+        <div id="countdown-meta" style="font-size: 14px; color: var(--text-muted); text-align: center; font-weight: 500;">Select a target date above or pick a quick preset to start countdown.</div>
       </div>
     </section>
 
@@ -1596,6 +2189,11 @@
       <div class="glass-card">
         <div class="section-title">Synchronized Unit Converter</div>
         <div class="section-desc">Type any value into any box. All units from seconds to months update immediately in real time.</div>
+
+        <div class="step-guide-banner">
+          <svg class="step-guide-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"></path><path d="M10 22h4"></path><path d="M12 2a7 7 0 0 0-7 7c0 2.38 1.19 4.47 3 5.74V17a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-2.26c1.81-1.27 3-3.36 3-5.74a7 7 0 0 0-7-7z"></path></svg>
+          <div><strong>Instant Conversion:</strong> Enter any number in any box. All other units convert in real-time.</div>
+        </div>
 
         <div class="converter-grid">
           <form class="conv-cell-form">
@@ -1641,122 +2239,241 @@
     <!-- MODE 3: TIME SOLVER -->
     <section id="solver-tab" class="tab-pane" role="tabpanel">
       <div class="glass-card">
-        <div class="section-title">3-Point Time Solver</div>
-        <div class="section-desc">Select what to solve. You can interact with any field at any time.</div>
+        <div class="section-title">Smart Time Solver & Math</div>
+        <div class="section-desc">Solve clock equations across midnight, deduct breaks, or calculate duration arithmetic.</div>
 
-        <div class="mode-switch-bar" id="mode-switch-bar">
-          <div class="mode-indicator" id="mode-indicator"></div>
-          <button class="mode-switch-btn js-solver-mode-btn active" id="btn-mode-start" data-mode="start">Solve Start Time</button>
-          <button class="mode-switch-btn js-solver-mode-btn" id="btn-mode-dur" data-mode="dur">Solve Duration</button>
-          <button class="mode-switch-btn js-solver-mode-btn" id="btn-mode-end" data-mode="end">Solve End Time</button>
+        <div class="solver-sub-nav" id="solver-sub-nav">
+          <button type="button" class="solver-sub-nav-btn active" id="btn-subsolver-clock" data-submode="clock">3-Point Clock</button>
+          <button type="button" class="solver-sub-nav-btn" id="btn-subsolver-math" data-submode="math">Duration Math (+ / −)</button>
         </div>
 
-        <div class="solver-equation-container">
-          <!-- Box 1: Start Time -->
-          <div class="solver-box js-solver-box" id="box-start" data-field="start">
-            <div>
-              <label class="form-label" for="solver-start-input">Start Time</label>
-              <div id="badge-start"></div>
-              <div class="input-row-with-btn">
-                <div class="custom-input-trigger" id="trigger-solver-start" tabindex="0" role="button" aria-haspopup="dialog" aria-label="Select Start Time">
-                  <span class="trigger-text-val" id="disp-solver-start">10:45</span>
+        <!-- SUB-SECTION A: 3-POINT CLOCK SOLVER -->
+        <div id="solver-clock-view">
+          <div class="step-guide-banner" id="solver-guide-banner">
+            <svg class="step-guide-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+            <div><strong>Solving Start Time:</strong> Enter End Time & Duration. Start Time resolves automatically.</div>
+          </div>
+
+          <div class="mode-switch-bar" id="mode-switch-bar">
+            <button class="mode-switch-btn js-solver-mode-btn active" id="btn-mode-start" data-mode="start">Solve Start Time</button>
+            <button class="mode-switch-btn js-solver-mode-btn" id="btn-mode-dur" data-mode="dur">Solve Duration</button>
+            <button class="mode-switch-btn js-solver-mode-btn" id="btn-mode-end" data-mode="end">Solve End Time</button>
+          </div>
+
+          <div class="solver-equation-container">
+            <!-- Box 1: Start Time -->
+            <div class="solver-box js-solver-box" id="box-start" data-field="start">
+              <div>
+                <label class="form-label" for="solver-start-input">Start Time</label>
+                <div id="badge-start"></div>
+                <div class="input-row-with-btn">
+                  <div class="custom-input-trigger" id="trigger-solver-start" tabindex="0" role="button" aria-haspopup="dialog" aria-label="Select Start Time">
+                    <span class="trigger-text-val" id="disp-solver-start">10:45</span>
+                    <span class="trigger-icon-badge" aria-hidden="true">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                      </svg>
+                    </span>
+                  </div>
+                  <input type="time" class="manual-native-input js-solver-input" id="solver-start-input" data-field="start" value="10:45" />
+                  <button type="button" class="btn-subtle js-time-now-btn" data-target="solver-start-input" data-field="start" title="Set to Current Time">Now</button>
+                </div>
+              </div>
+              <div>
+                <div class="stepper-row">
+                  <button type="button" class="stepper-btn js-stepper-time" data-target="solver-start-input" data-val="-60" data-field="start">&minus;1h</button>
+                  <button type="button" class="stepper-btn js-stepper-time" data-target="solver-start-input" data-val="-15" data-field="start">&minus;15m</button>
+                  <button type="button" class="stepper-btn js-stepper-time" data-target="solver-start-input" data-val="-1" data-field="start">&minus;1m</button>
+                  <button type="button" class="stepper-btn js-stepper-time" data-target="solver-start-input" data-val="1" data-field="start">&plus;1m</button>
+                  <button type="button" class="stepper-btn js-stepper-time" data-target="solver-start-input" data-val="15" data-field="start">&plus;15m</button>
+                  <button type="button" class="stepper-btn js-stepper-time" data-target="solver-start-input" data-val="60" data-field="start">&plus;1h</button>
+                </div>
+                <div id="hint-start" class="field-hint-tip"></div>
+              </div>
+            </div>
+
+            <div class="equation-operator">&plus;</div>
+
+            <!-- Box 2: Duration -->
+            <div class="solver-box js-solver-box" id="box-dur" data-field="dur">
+              <div>
+                <label class="form-label" for="solver-dur-h">Duration</label>
+                <div id="badge-dur"></div>
+                
+                <div class="custom-input-trigger" id="trigger-solver-dur" tabindex="0" role="button" aria-haspopup="dialog" aria-label="Select Duration">
+                  <span class="trigger-text-val" id="disp-solver-dur">4h 30m</span>
                   <span class="trigger-icon-badge" aria-hidden="true">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                      <circle cx="12" cy="12" r="10"></circle>
-                      <polyline points="12 6 12 12 16 14"></polyline>
+                      <path d="M5 22h14"></path>
+                      <path d="M5 2h14"></path>
+                      <path d="M17 22v-4.172a2 2 0 0 0-.586-1.414L12 12l-4.414 4.414A2 2 0 0 0 7 17.828V22"></path>
+                      <path d="M7 2v4.172a2 2 0 0 0 .586 1.414L12 12l4.414-4.414A2 2 0 0 0 17 6.172V2"></path>
                     </svg>
                   </span>
                 </div>
-                <input type="time" class="manual-native-input js-solver-input" id="solver-start-input" data-field="start" value="10:45" />
-                <button type="button" class="btn-subtle js-time-now-btn" data-target="solver-start-input" data-field="start" title="Set to Current Time">Now</button>
-              </div>
-            </div>
-            <div>
-              <div class="stepper-row">
-                <button type="button" class="stepper-btn js-stepper-time" data-target="solver-start-input" data-val="-60" data-field="start">&minus;1h</button>
-                <button type="button" class="stepper-btn js-stepper-time" data-target="solver-start-input" data-val="-15" data-field="start">&minus;15m</button>
-                <button type="button" class="stepper-btn js-stepper-time" data-target="solver-start-input" data-val="-1" data-field="start">&minus;1m</button>
-                <button type="button" class="stepper-btn js-stepper-time" data-target="solver-start-input" data-val="1" data-field="start">&plus;1m</button>
-                <button type="button" class="stepper-btn js-stepper-time" data-target="solver-start-input" data-val="15" data-field="start">&plus;15m</button>
-                <button type="button" class="stepper-btn js-stepper-time" data-target="solver-start-input" data-val="60" data-field="start">&plus;1h</button>
-              </div>
-              <div id="hint-start" class="field-hint-tip"></div>
-            </div>
-          </div>
 
-          <div class="equation-operator">&plus;</div>
-
-          <!-- Box 2: Duration -->
-          <div class="solver-box js-solver-box" id="box-dur" data-field="dur">
-            <div>
-              <label class="form-label" for="solver-dur-h">Duration</label>
-              <div id="badge-dur"></div>
-              
-              <div class="custom-input-trigger" id="trigger-solver-dur" tabindex="0" role="button" aria-haspopup="dialog" aria-label="Select Duration">
-                <span class="trigger-text-val" id="disp-solver-dur">4h 30m</span>
-                <span class="trigger-icon-badge" aria-hidden="true">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M5 22h14"></path>
-                    <path d="M5 2h14"></path>
-                    <path d="M17 22v-4.172a2 2 0 0 0-.586-1.414L12 12l-4.414 4.414A2 2 0 0 0 7 17.828V22"></path>
-                    <path d="M7 2v4.172a2 2 0 0 0 .586 1.414L12 12l4.414-4.414A2 2 0 0 0 17 6.172V2"></path>
-                  </svg>
-                </span>
-              </div>
-
-              <div class="duration-inputs manual-native-input">
-                <input type="number" min="0" max="999" class="js-solver-input" id="solver-dur-h" placeholder="Hours" data-field="dur" value="4" />
-                <input type="number" min="0" max="59" class="js-solver-input" id="solver-dur-m" placeholder="Mins" data-field="dur" value="30" />
-              </div>
-            </div>
-            <div>
-              <div class="stepper-row">
-                <button type="button" class="stepper-btn js-stepper-dur" data-val="-60">&minus;1h</button>
-                <button type="button" class="stepper-btn js-stepper-dur" data-val="-15">&minus;15m</button>
-                <button type="button" class="stepper-btn js-stepper-dur" data-val="-1">&minus;1m</button>
-                <button type="button" class="stepper-btn js-stepper-dur" data-val="1">&plus;1m</button>
-                <button type="button" class="stepper-btn js-stepper-dur" data-val="15">&plus;15m</button>
-                <button type="button" class="stepper-btn js-stepper-dur" data-val="60">&plus;1h</button>
-              </div>
-              <div id="hint-dur" class="field-hint-tip"></div>
-            </div>
-          </div>
-
-          <div class="equation-operator">&equals;</div>
-
-          <!-- Box 3: End Time -->
-          <div class="solver-box js-solver-box" id="box-end" data-field="end">
-            <div>
-              <label class="form-label" for="solver-end-input">End Time</label>
-              <div id="badge-end"></div>
-              <div class="input-row-with-btn">
-                <div class="custom-input-trigger" id="trigger-solver-end" tabindex="0" role="button" aria-haspopup="dialog" aria-label="Select End Time">
-                  <span class="trigger-text-val" id="disp-solver-end">15:15</span>
-                  <span class="trigger-icon-badge" aria-hidden="true">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                      <circle cx="12" cy="12" r="10"></circle>
-                      <polyline points="12 6 12 12 16 14"></polyline>
-                    </svg>
-                  </span>
+                <div class="duration-inputs manual-native-input">
+                  <input type="number" min="0" max="999" inputmode="numeric" class="js-solver-input" id="solver-dur-h" placeholder="Hours" data-field="dur" value="4" />
+                  <input type="number" min="0" max="59" inputmode="numeric" class="js-solver-input" id="solver-dur-m" placeholder="Mins" data-field="dur" value="30" />
                 </div>
-                <input type="time" class="manual-native-input js-solver-input" id="solver-end-input" data-field="end" value="15:15" />
-                <button type="button" class="btn-subtle js-time-now-btn" data-target="solver-end-input" data-field="end" title="Set to Current Time">Now</button>
+              </div>
+              <div>
+                <div class="stepper-row">
+                  <button type="button" class="stepper-btn js-stepper-dur" data-val="-60">&minus;1h</button>
+                  <button type="button" class="stepper-btn js-stepper-dur" data-val="-15">&minus;15m</button>
+                  <button type="button" class="stepper-btn js-stepper-dur" data-val="-1">&minus;1m</button>
+                  <button type="button" class="stepper-btn js-stepper-dur" data-val="1">&plus;1m</button>
+                  <button type="button" class="stepper-btn js-stepper-dur" data-val="15">&plus;15m</button>
+                  <button type="button" class="stepper-btn js-stepper-dur" data-val="60">&plus;1h</button>
+                </div>
+                <div id="hint-dur" class="field-hint-tip"></div>
               </div>
             </div>
-            <div>
-              <div class="stepper-row">
-                <button type="button" class="stepper-btn js-stepper-time" data-target="solver-end-input" data-val="-60" data-field="end">&minus;1h</button>
-                <button type="button" class="stepper-btn js-stepper-time" data-target="solver-end-input" data-val="-15" data-field="end">&minus;15m</button>
-                <button type="button" class="stepper-btn js-stepper-time" data-target="solver-end-input" data-val="-1" data-field="end">&minus;1m</button>
-                <button type="button" class="stepper-btn js-stepper-time" data-target="solver-end-input" data-val="1" data-field="end">&plus;1m</button>
-                <button type="button" class="stepper-btn js-stepper-time" data-target="solver-end-input" data-val="15" data-field="end">&plus;15m</button>
-                <button type="button" class="stepper-btn js-stepper-time" data-target="solver-end-input" data-val="60" data-field="end">&plus;1h</button>
+
+            <div class="equation-operator">&equals;</div>
+
+            <!-- Box 3: End Time -->
+            <div class="solver-box js-solver-box" id="box-end" data-field="end">
+              <div>
+                <label class="form-label" for="solver-end-input">End Time</label>
+                <div id="badge-end"></div>
+                <div class="input-row-with-btn">
+                  <div class="custom-input-trigger" id="trigger-solver-end" tabindex="0" role="button" aria-haspopup="dialog" aria-label="Select End Time">
+                    <span class="trigger-text-val" id="disp-solver-end">15:15</span>
+                    <span class="trigger-icon-badge" aria-hidden="true">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                      </svg>
+                    </span>
+                  </div>
+                  <input type="time" class="manual-native-input js-solver-input" id="solver-end-input" data-field="end" value="15:15" />
+                  <button type="button" class="btn-subtle js-time-now-btn" data-target="solver-end-input" data-field="end" title="Set to Current Time">Now</button>
+                </div>
               </div>
-              <div id="hint-end" class="field-hint-tip"></div>
+              <div>
+                <div class="stepper-row">
+                  <button type="button" class="stepper-btn js-stepper-time" data-target="solver-end-input" data-val="-60" data-field="end">&minus;1h</button>
+                  <button type="button" class="stepper-btn js-stepper-time" data-target="solver-end-input" data-val="-15" data-field="end">&minus;15m</button>
+                  <button type="button" class="stepper-btn js-stepper-time" data-target="solver-end-input" data-val="-1" data-field="end">&minus;1m</button>
+                  <button type="button" class="stepper-btn js-stepper-time" data-target="solver-end-input" data-val="1" data-field="end">&plus;1m</button>
+                  <button type="button" class="stepper-btn js-stepper-time" data-target="solver-end-input" data-val="15" data-field="end">&plus;15m</button>
+                  <button type="button" class="stepper-btn js-stepper-time" data-target="solver-end-input" data-val="60" data-field="end">&plus;1h</button>
+                </div>
+                <div id="hint-end" class="field-hint-tip"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Break / Pause Deduction Bar -->
+          <div class="break-deduction-bar" id="break-deduction-bar">
+            <span class="break-label">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12 6 12 12 16 14"></polyline>
+              </svg>
+              Break / Pause:
+            </span>
+            <div class="break-chips-row" id="break-chips-container">
+              <button type="button" class="break-chip active js-break-chip" data-mins="0">0m (None)</button>
+              <button type="button" class="break-chip js-break-chip" data-mins="15">15m</button>
+              <button type="button" class="break-chip js-break-chip" data-mins="30">30m (Lunch)</button>
+              <button type="button" class="break-chip js-break-chip" data-mins="45">45m</button>
+              <button type="button" class="break-chip js-break-chip" data-mins="60">1h</button>
             </div>
           </div>
         </div>
 
+        <!-- SUB-SECTION B: DURATION ARITHMETIC (+ / -) -->
+        <div id="solver-math-view" style="display: none;">
+          <div class="step-guide-banner" id="math-guide-banner">
+            <svg class="step-guide-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"></rect><line x1="8" y1="12" x2="16" y2="12"></line><line x1="12" y1="8" x2="12" y2="16"></line></svg>
+            <div><strong>Duration Arithmetic:</strong> Enter two durations (e.g. 2h 30m, 90m, 1.5h) to add or subtract.</div>
+          </div>
+
+          <div class="field-error-msg" id="durmath-error-msg" style="display: none;"></div>
+
+          <div class="durmath-grid">
+            <!-- Box A -->
+            <div class="durmath-box js-durmath-box" id="box-durmath-a">
+              <div>
+                <label class="form-label" for="durmath-input-a">Duration A</label>
+                <div class="input-row-with-btn">
+                  <div class="custom-input-trigger" id="trigger-durmath-a" tabindex="0" role="button" aria-haspopup="dialog" aria-label="Select Duration A">
+                    <span class="trigger-text-val" id="disp-durmath-a">2h 30m</span>
+                    <span class="trigger-icon-badge" aria-hidden="true">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                      </svg>
+                    </span>
+                  </div>
+                  <input type="text" class="durmath-input manual-native-input js-durmath-input" id="durmath-input-a" placeholder="e.g. 2h 30m, 90m, 1.5h" value="2h 30m" inputmode="text" />
+                </div>
+              </div>
+              <div>
+                <div class="stepper-row">
+                  <button type="button" class="stepper-btn js-stepper-durmath" data-target="durmath-input-a" data-disp="disp-durmath-a" data-val="-60">&minus;1h</button>
+                  <button type="button" class="stepper-btn js-stepper-durmath" data-target="durmath-input-a" data-disp="disp-durmath-a" data-val="-15">&minus;15m</button>
+                  <button type="button" class="stepper-btn js-stepper-durmath" data-target="durmath-input-a" data-disp="disp-durmath-a" data-val="-1">&minus;1m</button>
+                  <button type="button" class="stepper-btn js-stepper-durmath" data-target="durmath-input-a" data-disp="disp-durmath-a" data-val="1">&plus;1m</button>
+                  <button type="button" class="stepper-btn js-stepper-durmath" data-target="durmath-input-a" data-disp="disp-durmath-a" data-val="15">&plus;15m</button>
+                  <button type="button" class="stepper-btn js-stepper-durmath" data-target="durmath-input-a" data-disp="disp-durmath-a" data-val="60">&plus;1h</button>
+                </div>
+                <div class="durmath-quick-row">
+                  <button type="button" class="durmath-quick-chip js-durmath-quick" data-target="durmath-input-a" data-disp="disp-durmath-a" data-val="30m">30m</button>
+                  <button type="button" class="durmath-quick-chip js-durmath-quick" data-target="durmath-input-a" data-disp="disp-durmath-a" data-val="1h">1h</button>
+                  <button type="button" class="durmath-quick-chip js-durmath-quick" data-target="durmath-input-a" data-disp="disp-durmath-a" data-val="2h 30m">2h 30m</button>
+                  <button type="button" class="durmath-quick-chip js-durmath-quick" data-target="durmath-input-a" data-disp="disp-durmath-a" data-val="8h">8h</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Operator Selector -->
+            <div class="durmath-op-select">
+              <button type="button" class="durmath-op-btn active js-durmath-op" id="btn-op-add" data-op="+" title="Add Durations">+</button>
+              <button type="button" class="durmath-op-btn js-durmath-op" id="btn-op-sub" data-op="-" title="Subtract Durations">&minus;</button>
+            </div>
+
+            <!-- Box B -->
+            <div class="durmath-box js-durmath-box" id="box-durmath-b">
+              <div>
+                <label class="form-label" for="durmath-input-b">Duration B</label>
+                <div class="input-row-with-btn">
+                  <div class="custom-input-trigger" id="trigger-durmath-b" tabindex="0" role="button" aria-haspopup="dialog" aria-label="Select Duration B">
+                    <span class="trigger-text-val" id="disp-durmath-b">1h 45m</span>
+                    <span class="trigger-icon-badge" aria-hidden="true">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                      </svg>
+                    </span>
+                  </div>
+                  <input type="text" class="durmath-input manual-native-input js-durmath-input" id="durmath-input-b" placeholder="e.g. 1h 45m, 45m, 0.75h" value="1h 45m" inputmode="text" />
+                </div>
+              </div>
+              <div>
+                <div class="stepper-row">
+                  <button type="button" class="stepper-btn js-stepper-durmath" data-target="durmath-input-b" data-disp="disp-durmath-b" data-val="-60">&minus;1h</button>
+                  <button type="button" class="stepper-btn js-stepper-durmath" data-target="durmath-input-b" data-disp="disp-durmath-b" data-val="-15">&minus;15m</button>
+                  <button type="button" class="stepper-btn js-stepper-durmath" data-target="durmath-input-b" data-disp="disp-durmath-b" data-val="-1">&minus;1m</button>
+                  <button type="button" class="stepper-btn js-stepper-durmath" data-target="durmath-input-b" data-disp="disp-durmath-b" data-val="1">&plus;1m</button>
+                  <button type="button" class="stepper-btn js-stepper-durmath" data-target="durmath-input-b" data-disp="disp-durmath-b" data-val="15">&plus;15m</button>
+                  <button type="button" class="stepper-btn js-stepper-durmath" data-target="durmath-input-b" data-disp="disp-durmath-b" data-val="60">&plus;1h</button>
+                </div>
+                <div class="durmath-quick-row">
+                  <button type="button" class="durmath-quick-chip js-durmath-quick" data-target="durmath-input-b" data-disp="disp-durmath-b" data-val="15m">15m</button>
+                  <button type="button" class="durmath-quick-chip js-durmath-quick" data-target="durmath-input-b" data-disp="disp-durmath-b" data-val="30m">30m</button>
+                  <button type="button" class="durmath-quick-chip js-durmath-quick" data-target="durmath-input-b" data-disp="disp-durmath-b" data-val="45m">45m</button>
+                  <button type="button" class="durmath-quick-chip js-durmath-quick" data-target="durmath-input-b" data-disp="disp-durmath-b" data-val="1h 45m">1h 45m</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- UNIFIED RESULT CALLOUT -->
         <div class="result-callout">
           <div class="sub" id="callout-subtitle">Calculated Start Time</div>
           <div class="val" id="callout-value">
@@ -1764,6 +2481,7 @@
             <span id="callout-day-badge"></span>
           </div>
           <div class="desc" id="callout-explanation">Initializing...</div>
+          
           <button class="clipboard-btn" id="btn-copy-result">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
@@ -1771,11 +2489,147 @@
             </svg>
             <span id="copy-btn-label">Copy Result</span>
           </button>
+
+          <!-- 1-Click Multi-Format Copy Tray -->
+          <div class="copy-formats-tray">
+            <span class="copy-tray-title">Copy Specific Format</span>
+            <div class="copy-pills-row">
+              <button type="button" class="copy-fmt-pill js-copy-fmt" data-fmt="formatted" title="Copy Standard Format">
+                <span class="fmt-tag">Standard</span>
+                <span class="fmt-val" id="copy-fmt-val-std">--</span>
+              </button>
+              <button type="button" class="copy-fmt-pill js-copy-fmt" data-fmt="hhmmss" title="Copy HH:MM:SS">
+                <span class="fmt-tag">HH:MM:SS</span>
+                <span class="fmt-val" id="copy-fmt-val-hhmmss">--:--:--</span>
+              </button>
+              <button type="button" class="copy-fmt-pill js-copy-fmt" data-fmt="decimal" title="Copy Decimal Hours">
+                <span class="fmt-tag">Decimal</span>
+                <span class="fmt-val" id="copy-fmt-val-dec">-- hrs</span>
+              </button>
+              <button type="button" class="copy-fmt-pill js-copy-fmt" data-fmt="minutes" title="Copy Total Minutes">
+                <span class="fmt-tag">Minutes</span>
+                <span class="fmt-val" id="copy-fmt-val-min">-- min</span>
+              </button>
+            </div>
+          </div>
         </div>
 
       </div>
     </section>
+
+    <!-- TAB PANE 4: 404 NOT FOUND -->
+    <section id="not-found-tab" class="tab-pane" role="tabpanel" style="display: none;">
+      <div class="glass-card" style="text-align: center; padding: 48px 24px;">
+        <div style="display: inline-flex; align-items: center; justify-content: center; width: 76px; height: 76px; border-radius: 50%; background: var(--accent-blue-light); color: var(--accent-blue); margin-bottom: 20px;">
+          <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polyline points="12 6 12 12 14 10"></polyline>
+            <line x1="2" y1="2" x2="22" y2="22"></line>
+          </svg>
+        </div>
+        <div class="section-title">404 — Page Not Found</div>
+        <div class="section-desc" style="max-width: 460px; margin: 0 auto 28px auto;">The time tool or page you're searching for does not exist. Choose one of the precision tools below to continue.</div>
+        <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+          <button class="btn-primary-action js-tab-btn" data-target="countdown-tab">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+            Target Countdown
+          </button>
+          <button class="btn-primary-action js-tab-btn" data-target="converter-tab">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+            Unit Converter
+          </button>
+          <button class="btn-primary-action js-tab-btn" data-target="solver-tab">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;"><rect x="4" y="2" width="16" height="20" rx="2"></rect><line x1="8" y1="6" x2="16" y2="6"></line><line x1="16" y1="14" x2="16" y2="18"></line><path d="M16 10h.01"></path><path d="M12 10h.01"></path><path d="M8 10h.01"></path><path d="M12 14h.01"></path><path d="M8 14h.01"></path><path d="M12 18h.01"></path><path d="M8 18h.01"></path></svg>
+            Time Solver
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- KEYBOARD SHORTCUTS LEGEND -->
+    <div class="keyboard-legend-bar" aria-label="Keyboard Shortcuts">
+      <span class="kbd-hint"><kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd> Switch Tabs</span>
+      <span class="kbd-hint"><kbd>N</kbd> Set Now</span>
+      <span class="kbd-hint"><kbd>Enter</kbd> Calculate</span>
+      <span class="kbd-hint"><kbd>Esc</kbd> Close / Clear</span>
+      <span class="kbd-hint"><kbd>⌘/Ctrl + C</kbd> Quick Copy</span>
+    </div>
   </main>
+
+  <!-- SITE FOOTER & INFORMATION SECTION -->
+  <footer class="site-footer" id="site-footer">
+    <div class="footer-container">
+      <div class="footer-grid">
+        <!-- Col 1: About & Engine description -->
+        <div class="footer-col">
+          <div class="footer-brand">
+            <div class="brand-icon" style="width: 28px; height: 28px; border-radius: 8px;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="9"></circle>
+                <polyline points="12 7 12 12 15.5 13.5"></polyline>
+              </svg>
+            </div>
+            <span class="footer-brand-name">TimeCalc</span>
+          </div>
+          <p class="footer-desc">
+            Everything runs 100% locally in your browser. Solves bidirectional clock math across midnight, calculates duration arithmetic, converts units in real-time, and counts down with zero network latency.
+          </p>
+          <div class="footer-chips">
+            <span class="footer-chip">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+              100% Local (Offline)
+            </span>
+            <span class="footer-chip">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+              Midnight Wraparound
+            </span>
+            <span class="footer-chip">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 15 15"></polyline></svg>
+              24h & 12h Modes
+            </span>
+            <span class="footer-chip">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"></path><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path><line x1="6" y1="1" x2="6" y2="4"></line><line x1="10" y1="1" x2="10" y2="4"></line><line x1="14" y1="1" x2="14" y2="4"></line></svg>
+              Break Deduction
+            </span>
+          </div>
+        </div>
+
+        <!-- Col 2: Core Tools Quick Nav -->
+        <div class="footer-col">
+          <div class="footer-col-title">What It Does</div>
+          <ul class="footer-links">
+            <li><button type="button" class="footer-link-btn js-tab-btn" data-target="countdown-tab">Target Date Countdown</button></li>
+            <li><button type="button" class="footer-link-btn js-tab-btn" data-target="countdown-tab" onclick="setCountdownSubMode('since')">Time Since (Elapsed Tracker)</button></li>
+            <li><button type="button" class="footer-link-btn js-tab-btn" data-target="converter-tab">Instant Unit Converter (sec to mo)</button></li>
+            <li><button type="button" class="footer-link-btn js-tab-btn" data-target="solver-tab" onclick="setSolverSubMode('clock')">3-Point Solver (Start / Duration / End)</button></li>
+            <li><button type="button" class="footer-link-btn js-tab-btn" data-target="solver-tab" onclick="setSolverSubMode('math')">Duration Math (+ / −)</button></li>
+          </ul>
+        </div>
+
+        <!-- Col 3: Accuracy & Keyboard Legend -->
+        <div class="footer-col">
+          <div class="footer-col-title">Engine & Shortcuts</div>
+          <p class="footer-desc" style="margin-bottom: 12px;">
+            Supports Gregorian leap years, flexible duration tokens (e.g. <code>2h 30m</code>, <code>90m</code>), and instant multi-format clipboard copying.
+          </p>
+          <div class="footer-kbd-list">
+            <span class="kbd-hint"><kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd> Switch Tools</span>
+            <span class="kbd-hint"><kbd>N</kbd> Set Current Time</span>
+            <span class="kbd-hint"><kbd>Esc</kbd> Close Dialogs</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom-bar">
+        <div class="footer-copy">
+          &copy; 2026 TimeCalc • All calculations run locally on your device.
+        </div>
+        <div class="footer-legal">
+          <span>No servers, no tracking, works completely offline.</span>
+        </div>
+      </div>
+    </div>
+  </footer>
 
   <!-- Modal / Mobile Bottom Sheet -->
   <div class="ts-picker-scrim" id="ts-picker-scrim"></div>
@@ -1850,6 +2704,377 @@
   </div>
 
   <script>
+    /* 0. PURE TIME & MATHEMATICAL CALCULATION ENGINE */
+    const TimeEngine = {
+      MS_IN_SECOND: 1000,
+      MS_IN_MINUTE: 60 * 1000,
+      MS_IN_HOUR: 60 * 60 * 1000,
+      MS_IN_DAY: 24 * 60 * 60 * 1000,
+      MS_IN_WEEK: 7 * 24 * 60 * 60 * 1000,
+      MS_IN_AVG_MONTH: (365.25 / 12) * 24 * 60 * 60 * 1000,
+
+      round(num, decimals = 4) {
+        if (num === null || num === undefined || isNaN(num)) return 0;
+        const factor = Math.pow(10, decimals);
+        return Math.round((num + Number.EPSILON) * factor) / factor;
+      },
+
+      isLeapYear(year) {
+        return (year % 4 === 0 && year % 100 !== 0) || (year % 400 === 0);
+      },
+
+      getDaysInMonth(year, monthIndex) {
+        return new Date(year, monthIndex + 1, 0).getDate();
+      },
+
+      timeToMinutes(timeStr) {
+        if (!timeStr || typeof timeStr !== 'string') return null;
+        const clean = timeStr.trim();
+        const match12 = clean.match(/^(\d{1,2}):(\d{2})(?::(\d{2}))?\s*(am|pm)$/i);
+        if (match12) {
+          let h = parseInt(match12[1], 10);
+          const m = parseInt(match12[2], 10);
+          const meridiem = match12[4].toLowerCase();
+          if (h < 1 || h > 12 || m < 0 || m > 59) return null;
+          if (meridiem === 'am' && h === 12) h = 0;
+          if (meridiem === 'pm' && h !== 12) h += 12;
+          return h * 60 + m;
+        }
+
+        const match24 = clean.match(/^(\d{1,2}):(\d{2})(?::(\d{2}))?$/);
+        if (match24) {
+          const h = parseInt(match24[1], 10);
+          const m = parseInt(match24[2], 10);
+          if (h < 0 || h > 23 || m < 0 || m > 59) return null;
+          return h * 60 + m;
+        }
+        return null;
+      },
+
+      minutesToTime(totalMins) {
+        const normalized = ((totalMins % 1440) + 1440) % 1440;
+        const h = Math.floor(normalized / 60);
+        const m = Math.floor(normalized % 60);
+        return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
+      },
+
+      parseFlexibleDuration(input) {
+        if (typeof input === 'number') {
+          const isNegative = input < 0;
+          const abs = Math.abs(input);
+          return {
+            totalMinutes: input,
+            hours: Math.floor(abs / 60) * (isNegative ? -1 : 1),
+            minutes: Math.round(abs % 60),
+            isValid: true
+          };
+        }
+
+        if (!input || typeof input !== 'string') {
+          return { totalMinutes: 0, hours: 0, minutes: 0, isValid: false };
+        }
+
+        const clean = input.trim();
+        if (clean === '') {
+          return { totalMinutes: 0, hours: 0, minutes: 0, isValid: false };
+        }
+
+        let isNegative = false;
+        let str = clean;
+        if (str.startsWith('-')) {
+          isNegative = true;
+          str = str.substring(1).trim();
+        }
+
+        const colonMatch = str.match(/^(\d+):(\d{1,2})$/);
+        if (colonMatch) {
+          const h = parseInt(colonMatch[1], 10);
+          const m = parseInt(colonMatch[2], 10);
+          const total = (h * 60 + m) * (isNegative ? -1 : 1);
+          return {
+            totalMinutes: total,
+            hours: isNegative ? -h : h,
+            minutes: m,
+            isValid: true
+          };
+        }
+
+        const decimalHourMatch = str.match(/^(\d+(?:\.\d+)?)\s*(?:hrs?|hours?|h)$/i);
+        if (decimalHourMatch) {
+          const hoursFloat = parseFloat(decimalHourMatch[1]);
+          const total = Math.round(hoursFloat * 60) * (isNegative ? -1 : 1);
+          return {
+            totalMinutes: total,
+            hours: Math.floor(Math.abs(total) / 60) * (isNegative ? -1 : 1),
+            minutes: Math.abs(total) % 60,
+            isValid: true
+          };
+        }
+
+        const pureMinutesMatch = str.match(/^(\d+(?:\.\d+)?)\s*(?:mins?|minutes?|m)$/i);
+        if (pureMinutesMatch) {
+          const minsFloat = parseFloat(pureMinutesMatch[1]);
+          const total = Math.round(minsFloat) * (isNegative ? -1 : 1);
+          return {
+            totalMinutes: total,
+            hours: Math.floor(Math.abs(total) / 60) * (isNegative ? -1 : 1),
+            minutes: Math.abs(total) % 60,
+            isValid: true
+          };
+        }
+
+        let foundAny = false;
+        let totalMinutes = 0;
+        const tokens = str.matchAll(/(\d+(?:\.\d+)?)\s*(days?|d|hrs?|hours?|h|mins?|minutes?|m|secs?|seconds?|s)/gi);
+        for (const match of tokens) {
+          foundAny = true;
+          const val = parseFloat(match[1]);
+          const unit = match[2].toLowerCase();
+          if (unit.startsWith('d')) totalMinutes += val * 1440;
+          else if (unit.startsWith('h')) totalMinutes += val * 60;
+          else if (unit.startsWith('m')) totalMinutes += val;
+          else if (unit.startsWith('s')) totalMinutes += val / 60;
+        }
+
+        if (foundAny) {
+          const finalTotal = Math.round(totalMinutes) * (isNegative ? -1 : 1);
+          return {
+            totalMinutes: finalTotal,
+            hours: Math.floor(Math.abs(finalTotal) / 60) * (isNegative ? -1 : 1),
+            minutes: Math.abs(finalTotal) % 60,
+            isValid: true
+          };
+        }
+
+        const fallbackNum = parseFloat(str);
+        if (!isNaN(fallbackNum)) {
+          const total = Math.round(fallbackNum * 60) * (isNegative ? -1 : 1);
+          return {
+            totalMinutes: total,
+            hours: Math.floor(Math.abs(total) / 60) * (isNegative ? -1 : 1),
+            minutes: Math.abs(total) % 60,
+            isValid: true
+          };
+        }
+
+        return { totalMinutes: 0, hours: 0, minutes: 0, isValid: false };
+      },
+
+      formatDurationMulti(minutes) {
+        const isNeg = minutes < 0;
+        const absMin = Math.abs(minutes);
+        const h = Math.floor(absMin / 60);
+        const m = Math.floor(absMin % 60);
+        const s = 0;
+
+        const sign = isNeg ? '-' : '';
+        const formatted = `${sign}${h > 0 ? `${h}h ` : ''}${m}m`.trim() || '0m';
+        const hhmmss = `${sign}${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+        const decimalHoursVal = this.round(minutes / 60, 4);
+        const decimalHours = `${this.round(minutes / 60, 2).toFixed(2)} hrs`;
+
+        return {
+          formatted: isNeg && !formatted.startsWith('-') ? `-${formatted}` : formatted,
+          formattedNetDuration: isNeg && !formatted.startsWith('-') ? `-${formatted}` : formatted,
+          hhmmss,
+          decimalHours,
+          decimalHoursVal,
+          totalMinutes: minutes,
+          netDurationMinutes: minutes,
+          grossDurationMinutes: minutes,
+          hours: isNeg ? -h : h,
+          minutes: m
+        };
+      },
+
+      formatDuration(minutes) {
+        return this.formatDurationMulti(minutes).formatted;
+      },
+
+      calculateDuration(startStr, endStr, breakMinutes = 0) {
+        const startMins = this.timeToMinutes(startStr);
+        const endMins = this.timeToMinutes(endStr);
+        if (startMins === null || endMins === null) {
+          return {
+            isValid: false,
+            grossMinutes: 0,
+            netMinutes: 0,
+            grossDurationMinutes: 0,
+            netDurationMinutes: 0,
+            crossesMidnight: false,
+            isNextDay: false,
+            formatted: '--',
+            formattedNetDuration: '--',
+            hhmmss: '--:--:--',
+            decimalHours: '--'
+          };
+        }
+
+        let gross = endMins - startMins;
+        let crossesMidnight = false;
+        if (gross < 0) {
+          gross += 1440;
+          crossesMidnight = true;
+        }
+
+        const net = Math.max(0, gross - (breakMinutes || 0));
+        const multi = this.formatDurationMulti(net);
+
+        return {
+          isValid: true,
+          grossMinutes: gross,
+          netMinutes: net,
+          grossDurationMinutes: gross,
+          netDurationMinutes: net,
+          breakMinutes,
+          crossesMidnight,
+          isNextDay: crossesMidnight,
+          ...multi
+        };
+      },
+
+      resolveDuration(startStr, endStr, breakMinutes = 0) {
+        return this.calculateDuration(startStr, endStr, breakMinutes);
+      },
+
+      resolveEnd(startStr, durHours, durMinutes = 0, breakMinutes = 0) {
+        const startMins = this.timeToMinutes(startStr);
+        if (startMins === null) return { isValid: false, endTimeStr: '--:--', endTime: '--:--', dayOffset: 0, daysOffset: 0, isNextDay: false };
+
+        let durationMins = 0;
+        let breakMins = 0;
+
+        if (arguments.length === 2) {
+          durationMins = typeof durHours === 'string' ? this.parseFlexibleDuration(durHours).totalMinutes : (parseInt(durHours, 10) || 0);
+          breakMins = 0;
+        } else {
+          durationMins = (parseInt(durHours, 10) || 0) * 60 + (parseInt(durMinutes, 10) || 0);
+          breakMins = Math.max(0, parseInt(breakMinutes, 10) || 0);
+        }
+
+        const totalSpan = durationMins + breakMins;
+        const rawEnd = startMins + totalSpan;
+        const dayOffset = Math.floor(rawEnd / 1440);
+        const endTimeStr = this.minutesToTime(rawEnd);
+        const multiFormat = this.formatDurationMulti(durationMins);
+
+        return {
+          isValid: true,
+          timeStr: endTimeStr,
+          endTimeStr,
+          endTime: endTimeStr,
+          startTime: startStr,
+          dayOffset,
+          daysOffset: dayOffset,
+          isNextDay: dayOffset > 0,
+          totalSpanMinutes: totalSpan,
+          durationMinutes: durationMins,
+          netDurationMinutes: durationMins,
+          grossDurationMinutes: totalSpan,
+          breakMinutes: breakMins,
+          formattedNetDuration: multiFormat.formatted,
+          hhmmss: `${endTimeStr}:00`,
+          decimalHours: multiFormat.decimalHoursVal,
+          multiFormat
+        };
+      },
+
+      resolveStart(endStr, durHours, durMinutes = 0, breakMinutes = 0) {
+        const endMins = this.timeToMinutes(endStr);
+        if (endMins === null) return { isValid: false, startTimeStr: '--:--', startTime: '--:--', dayOffset: 0, daysOffset: 0, isNextDay: false };
+
+        let durationMins = 0;
+        let breakMins = 0;
+
+        if (arguments.length === 2) {
+          durationMins = typeof durHours === 'string' ? this.parseFlexibleDuration(durHours).totalMinutes : (parseInt(durHours, 10) || 0);
+          breakMins = 0;
+        } else {
+          durationMins = (parseInt(durHours, 10) || 0) * 60 + (parseInt(durMinutes, 10) || 0);
+          breakMins = Math.max(0, parseInt(breakMinutes, 10) || 0);
+        }
+
+        const totalSpan = durationMins + breakMins;
+        const rawStart = endMins - totalSpan;
+        const dayOffset = Math.floor(rawStart / 1440);
+        const startTimeStr = this.minutesToTime(rawStart);
+        const multiFormat = this.formatDurationMulti(durationMins);
+
+        return {
+          isValid: true,
+          timeStr: startTimeStr,
+          startTimeStr,
+          startTime: startTimeStr,
+          endTime: endStr,
+          dayOffset,
+          daysOffset: dayOffset,
+          isNextDay: dayOffset !== 0,
+          totalSpanMinutes: totalSpan,
+          durationMinutes: durationMins,
+          netDurationMinutes: durationMins,
+          grossDurationMinutes: totalSpan,
+          breakMinutes: breakMins,
+          formattedNetDuration: multiFormat.formatted,
+          hhmmss: `${startTimeStr}:00`,
+          decimalHours: multiFormat.decimalHoursVal,
+          multiFormat
+        };
+      },
+
+      durationMath(durationA_mins, operator, durationB_mins) {
+        const a = typeof durationA_mins === 'number' ? durationA_mins : this.parseFlexibleDuration(durationA_mins).totalMinutes;
+        const b = typeof durationB_mins === 'number' ? durationB_mins : this.parseFlexibleDuration(durationB_mins).totalMinutes;
+
+        let resultMins = 0;
+        if (operator === '-' || operator === '−') {
+          resultMins = a - b;
+        } else {
+          resultMins = a + b;
+        }
+
+        return this.formatDurationMulti(resultMins);
+      },
+
+      calculateDurationMath(strA, op, strB) {
+        const parseA = this.parseFlexibleDuration(strA);
+        const parseB = this.parseFlexibleDuration(strB);
+        const operator = (op === '−' || op === '-') ? '-' : '+';
+        const result = this.durationMath(parseA.totalMinutes, operator, parseB.totalMinutes);
+        return {
+          ...result,
+          parseA,
+          parseB,
+          isValid: parseA.isValid && parseB.isValid
+        };
+      },
+
+      convertUnits(value, fromUnit) {
+        const val = parseFloat(value);
+        if (isNaN(val)) return null;
+
+        let ms = 0;
+        switch (fromUnit) {
+          case 'sec': ms = val * this.MS_IN_SECOND; break;
+          case 'min': ms = val * this.MS_IN_MINUTE; break;
+          case 'hr': ms = val * this.MS_IN_HOUR; break;
+          case 'day': ms = val * this.MS_IN_DAY; break;
+          case 'wk': ms = val * this.MS_IN_WEEK; break;
+          case 'mo': ms = val * this.MS_IN_AVG_MONTH; break;
+          default: return null;
+        }
+
+        return {
+          sec: this.round(ms / this.MS_IN_SECOND, 6),
+          min: this.round(ms / this.MS_IN_MINUTE, 6),
+          hr: this.round(ms / this.MS_IN_HOUR, 6),
+          day: this.round(ms / this.MS_IN_DAY, 6),
+          wk: this.round(ms / this.MS_IN_WEEK, 6),
+          mo: this.round(ms / this.MS_IN_AVG_MONTH, 6)
+        };
+      }
+    };
+    window.TimeEngine = TimeEngine;
+
     /* 1. APP STATE & PERSISTENCE */
     const AppState = {
       activeTab: localStorage.getItem('activeTab') || 'countdown-tab',
@@ -1861,15 +3086,33 @@
         toastTimeout: null
       },
       solver: {
-        mode: localStorage.getItem('solverMode') || 'start'
+        mode: localStorage.getItem('solverMode') || 'start',
+        subMode: localStorage.getItem('solverSubMode') || 'clock',
+        breakMinutes: parseInt(localStorage.getItem('solverBreakMins') || '0', 10),
+        durMath: {
+          a: localStorage.getItem('durMathA') || '2h 30m',
+          op: localStorage.getItem('durMathOp') || '+',
+          b: localStorage.getItem('durMathB') || '1h 45m'
+        }
       },
       converter: {
         lastUnit: localStorage.getItem('convLastUnit') || 'hr',
         lastVal: localStorage.getItem('convLastVal') || '2.5'
+      },
+      lastResult: {
+        text: '',
+        formatted: '',
+        hhmmss: '',
+        decimal: '',
+        minutes: ''
       }
     };
 
     const SECONDS_MAP = { sec: 1, min: 60, hr: 3600, day: 86400, wk: 604800, mo: 2629800 };
+
+    function escapeHtml(str) {
+      return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
 
     /* 2. TIME & DATE PICKER ENGINE */
     const TimePickerEngine = {
@@ -1934,6 +3177,8 @@
         this.bindTrigger('trigger-solver-start', 'solver-start-input', 'time');
         this.bindTrigger('trigger-solver-end', 'solver-end-input', 'time');
         this.bindTrigger('trigger-solver-dur', 'solver-dur', 'duration');
+        this.bindTrigger('trigger-durmath-a', 'durmath-input-a', 'durmath-a');
+        this.bindTrigger('trigger-durmath-b', 'durmath-input-b', 'durmath-b');
         this.bindTrigger('trigger-cd-target', 'countdown-target-input', 'datetime');
       },
 
@@ -1975,6 +3220,17 @@
           const m = parseInt(document.getElementById('solver-dur-m').value || 0, 10);
           this.selectedHour = isNaN(h) ? 0 : h;
           this.selectedMin = isNaN(m) ? 0 : m;
+        } else if (type === 'durmath-a' || type === 'durmath-b') {
+          this.modal.classList.remove('wide-mode');
+          this.dateSection.style.display = 'none';
+          const title = type === 'durmath-a' ? "Select Duration A" : "Select Duration B";
+          document.getElementById('picker-title-lbl').textContent = title;
+          document.getElementById('col-h-hours').textContent = "Hours";
+          document.getElementById('col-h-mins').textContent = "Minutes";
+          const currentVal = document.getElementById(inputId).value || '0m';
+          const parsed = TimeEngine.parseFlexibleDuration(currentVal);
+          this.selectedHour = Math.max(0, parsed.hours);
+          this.selectedMin = Math.max(0, parsed.minutes);
         } else {
           this.modal.classList.add('wide-mode');
           this.dateSection.style.display = 'block';
@@ -2038,6 +3294,18 @@
             { label: '4 hours', action: () => { this.selectedHour = 4; this.selectedMin = 0; this.commitChange(); } },
             { label: '8 hours', action: () => { this.selectedHour = 8; this.selectedMin = 0; this.commitChange(); } }
           ];
+        } else if (this.activeType === 'durmath-a' || this.activeType === 'durmath-b') {
+          pills = [
+            { label: '15 min', action: () => { this.selectedHour = 0; this.selectedMin = 15; this.commitChange(); } },
+            { label: '30 min', action: () => { this.selectedHour = 0; this.selectedMin = 30; this.commitChange(); } },
+            { label: '45 min', action: () => { this.selectedHour = 0; this.selectedMin = 45; this.commitChange(); } },
+            { label: '1 hour', action: () => { this.selectedHour = 1; this.selectedMin = 0; this.commitChange(); } },
+            { label: '1h 30m', action: () => { this.selectedHour = 1; this.selectedMin = 30; this.commitChange(); } },
+            { label: '2 hours', action: () => { this.selectedHour = 2; this.selectedMin = 0; this.commitChange(); } },
+            { label: '2h 30m', action: () => { this.selectedHour = 2; this.selectedMin = 30; this.commitChange(); } },
+            { label: '4 hours', action: () => { this.selectedHour = 4; this.selectedMin = 0; this.commitChange(); } },
+            { label: '8 hours', action: () => { this.selectedHour = 8; this.selectedMin = 0; this.commitChange(); } }
+          ];
         } else {
           pills = [
             { label: 'Now', action: () => this.setToNow() },
@@ -2060,7 +3328,7 @@
 
       renderHoursDrum() {
         this.hoursDrum.innerHTML = '';
-        const maxH = this.activeType === 'duration' ? 48 : 24;
+        const maxH = (this.activeType === 'duration' || this.activeType === 'durmath-a' || this.activeType === 'durmath-b') ? 48 : 24;
         for (let i = 0; i < maxH; i++) {
           const item = document.createElement('div');
           item.className = `ts-drum-item ${i === this.selectedHour ? 'selected' : ''}`;
@@ -2188,7 +3456,7 @@
             wheelDeltaAccumulator = 0;
 
             if (type === 'hour') {
-              const maxH = TimePickerEngine.activeType === 'duration' ? 48 : 24;
+              const maxH = (TimePickerEngine.activeType === 'duration' || TimePickerEngine.activeType === 'durmath-a' || TimePickerEngine.activeType === 'durmath-b') ? 48 : 24;
               const prev = TimePickerEngine.selectedHour;
               TimePickerEngine.selectedHour = (TimePickerEngine.selectedHour + step + maxH * 10) % maxH;
               if (prev !== TimePickerEngine.selectedHour) {
@@ -2317,7 +3585,13 @@
           chip.addEventListener('click', (e) => {
             e.stopPropagation();
             this.calViewDate.setFullYear(y);
+            const currentMonth = this.selectedDate.getMonth();
+            const maxDays = new Date(y, currentMonth + 1, 0).getDate();
+            const currentDay = Math.min(this.selectedDate.getDate(), maxDays);
+            this.selectedDate.setFullYear(y, currentMonth, currentDay);
             this.renderMonthYearPicker();
+            this.renderCalendar();
+            this.commitChange(false);
           });
           yearStrip.appendChild(chip);
         }
@@ -2330,10 +3604,13 @@
           chip.addEventListener('click', (e) => {
             e.stopPropagation();
             this.calViewDate.setMonth(idx);
-            this.selectedDate.setFullYear(this.calViewDate.getFullYear(), idx);
+            const currentYear = this.calViewDate.getFullYear();
+            const maxDays = new Date(currentYear, idx + 1, 0).getDate();
+            const currentDay = Math.min(this.selectedDate.getDate(), maxDays);
+            this.selectedDate.setFullYear(currentYear, idx, currentDay);
             this.renderCalendar();
             this.toggleMonthYearPopover();
-            this.commitChange();
+            this.commitChange(false);
           });
           monthGrid.appendChild(chip);
         });
@@ -2387,7 +3664,7 @@
       },
 
       adjustMinute(delta) {
-        if (this.activeType === 'duration') {
+        if (this.activeType === 'duration' || this.activeType === 'durmath-a' || this.activeType === 'durmath-b') {
           let total = this.selectedHour * 60 + this.selectedMin + delta;
           total = Math.max(0, total);
           this.selectedHour = Math.floor(total / 60);
@@ -2428,6 +3705,22 @@
           document.getElementById('solver-dur-m').value = this.selectedMin;
           document.getElementById('disp-solver-dur').textContent = `${this.selectedHour}h ${mStr}m`;
           handleFieldInput('dur');
+        } else if (this.activeType === 'durmath-a' || this.activeType === 'durmath-b') {
+          const formatted = (this.selectedHour === 0 && this.selectedMin === 0)
+            ? '0m'
+            : `${this.selectedHour > 0 ? `${this.selectedHour}h ` : ''}${this.selectedMin}m`.trim();
+          document.getElementById(this.activeInputId).value = formatted;
+          const dispId = this.activeType === 'durmath-a' ? 'disp-durmath-a' : 'disp-durmath-b';
+          const dispEl = document.getElementById(dispId);
+          if (dispEl) dispEl.textContent = formatted;
+          if (this.activeType === 'durmath-a') {
+            AppState.solver.durMath.a = formatted;
+            localStorage.setItem('durMathA', formatted);
+          } else {
+            AppState.solver.durMath.b = formatted;
+            localStorage.setItem('durMathB', formatted);
+          }
+          runInteractiveSolver();
         } else {
           this.selectedDate.setHours(this.selectedHour, this.selectedMin, 0, 0);
           const isoVal = new Date(this.selectedDate.getTime() - (this.selectedDate.getTimezoneOffset() * 60000)).toISOString().slice(0, 16);
@@ -2452,7 +3745,7 @@
         const mStr = String(this.selectedMin).padStart(2, '0');
         if (this.activeType === 'time') {
           this.liveDisplay.textContent = `${hStr}:${mStr}`;
-        } else if (this.activeType === 'duration') {
+        } else if (this.activeType === 'duration' || this.activeType === 'durmath-a' || this.activeType === 'durmath-b') {
           this.liveDisplay.textContent = `${this.selectedHour}h ${mStr}m`;
         } else {
           const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -2481,12 +3774,52 @@
       initCountdownDefault();
       
       convertFrom(AppState.converter.lastUnit, AppState.converter.lastVal);
+      handleHashRouting();
       setTimeout(updateIndicators, 60);
     });
+
+    function handleHashRouting() {
+      const hash = window.location.hash.toLowerCase();
+      if (!hash) return;
+      if (hash === '#countdown') {
+        const btn = document.querySelector('.js-tab-btn[data-target="countdown-tab"]');
+        if (btn) switchMainTab('countdown-tab', btn);
+        setCountdownSubMode('countdown');
+      } else if (hash === '#since') {
+        const btn = document.querySelector('.js-tab-btn[data-target="countdown-tab"]');
+        if (btn) switchMainTab('countdown-tab', btn);
+        setCountdownSubMode('since');
+      } else if (hash === '#converter') {
+        const btn = document.querySelector('.js-tab-btn[data-target="converter-tab"]');
+        if (btn) switchMainTab('converter-tab', btn);
+      } else if (hash === '#solver' || hash === '#clock') {
+        const btn = document.querySelector('.js-tab-btn[data-target="solver-tab"]');
+        if (btn) switchMainTab('solver-tab', btn);
+        setSolverSubMode('clock');
+      } else if (hash === '#math' || hash === '#duration-math') {
+        const btn = document.querySelector('.js-tab-btn[data-target="solver-tab"]');
+        if (btn) switchMainTab('solver-tab', btn);
+        setSolverSubMode('math');
+      } else if (hash === '#404' || hash.length > 1) {
+        // Unknown hash route -> show custom 404 tab
+        show404Tab();
+      }
+    }
+
+    function show404Tab() {
+      document.querySelectorAll('.tab-pane').forEach(p => { p.classList.remove('active'); p.style.display = 'none'; });
+      document.querySelectorAll('.nav-pill-btn').forEach(b => { b.classList.remove('active'); b.setAttribute('aria-selected', 'false'); });
+      const notFoundTab = document.getElementById('not-found-tab');
+      if (notFoundTab) {
+        notFoundTab.classList.add('active');
+        notFoundTab.style.display = 'block';
+      }
+    }
 
     function bindEvents() {
       document.getElementById('theme-toggle').addEventListener('click', toggleTheme);
       window.addEventListener('resize', updateIndicators);
+      window.addEventListener('hashchange', handleHashRouting);
 
       document.getElementById('btn-mode-wheel').addEventListener('click', () => setInputMode('wheel'));
       document.getElementById('btn-mode-manual').addEventListener('click', () => setInputMode('manual'));
@@ -2512,6 +3845,10 @@
         input.addEventListener('keydown', handleConvKeyDown);
       });
 
+      // Solver Sub-Mode (3-Point Clock vs Duration Math)
+      document.getElementById('btn-subsolver-clock').addEventListener('click', () => setSolverSubMode('clock'));
+      document.getElementById('btn-subsolver-math').addEventListener('click', () => setSolverSubMode('math'));
+
       document.querySelectorAll('.js-solver-mode-btn').forEach(btn => {
         btn.addEventListener('click', (e) => setSolverMode(e.target.dataset.mode));
       });
@@ -2534,6 +3871,58 @@
       document.getElementById('solver-dur-h').addEventListener('input', () => syncDurationFromDirectInputs());
       document.getElementById('solver-dur-m').addEventListener('input', () => syncDurationFromDirectInputs());
 
+      // Break Deduction Chips
+      document.querySelectorAll('.js-break-chip').forEach(chip => {
+        chip.addEventListener('click', () => {
+          const mins = parseInt(chip.dataset.mins, 10);
+          setBreakMinutes(mins);
+        });
+      });
+
+      // Duration Math Inputs & Buttons
+      document.getElementById('durmath-input-a').addEventListener('input', (e) => {
+        AppState.solver.durMath.a = e.target.value;
+        const disp = document.getElementById('disp-durmath-a');
+        if (disp) disp.textContent = e.target.value || '0m';
+        localStorage.setItem('durMathA', e.target.value);
+        runInteractiveSolver();
+      });
+      document.getElementById('durmath-input-b').addEventListener('input', (e) => {
+        AppState.solver.durMath.b = e.target.value;
+        const disp = document.getElementById('disp-durmath-b');
+        if (disp) disp.textContent = e.target.value || '0m';
+        localStorage.setItem('durMathB', e.target.value);
+        runInteractiveSolver();
+      });
+      document.querySelectorAll('.js-durmath-op').forEach(btn => {
+        btn.addEventListener('click', () => {
+          setDurMathOp(btn.dataset.op);
+        });
+      });
+      document.querySelectorAll('.js-durmath-quick').forEach(chip => {
+        chip.addEventListener('click', () => {
+          const targetId = chip.dataset.target;
+          const val = chip.dataset.val;
+          const inputEl = document.getElementById(targetId);
+          if (inputEl) {
+            inputEl.value = val;
+            if (targetId === 'durmath-input-a') {
+              AppState.solver.durMath.a = val;
+              const disp = document.getElementById('disp-durmath-a');
+              if (disp) disp.textContent = val;
+              localStorage.setItem('durMathA', val);
+            } else {
+              AppState.solver.durMath.b = val;
+              const disp = document.getElementById('disp-durmath-b');
+              if (disp) disp.textContent = val;
+              localStorage.setItem('durMathB', val);
+            }
+            runInteractiveSolver();
+          }
+        });
+      });
+
+      // Stepper & Now buttons
       document.querySelectorAll('.js-time-now-btn').forEach(btn => {
         btn.addEventListener('click', (e) => { e.stopPropagation(); setCurrentTime(btn.dataset.target, btn.dataset.field); });
       });
@@ -2543,8 +3932,74 @@
       document.querySelectorAll('.js-stepper-dur').forEach(btn => {
         btn.addEventListener('click', (e) => { e.stopPropagation(); adjustDuration(parseInt(btn.dataset.val)); });
       });
+      document.querySelectorAll('.js-stepper-durmath').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          adjustDurMath(btn.dataset.target, btn.dataset.disp, parseInt(btn.dataset.val, 10));
+        });
+      });
 
+      // Copying
       document.getElementById('btn-copy-result').addEventListener('click', copySolverResult);
+      document.querySelectorAll('.js-copy-fmt').forEach(pill => {
+        pill.addEventListener('click', () => {
+          const fmt = pill.dataset.fmt;
+          copySpecificFormat(fmt, pill);
+        });
+      });
+
+      // Global Keyboard Ergonomics
+      window.addEventListener('keydown', handleGlobalKeydown);
+    }
+
+    function handleGlobalKeydown(e) {
+      const activeEl = document.activeElement;
+      const isInput = activeEl && (activeEl.tagName === 'INPUT' || activeEl.tagName === 'TEXTAREA' || activeEl.isContentEditable);
+
+      if (e.key === 'Escape') {
+        TimePickerEngine.close();
+        if (isInput) activeEl.blur();
+        return;
+      }
+
+      if (e.key === 'Enter' && isInput) {
+        e.preventDefault();
+        activeEl.blur();
+        return;
+      }
+
+      // Hotkeys when not focused on an input
+      if (!isInput) {
+        if (e.key === '1') {
+          const btn = document.querySelector('.js-tab-btn[data-target="countdown-tab"]');
+          if (btn) switchMainTab('countdown-tab', btn);
+        } else if (e.key === '2') {
+          const btn = document.querySelector('.js-tab-btn[data-target="converter-tab"]');
+          if (btn) switchMainTab('converter-tab', btn);
+        } else if (e.key === '3') {
+          const btn = document.querySelector('.js-tab-btn[data-target="solver-tab"]');
+          if (btn) switchMainTab('solver-tab', btn);
+        } else if (e.key === 'n' || e.key === 'N') {
+          if (AppState.activeTab === 'solver-tab') {
+            if (AppState.solver.mode === 'start') {
+              setCurrentTime('solver-end-input', 'end');
+            } else {
+              setCurrentTime('solver-start-input', 'start');
+            }
+          } else if (AppState.activeTab === 'countdown-tab') {
+            applyPreset('today-start');
+          }
+        }
+      }
+
+      // Quick Copy via Cmd+C / Ctrl+C when no text is highlighted
+      if ((e.metaKey || e.ctrlKey) && (e.key === 'c' || e.key === 'C')) {
+        const sel = window.getSelection().toString();
+        if (!sel && AppState.lastResult.text) {
+          e.preventDefault();
+          copySolverResult();
+        }
+      }
     }
 
     function syncDurationFromDirectInputs() {
@@ -2571,7 +4026,9 @@
       moon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>`,
       alert: `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block; vertical-align:text-bottom; margin-right:4px;" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>`,
       copy: `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>`,
-      check: `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>`
+      check: `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>`,
+      arrowRight: `<svg class="step-guide-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>`,
+      lightbulb: `<svg class="step-guide-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18h6"></path><path d="M10 22h4"></path><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5.76.76 1.23 1.52 1.41 2.5h6.18z"></path></svg>`
     };
 
     function toggleTheme() {
@@ -2618,10 +4075,23 @@
       }
     }
     function switchMainTab(tabId, el) {
-      document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.tab-pane').forEach(p => {
+        p.classList.remove('active');
+        p.style.display = '';
+      });
       document.querySelectorAll('.nav-pill-btn').forEach(b => { b.classList.remove('active'); b.setAttribute('aria-selected', 'false'); });
-      el.classList.add('active'); el.setAttribute('aria-selected', 'true');
-      document.getElementById(tabId).classList.add('active');
+      if (el) {
+        el.classList.add('active'); el.setAttribute('aria-selected', 'true');
+      } else {
+        const correspondingBtn = document.querySelector(`.js-tab-btn[data-target="${tabId}"]`);
+        if (correspondingBtn) {
+          correspondingBtn.classList.add('active');
+          correspondingBtn.setAttribute('aria-selected', 'true');
+        }
+      }
+      const targetPane = document.getElementById(tabId);
+      if (targetPane) targetPane.classList.add('active');
+      AppState.activeTab = tabId;
       localStorage.setItem('activeTab', tabId);
       updateIndicators();
     }
@@ -2633,19 +4103,23 @@
     function setCountdownSubMode(mode, fromAutoSwitch = false) {
       AppState.countdown.mode = mode;
       document.querySelectorAll('.js-cd-sub-btn').forEach(b => b.classList.remove('active'));
-      document.querySelector(`.js-cd-sub-btn[data-mode="${mode}"]`).classList.add('active');
+      const activeBtn = document.querySelector(`.js-cd-sub-btn[data-mode="${mode}"]`);
+      if (activeBtn) activeBtn.classList.add('active');
       updateCdSubIndicator();
 
       const titleEl = document.getElementById('cd-title');
       const descEl = document.getElementById('cd-desc');
+      const guideEl = document.getElementById('cd-guide-banner');
       
       if (mode === 'countdown') {
         titleEl.textContent = "Target Date Countdown";
         descEl.textContent = "Select a target date and time to track time remaining down to the second.";
+        if (guideEl) guideEl.innerHTML = `${Icons.arrowRight} <strong>Next Step:</strong> Click the date box below or select a quick preset to set your countdown target.`;
         if (!fromAutoSwitch) initCountdownDefault();
       } else {
         titleEl.textContent = "Time Since (Elapsed)";
         descEl.textContent = "Select a past date and time to track how long it has been since then.";
+        if (guideEl) guideEl.innerHTML = `${Icons.arrowRight} <strong>Next Step:</strong> Click the date box below or select a past preset to track elapsed time.`;
         if (!fromAutoSwitch) initSinceDefault();
       }
       renderPresets();
@@ -2778,7 +4252,6 @@
     function handleConvKeyDown(e) {
       if (e.key === 'Enter') { e.preventDefault(); e.target.blur(); }
     }
-    function cleanFloat(val) { return isNaN(val) ? '' : parseFloat(Number(val.toPrecision(10))); }
     function convertFrom(sourceUnit, valStr) {
       const sourceEl = document.getElementById(`conv-${sourceUnit}`);
       if (sourceEl && sourceEl.value !== valStr) sourceEl.value = valStr;
@@ -2787,17 +4260,27 @@
         Object.keys(SECONDS_MAP).forEach(u => { if (u !== sourceUnit) document.getElementById(`conv-${u}`).value = ''; });
         return;
       }
-      const totalSecs = parseFloat(valStr) * SECONDS_MAP[sourceUnit];
+      
+      const convResults = typeof TimeEngine !== 'undefined' && TimeEngine.convertUnits 
+        ? TimeEngine.convertUnits(parseFloat(valStr), sourceUnit)
+        : null;
+
       Object.keys(SECONDS_MAP).forEach(u => {
         if (u !== sourceUnit) {
-          const cvt = cleanFloat(totalSecs / SECONDS_MAP[u]);
+          let cvt;
+          if (convResults && convResults[u] !== undefined) {
+            cvt = convResults[u];
+          } else {
+            const totalSecs = parseFloat(valStr) * SECONDS_MAP[sourceUnit];
+            cvt = isNaN(totalSecs) ? '' : parseFloat(Number((totalSecs / SECONDS_MAP[u]).toPrecision(10)));
+          }
           document.getElementById(`conv-${u}`).value = cvt;
           document.getElementById(`conv-${u}`).dataset.prevVal = cvt;
         }
       });
     }
 
-    /* MODE 3: TIME SOLVER */
+    /* MODE 3: TIME SOLVER & DURATION MATH */
     function initSolverDefaults() {
       const saved = JSON.parse(localStorage.getItem('solverState')) || { start: '10:45', h: 4, m: 30, end: '15:15' };
       document.getElementById('solver-start-input').value = saved.start;
@@ -2807,8 +4290,42 @@
       document.getElementById('disp-solver-dur').textContent = `${saved.h}h ${String(saved.m).padStart(2,'0')}m`;
       document.getElementById('solver-end-input').value = saved.end;
       document.getElementById('disp-solver-end').textContent = saved.end;
-      setSolverMode(AppState.solver.mode);
+
+      setBreakMinutes(AppState.solver.breakMinutes, false);
+      setSolverSubMode(AppState.solver.subMode, false);
+      setSolverMode(AppState.solver.mode, false);
+      setDurMathOp(AppState.solver.durMath.op, false);
+
+      document.getElementById('durmath-input-a').value = AppState.solver.durMath.a;
+      document.getElementById('durmath-input-b').value = AppState.solver.durMath.b;
+      const dispA = document.getElementById('disp-durmath-a');
+      if (dispA) dispA.textContent = AppState.solver.durMath.a || '0m';
+      const dispB = document.getElementById('disp-durmath-b');
+      if (dispB) dispB.textContent = AppState.solver.durMath.b || '0m';
+
+      runInteractiveSolver();
     }
+
+    function adjustDurMath(inputId, dispId, deltaMins) {
+      const input = document.getElementById(inputId);
+      const disp = document.getElementById(dispId);
+      if (!input) return;
+      const currentVal = input.value || '0m';
+      const parsed = TimeEngine.parseFlexibleDuration(currentVal);
+      const newTotal = Math.max(0, parsed.totalMinutes + deltaMins);
+      const formatted = TimeEngine.formatDurationMulti(newTotal).formatted;
+      input.value = formatted;
+      if (disp) disp.textContent = formatted;
+      if (inputId === 'durmath-input-a') {
+        AppState.solver.durMath.a = formatted;
+        localStorage.setItem('durMathA', formatted);
+      } else {
+        AppState.solver.durMath.b = formatted;
+        localStorage.setItem('durMathB', formatted);
+      }
+      runInteractiveSolver();
+    }
+
     function saveSolverState() {
       localStorage.setItem('solverState', JSON.stringify({
         start: document.getElementById('solver-start-input').value,
@@ -2818,12 +4335,69 @@
       }));
     }
 
-    function setSolverMode(mode) {
+    function setSolverSubMode(subMode, shouldRun = true) {
+      AppState.solver.subMode = subMode;
+      localStorage.setItem('solverSubMode', subMode);
+      
+      const clockBtn = document.getElementById('btn-subsolver-clock');
+      const mathBtn = document.getElementById('btn-subsolver-math');
+      const clockView = document.getElementById('solver-clock-view');
+      const mathView = document.getElementById('solver-math-view');
+
+      if (subMode === 'clock') {
+        clockBtn.classList.add('active');
+        mathBtn.classList.remove('active');
+        clockView.style.display = 'block';
+        mathView.style.display = 'none';
+      } else {
+        mathBtn.classList.add('active');
+        clockBtn.classList.remove('active');
+        clockView.style.display = 'none';
+        mathView.style.display = 'block';
+      }
+
+      if (shouldRun) runInteractiveSolver();
+    }
+
+    function setBreakMinutes(mins, shouldRun = true) {
+      AppState.solver.breakMinutes = mins;
+      localStorage.setItem('solverBreakMins', mins);
+
+      document.querySelectorAll('.js-break-chip').forEach(chip => {
+        chip.classList.toggle('active', parseInt(chip.dataset.mins, 10) === mins);
+      });
+
+      if (shouldRun) runInteractiveSolver();
+    }
+
+    function setDurMathOp(op, shouldRun = true) {
+      AppState.solver.durMath.op = op;
+      localStorage.setItem('durMathOp', op);
+
+      document.getElementById('btn-op-add').classList.toggle('active', op === '+');
+      document.getElementById('btn-op-sub').classList.toggle('active', op === '-' || op === '−');
+
+      if (shouldRun) runInteractiveSolver();
+    }
+
+    function setSolverMode(mode, shouldRun = true) {
       AppState.solver.mode = mode;
       localStorage.setItem('solverMode', mode);
       document.querySelectorAll('.js-solver-mode-btn').forEach(b => b.classList.remove('active'));
-      document.querySelector(`.js-solver-mode-btn[data-mode="${mode}"]`).classList.add('active');
+      const activeBtn = document.querySelector(`.js-solver-mode-btn[data-mode="${mode}"]`);
+      if (activeBtn) activeBtn.classList.add('active');
       updateModeIndicator();
+
+      const guideEl = document.getElementById('solver-guide-banner');
+      if (guideEl) {
+        if (mode === 'start') {
+          guideEl.innerHTML = `${Icons.lightbulb} <strong>Solving Start Time:</strong> Enter End Time & Duration. Start Time resolves automatically.`;
+        } else if (mode === 'dur') {
+          guideEl.innerHTML = `${Icons.lightbulb} <strong>Solving Duration:</strong> Enter Start Time & End Time. Duration resolves automatically.`;
+        } else {
+          guideEl.innerHTML = `${Icons.lightbulb} <strong>Solving End Time:</strong> Enter Start Time & Duration. End Time resolves automatically.`;
+        }
+      }
 
       ['start', 'dur', 'end'].forEach(m => {
         const box = document.getElementById(`box-${m}`);
@@ -2836,7 +4410,7 @@
           box.classList.remove('highlight'); badge.innerHTML = '';
         }
       });
-      runInteractiveSolver();
+      if (shouldRun) runInteractiveSolver();
     }
 
     function setCurrentTime(inputId, fieldType) {
@@ -2847,6 +4421,7 @@
       document.getElementById(dispId).textContent = valStr;
       handleFieldInput(fieldType);
     }
+
     function adjustTime(inputId, deltaMins, fieldType) {
       const input = document.getElementById(inputId);
       if (!input.value) return;
@@ -2859,6 +4434,7 @@
       document.getElementById(dispId).textContent = valStr;
       handleFieldInput(fieldType);
     }
+
     function adjustDuration(deltaMins) {
       const hEl = document.getElementById('solver-dur-h'), mEl = document.getElementById('solver-dur-m');
       const total = Math.max(0, (parseInt(hEl.value||0)*60 + parseInt(mEl.value||0)) + deltaMins);
@@ -2889,57 +4465,209 @@
       }
     }
 
-    function timeStrMins(str) { return str ? str.split(':').map(Number).reduce((h, m) => h*60+m) : null; }
-    function minsToStr(tm) { 
-      const nm = ((tm % 1440) + 1440) % 1440; 
-      return `${String(Math.floor(nm/60)).padStart(2,'0')}:${String(nm%60).padStart(2,'0')}`;
-    }
-
     function runInteractiveSolver() {
+      const isMath = AppState.solver.subMode === 'math';
+      const tText = document.getElementById('callout-time-text');
+      const tBadge = document.getElementById('callout-day-badge');
+      const expl = document.getElementById('callout-explanation');
+      const subTitle = document.getElementById('callout-subtitle');
+      tBadge.innerHTML = '';
+
+      if (isMath) {
+        const strA = document.getElementById('durmath-input-a').value || '0m';
+        const strB = document.getElementById('durmath-input-b').value || '0m';
+        const op = AppState.solver.durMath.op;
+        const errorEl = document.getElementById('durmath-error-msg');
+        const boxA = document.getElementById('box-durmath-a');
+        const boxB = document.getElementById('box-durmath-b');
+
+        const parsedA = typeof TimeEngine !== 'undefined' ? TimeEngine.parseFlexibleDuration(strA) : { isValid: true, minutes: 150 };
+        const parsedB = typeof TimeEngine !== 'undefined' ? TimeEngine.parseFlexibleDuration(strB) : { isValid: true, minutes: 105 };
+
+        if (!parsedA.isValid || !parsedB.isValid) {
+          const invalidField = !parsedA.isValid ? 'Duration A' : 'Duration B';
+          const invalidVal = !parsedA.isValid ? strA : strB;
+          
+          if (errorEl) {
+            errorEl.innerHTML = `${Icons.alert} <strong>Invalid Format:</strong> ${invalidField} ("${invalidVal}") could not be parsed. Use expressions like <code>2h 30m</code>, <code>90m</code>, or <code>1.5h</code>.`;
+            errorEl.style.display = 'block';
+          }
+          if (boxA) boxA.classList.toggle('error-state', !parsedA.isValid);
+          if (boxB) boxB.classList.toggle('error-state', !parsedB.isValid);
+
+          subTitle.textContent = "Duration Calculation Error";
+          tText.textContent = "Invalid Input";
+          expl.textContent = `Please enter valid duration formats (e.g. 2h 30m, 90m, or 1.5h) to calculate.`;
+
+          AppState.lastResult = {
+            text: expl.textContent,
+            formatted: '--',
+            hhmmss: '--:--:--',
+            decimal: '-- hrs',
+            minutes: '-- min'
+          };
+          updateCopyFormatDisplays('--', '--:--:--', '-- hrs', '-- min');
+          return;
+        }
+
+        if (errorEl) {
+          errorEl.style.display = 'none';
+          errorEl.innerHTML = '';
+        }
+        if (boxA) boxA.classList.remove('error-state');
+        if (boxB) boxB.classList.remove('error-state');
+
+        const mathRes = typeof TimeEngine !== 'undefined'
+          ? TimeEngine.calculateDurationMath(strA, op, strB)
+          : { formatted: '0m', totalMinutes: 0, decimalHours: '0.00 hrs', decimalHoursVal: 0, hhmmss: '00:00:00' };
+
+        subTitle.textContent = "Duration Calculation Result";
+        tText.textContent = mathRes.formatted;
+        expl.textContent = `${strA} ${op} ${strB} = ${mathRes.formatted} (${mathRes.decimalHours} / ${mathRes.totalMinutes} min)`;
+
+        AppState.lastResult = {
+          text: expl.textContent,
+          formatted: mathRes.formatted,
+          hhmmss: mathRes.hhmmss,
+          decimal: mathRes.decimalHours,
+          minutes: `${mathRes.totalMinutes} min`
+        };
+
+        updateCopyFormatDisplays(mathRes.formatted, mathRes.hhmmss, mathRes.decimalHours, `${mathRes.totalMinutes} min`);
+        return;
+      }
+
+      // SUB-SECTION A: 3-POINT CLOCK SOLVER
       const stVal = document.getElementById('solver-start-input').value;
       const endVal = document.getElementById('solver-end-input').value;
       const dH = parseInt(document.getElementById('solver-dur-h').value || 0, 10);
       const dM = parseInt(document.getElementById('solver-dur-m').value || 0, 10);
-      const durMins = Math.max(0, dH*60 + dM);
+      const durMins = Math.max(0, dH * 60 + dM);
+      const breakMins = AppState.solver.breakMinutes;
 
-      const stMins = timeStrMins(stVal), enMins = timeStrMins(endVal);
-      const tText = document.getElementById('callout-time-text'), tBadge = document.getElementById('callout-day-badge'), expl = document.getElementById('callout-explanation');
-      
-      document.getElementById('callout-subtitle').textContent = `Calculated ${AppState.solver.mode === 'dur' ? 'Duration' : AppState.solver.mode === 'start' ? 'Start Time' : 'End Time'}`;
-      tBadge.innerHTML = '';
+      subTitle.textContent = `Calculated ${AppState.solver.mode === 'dur' ? 'Duration' : AppState.solver.mode === 'start' ? 'Start Time' : 'End Time'}`;
 
-      if (AppState.solver.mode === 'start' && enMins !== null) {
-        const resMins = enMins - durMins;
-        const resStr = minsToStr(resMins);
-        document.getElementById('solver-start-input').value = resStr;
-        document.getElementById('disp-solver-start').textContent = resStr;
-        tText.textContent = resStr;
-        const dOff = Math.floor(resMins/1440);
-        if (dOff < 0) tBadge.innerHTML = `<span class="day-wrap-badge">${dOff} Day(s)</span>`;
-        expl.textContent = `To end at ${endVal} with a ${dH}h ${dM}m duration, Start Time must be ${resStr}.`;
+      if (AppState.solver.mode === 'start') {
+        const res = typeof TimeEngine !== 'undefined'
+          ? TimeEngine.resolveStart(endVal, dH, dM, breakMins)
+          : { startTime: '10:45', daysOffset: 0, isNextDay: false, grossDurationMinutes: durMins + breakMins };
+
+        document.getElementById('solver-start-input').value = res.startTime;
+        document.getElementById('disp-solver-start').textContent = res.startTime;
+        tText.textContent = res.startTime;
+
+        if (res.daysOffset < 0) {
+          tBadge.innerHTML = `<span class="day-wrap-badge">${res.daysOffset} Day(s)</span>`;
+        }
+
+        const breakDesc = breakMins > 0 ? ` with ${breakMins}m break` : '';
+        expl.textContent = `To end at ${endVal} with ${dH}h ${dM}m work${breakDesc}, Start Time must be ${res.startTime}.`;
+
+        const totalSecs = (res.grossDurationMinutes || durMins) * 60;
+        const hhmmss = `${res.startTime}:00`;
+        const decHrs = `${((durMins) / 60).toFixed(2)} hrs`;
+        const totMins = `${durMins} min`;
+
+        AppState.lastResult = {
+          text: expl.textContent,
+          formatted: res.startTime,
+          hhmmss,
+          decimal: decHrs,
+          minutes: totMins
+        };
+
+        updateCopyFormatDisplays(res.startTime, hhmmss, decHrs, totMins);
       } 
-      else if (AppState.solver.mode === 'dur' && stMins !== null && enMins !== null) {
-        let diff = enMins - stMins;
-        const isNext = diff < 0; if (isNext) diff += 1440;
-        const resH = Math.floor(diff/60), resM = diff%60;
-        document.getElementById('solver-dur-h').value = resH;
-        document.getElementById('solver-dur-m').value = resM;
-        document.getElementById('disp-solver-dur').textContent = `${resH}h ${String(resM).padStart(2,'0')}m`;
-        tText.textContent = `${resH}h ${String(resM).padStart(2,'0')}m`;
-        if (isNext) tBadge.innerHTML = `<span class="day-wrap-badge">Overnight (+1 Day)</span>`;
-        expl.textContent = `From ${stVal} to ${endVal}, duration is ${resH}h ${resM}m.`;
+      else if (AppState.solver.mode === 'dur') {
+        const res = typeof TimeEngine !== 'undefined'
+          ? TimeEngine.resolveDuration(stVal, endVal, breakMins)
+          : { formattedNetDuration: `${dH}h ${dM}m`, netDurationMinutes: durMins, grossDurationMinutes: durMins, isNextDay: false, decimalHours: durMins/60, hhmmss: '04:30:00' };
+
+        const netH = Math.floor(res.netDurationMinutes / 60);
+        const netM = res.netDurationMinutes % 60;
+
+        document.getElementById('solver-dur-h').value = netH;
+        document.getElementById('solver-dur-m').value = netM;
+        document.getElementById('disp-solver-dur').textContent = `${netH}h ${String(netM).padStart(2,'0')}m`;
+        tText.textContent = res.formattedNetDuration;
+
+        if (res.isNextDay) {
+          tBadge.innerHTML = `<span class="day-wrap-badge">Overnight (+1 Day)</span>`;
+        }
+
+        const breakDesc = breakMins > 0 ? ` (${TimeEngine.formatDuration(res.grossDurationMinutes)} gross - ${breakMins}m break)` : '';
+        expl.textContent = `From ${stVal} to ${endVal}, net duration is ${res.formattedNetDuration}${breakDesc}.`;
+
+        AppState.lastResult = {
+          text: expl.textContent,
+          formatted: res.formattedNetDuration,
+          hhmmss: res.hhmmss,
+          decimal: `${res.decimalHours.toFixed(2)} hrs`,
+          minutes: `${res.netDurationMinutes} min`
+        };
+
+        updateCopyFormatDisplays(res.formattedNetDuration, res.hhmmss, `${res.decimalHours.toFixed(2)} hrs`, `${res.netDurationMinutes} min`);
       } 
-      else if (AppState.solver.mode === 'end' && stMins !== null) {
-        const resMins = stMins + durMins;
-        const resStr = minsToStr(resMins);
-        document.getElementById('solver-end-input').value = resStr;
-        document.getElementById('disp-solver-end').textContent = resStr;
-        tText.textContent = resStr;
-        const dOff = Math.floor(resMins/1440);
-        if (dOff > 0) tBadge.innerHTML = `<span class="day-wrap-badge">+${dOff} Day(s)</span>`;
-        expl.textContent = `Starting at ${stVal} for ${dH}h ${dM}m finishes at ${resStr}.`;
+      else if (AppState.solver.mode === 'end') {
+        const res = typeof TimeEngine !== 'undefined'
+          ? TimeEngine.resolveEnd(stVal, dH, dM, breakMins)
+          : { endTime: '15:15', daysOffset: 0, isNextDay: false, grossDurationMinutes: durMins + breakMins };
+
+        document.getElementById('solver-end-input').value = res.endTime;
+        document.getElementById('disp-solver-end').textContent = res.endTime;
+        tText.textContent = res.endTime;
+
+        if (res.daysOffset > 0) {
+          tBadge.innerHTML = `<span class="day-wrap-badge">+${res.daysOffset} Day(s)</span>`;
+        }
+
+        const breakDesc = breakMins > 0 ? ` with ${breakMins}m break` : '';
+        expl.textContent = `Starting at ${stVal} for ${dH}h ${dM}m work${breakDesc} finishes at ${res.endTime}.`;
+
+        const hhmmss = `${res.endTime}:00`;
+        const decHrs = `${(durMins / 60).toFixed(2)} hrs`;
+        const totMins = `${durMins} min`;
+
+        AppState.lastResult = {
+          text: expl.textContent,
+          formatted: res.endTime,
+          hhmmss,
+          decimal: decHrs,
+          minutes: totMins
+        };
+
+        updateCopyFormatDisplays(res.endTime, hhmmss, decHrs, totMins);
       }
+
       saveSolverState();
+    }
+
+    function updateCopyFormatDisplays(std, hhmmss, dec, min) {
+      document.getElementById('copy-fmt-val-std').textContent = std || '--';
+      document.getElementById('copy-fmt-val-hhmmss').textContent = hhmmss || '--:--:--';
+      document.getElementById('copy-fmt-val-dec').textContent = dec || '-- hrs';
+      document.getElementById('copy-fmt-val-min').textContent = min || '-- min';
+    }
+
+    function copySpecificFormat(fmt, buttonEl) {
+      let valToCopy = '';
+      if (fmt === 'formatted') valToCopy = AppState.lastResult.formatted;
+      else if (fmt === 'hhmmss') valToCopy = AppState.lastResult.hhmmss;
+      else if (fmt === 'decimal') valToCopy = AppState.lastResult.decimal;
+      else if (fmt === 'minutes') valToCopy = AppState.lastResult.minutes;
+
+      if (!valToCopy) return;
+
+      navigator.clipboard.writeText(valToCopy).then(() => {
+        buttonEl.classList.add('copied');
+        const tag = buttonEl.querySelector('.fmt-tag');
+        const origTag = tag.textContent;
+        tag.textContent = 'Copied!';
+        setTimeout(() => {
+          buttonEl.classList.remove('copied');
+          tag.textContent = origTag;
+        }, 1500);
+      });
     }
 
     function copySolverResult() {

@@ -7,7 +7,9 @@
   "scripts": {
     "dev": "node server.js",
     "build": "echo 'No build required for static site'",
-    "start": "node server.js"
+    "start": "node server.js",
+    "lint": "node --check server.js time-engine.js test/time-engine.test.js",
+    "test": "node --test"
   },
   "dependencies": {
     "express": "^4.21.2"
