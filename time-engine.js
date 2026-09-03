@@ -208,7 +208,7 @@ export const TimeEngine = {
     const formatted = `${prefix}${h}h ${String(m).padStart(2, '0')}m`;
     const hhmmss = `${prefix}${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:00`;
     const decimalHoursVal = this.round(minutes / 60, 2);
-    const decimalHours = `${decimalHoursVal.toFixed(2)} hrs`;
+    const decimalHoursStr = `${decimalHoursVal.toFixed(2)} hrs`;
     const totalMinutesStr = `${minutes} min`;
     const totalSecondsVal = Math.round(minutes * 60);
     const totalSecondsStr = `${totalSecondsVal.toLocaleString()} sec`;
@@ -216,8 +216,10 @@ export const TimeEngine = {
     return {
       formatted,
       hhmmss,
-      decimalHours,
+      decimalHours: decimalHoursVal,
       decimalHoursVal,
+      decimalHoursStr,
+      decimalHoursFormatted: decimalHoursStr,
       totalMinutesStr,
       totalMinutes: minutes,
       totalSecondsVal,
@@ -258,6 +260,8 @@ export const TimeEngine = {
       hours: multiFormat.hours,
       minutes: multiFormat.minutes,
       decimalHours: multiFormat.decimalHoursVal,
+      decimalHoursVal: multiFormat.decimalHoursVal,
+      decimalHoursFormatted: multiFormat.decimalHoursStr,
       isOvernight,
       dayOffset: isOvernight ? 1 : 0,
       formattedGross: grossMulti.formatted,
@@ -271,7 +275,28 @@ export const TimeEngine = {
    */
   resolveEnd(startStr, durHours, durMinutes = 0, breakMinutes = 0) {
     const startMins = this.timeToMinutes(startStr);
-    if (startMins === null) return null;
+    if (startMins === null) {
+      return {
+        isValid: false,
+        timeStr: '--:--',
+        endTime: '--:--',
+        startTime: startStr || '--:--',
+        dayOffset: 0,
+        daysOffset: 0,
+        isNextDay: false,
+        startMins: 0,
+        durationMinutes: 0,
+        netDurationMinutes: 0,
+        grossDurationMinutes: 0,
+        breakMinutes: 0,
+        totalSpanMinutes: 0,
+        formattedNetDuration: '0m',
+        hhmmss: '00:00:00',
+        decimalHours: 0,
+        decimalHoursVal: 0,
+        decimalHoursFormatted: '0.00 hrs'
+      };
+    }
 
     let durationMins = 0;
     let breakMins = 0;
@@ -291,6 +316,7 @@ export const TimeEngine = {
     const multiFormat = this.formatDurationMulti(durationMins);
 
     return {
+      isValid: true,
       timeStr,
       endTime: timeStr,
       startTime: startStr,
@@ -306,6 +332,8 @@ export const TimeEngine = {
       formattedNetDuration: multiFormat.formatted,
       hhmmss: `${timeStr}:00`,
       decimalHours: multiFormat.decimalHoursVal,
+      decimalHoursVal: multiFormat.decimalHoursVal,
+      decimalHoursFormatted: multiFormat.decimalHoursStr,
       multiFormat
     };
   },
@@ -315,7 +343,28 @@ export const TimeEngine = {
    */
   resolveStart(endStr, durHours, durMinutes = 0, breakMinutes = 0) {
     const endMins = this.timeToMinutes(endStr);
-    if (endMins === null) return null;
+    if (endMins === null) {
+      return {
+        isValid: false,
+        timeStr: '--:--',
+        startTime: '--:--',
+        endTime: endStr || '--:--',
+        dayOffset: 0,
+        daysOffset: 0,
+        isNextDay: false,
+        endMins: 0,
+        durationMinutes: 0,
+        netDurationMinutes: 0,
+        grossDurationMinutes: 0,
+        breakMinutes: 0,
+        totalSpanMinutes: 0,
+        formattedNetDuration: '0m',
+        hhmmss: '00:00:00',
+        decimalHours: 0,
+        decimalHoursVal: 0,
+        decimalHoursFormatted: '0.00 hrs'
+      };
+    }
 
     let durationMins = 0;
     let breakMins = 0;
@@ -335,6 +384,7 @@ export const TimeEngine = {
     const multiFormat = this.formatDurationMulti(durationMins);
 
     return {
+      isValid: true,
       timeStr,
       startTime: timeStr,
       endTime: endStr,
@@ -350,6 +400,8 @@ export const TimeEngine = {
       formattedNetDuration: multiFormat.formatted,
       hhmmss: `${timeStr}:00`,
       decimalHours: multiFormat.decimalHoursVal,
+      decimalHoursVal: multiFormat.decimalHoursVal,
+      decimalHoursFormatted: multiFormat.decimalHoursStr,
       multiFormat
     };
   },
@@ -359,15 +411,43 @@ export const TimeEngine = {
    */
   resolveDuration(startStr, endStr, breakMinutes = 0) {
     const res = this.calculateDuration(startStr, endStr, breakMinutes);
-    if (!res) return null;
+    if (!res) {
+      return {
+        isValid: false,
+        startMins: 0,
+        endMins: 0,
+        grossMinutes: 0,
+        netMinutes: 0,
+        breakMinutes: 0,
+        hours: 0,
+        minutes: 0,
+        decimalHours: 0,
+        decimalHoursVal: 0,
+        decimalHoursFormatted: '0.00 hrs',
+        isOvernight: false,
+        dayOffset: 0,
+        formattedGross: '0m',
+        formattedNet: '0m',
+        formattedNetDuration: '0m',
+        netDurationMinutes: 0,
+        grossDurationMinutes: 0,
+        hhmmss: '00:00:00',
+        daysOffset: 0,
+        isNextDay: false
+      };
+    }
+    const decHours = typeof res.decimalHours === 'number' ? res.decimalHours : (res.netMinutes / 60);
     return {
       ...res,
       formattedNetDuration: res.formattedNet,
       netDurationMinutes: res.netMinutes,
       grossDurationMinutes: res.grossMinutes,
-      hhmmss: res.multiFormat.hhmmss,
+      hhmmss: res.multiFormat?.hhmmss || '00:00:00',
       daysOffset: res.dayOffset,
-      isNextDay: res.isOvernight
+      isNextDay: res.isOvernight,
+      decimalHours: decHours,
+      decimalHoursVal: decHours,
+      decimalHoursFormatted: `${decHours.toFixed(2)} hrs`
     };
   },
 
