@@ -872,6 +872,7 @@
     }
     .preset-chip {
       background: var(--btn-subtle-bg);
+      min-height: 44px;
       padding: 10px 18px;
       font-size: 13.5px;
       font-weight: 600;
@@ -880,6 +881,12 @@
       color: var(--text-sub);
       border: 1px solid transparent;
       transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: manipulation;
     }
     .preset-chip:hover {
       background: var(--accent-blue-light);
@@ -970,10 +977,21 @@
     }
     .solver-box.shake { animation: gentleShake 0.4s ease-in-out; }
 
+    .solver-box-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      min-height: 28px;
+      margin-bottom: 6px;
+    }
+    .solver-box-header .form-label {
+      margin-bottom: 0;
+      cursor: pointer;
+    }
+
     .solver-target-badge {
-      position: absolute;
-      top: 16px;
-      right: 16px;
+      position: static !important;
       background: var(--accent-blue);
       color: #FFF;
       font-size: 11px;
@@ -982,6 +1000,10 @@
       padding: 4px 10px;
       border-radius: var(--radius-full);
       letter-spacing: 0.5px;
+      line-height: 1.3;
+      white-space: nowrap;
+      flex-shrink: 0;
+      box-shadow: 0 2px 6px rgba(0, 113, 227, 0.35);
     }
     .equation-operator {
       display: flex;
@@ -992,6 +1014,7 @@
       color: var(--text-muted);
       user-select: none;
       padding: 0 4px;
+      line-height: 1;
     }
     .input-row-with-btn {
       display: flex;
@@ -1014,16 +1037,23 @@
     .stepper-btn {
       width: 100%;
       min-width: 0;
+      min-height: 44px;
       background: var(--stepper-bg);
       border: 1.5px solid var(--border-subtle);
       color: var(--stepper-color);
       font-size: 13px;
       font-weight: 700;
-      padding: 11px 0;
+      padding: 0 4px;
       border-radius: 8px;
       cursor: pointer;
       transition: all 0.15s ease;
       text-align: center;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: manipulation;
     }
     .stepper-btn:hover {
       background: var(--accent-blue);
@@ -1123,12 +1153,19 @@
       margin-top: 10px;
     }
     .durmath-box .stepper-btn {
-      font-size: 11.5px;
+      min-height: 44px;
+      font-size: 12.5px;
       font-weight: 700;
-      padding: 8px 0;
+      padding: 0 4px;
       min-width: 0;
       text-align: center;
       white-space: nowrap;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: manipulation;
     }
     .durmath-input {
       width: 100%;
@@ -1191,8 +1228,9 @@
       margin-top: 10px;
     }
     .durmath-quick-chip {
-      padding: 5px 12px;
-      font-size: 12px;
+      min-height: 44px;
+      padding: 8px 14px;
+      font-size: 13px;
       font-weight: 600;
       border-radius: var(--radius-full);
       background: var(--btn-subtle-bg);
@@ -1205,6 +1243,9 @@
       align-items: center;
       justify-content: center;
       line-height: 1.2;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: manipulation;
     }
     .durmath-quick-chip:hover {
       background: var(--accent-blue-light);
@@ -1311,12 +1352,14 @@
       z-index: 2000;
       opacity: 0;
       pointer-events: none;
-      transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      visibility: hidden;
+      transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.25s ease;
     }
 
     .ts-picker-scrim.visible {
       opacity: 1;
       pointer-events: auto;
+      visibility: visible;
     }
 
     .ts-picker-modal {
@@ -1341,7 +1384,8 @@
       overflow-y: auto;
       opacity: 0;
       pointer-events: none;
-      transition: opacity 0.22s ease, transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+      visibility: hidden;
+      transition: opacity 0.22s ease, transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.22s ease;
     }
 
     .ts-picker-modal.wide-mode {
@@ -1351,6 +1395,7 @@
     .ts-picker-modal.visible {
       opacity: 1;
       pointer-events: auto;
+      visibility: visible;
       transform: translate(-50%, -50%) scale(1);
     }
 
@@ -2084,56 +2129,18 @@
       font-size: 12.5px;
       color: var(--text-muted);
     }
-    @media (max-width: 860px) {
+    @media (max-width: 960px) {
       body {
         padding-top: 0;
         padding-bottom: 40px;
       }
       
-      .top-nav {
-        padding: 12px 16px;
-        height: auto;
-        min-height: auto;
-        flex-wrap: wrap;
-        align-content: center;
-        gap: 10px 0;
-      }
-
-      .brand { font-size: 19px; }
-      .brand-icon { width: 36px; height: 36px; }
-
-      .nav-pill-group {
-        order: 3;
-        width: 100%;
-        display: flex;
-        justify-content: space-between;
-        padding: 4px;
-      }
-
-      .nav-pill-btn {
-        flex: 1;
-        padding: 9px 8px;
-        font-size: 13px;
-        text-align: center;
-      }
-
-      .input-mode-btn {
-        padding: 6px 12px;
-        font-size: 12.5px;
-      }
-
-      .theme-toggle-btn {
-        width: 38px;
-        height: 38px;
-        font-size: 16px;
-      }
-
       .container {
-        padding: 20px 16px 0 16px;
+        padding: 16px 14px 0 14px;
       }
 
       .glass-card {
-        padding: 26px 18px;
+        padding: 24px 16px;
         border-radius: 22px;
         margin-bottom: 20px;
       }
@@ -2158,9 +2165,142 @@
       .sub-switch-btn,
       .solver-sub-nav-btn {
         padding: 10px 8px;
-        font-size: 12.5px;
+        min-height: 44px;
+        font-size: 13px;
         flex: 1;
         text-align: center;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .converter-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 14px;
+      }
+
+      .solver-equation-container {
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .solver-box {
+        padding: 20px 16px;
+      }
+
+      .equation-operator {
+        font-size: 22px;
+        padding: 2px 0;
+        line-height: 1;
+      }
+
+      .durmath-grid {
+        grid-template-columns: 1fr;
+        gap: 14px;
+      }
+
+      .durmath-box {
+        padding: 18px 16px;
+      }
+
+      .durmath-op-select {
+        flex-direction: row;
+        justify-content: center;
+        gap: 14px;
+        margin: 6px 0;
+      }
+
+      /* Mobile Modal Bottom Sheet */
+      .ts-picker-modal {
+        top: auto !important;
+        left: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+        transform: translateY(100%) !important;
+        width: 100vw !important;
+        max-width: 100vw !important;
+        max-height: 92vh !important;
+        border-radius: 24px 24px 0 0 !important;
+        padding: 18px 16px calc(18px + env(safe-area-inset-bottom, 12px)) 16px !important;
+        box-sizing: border-box !important;
+      }
+
+      .ts-picker-modal.visible {
+        transform: translateY(0) !important;
+        visibility: visible !important;
+      }
+
+      .ts-picker-modal.wide-mode .ts-picker-body-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      .ts-calendar-box {
+        display: flex !important;
+      }
+
+      .ts-speed-pill {
+        min-height: 44px;
+        padding: 10px 16px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .top-nav {
+        padding: 10px 14px;
+        height: auto;
+        min-height: auto;
+        flex-wrap: wrap;
+        align-content: center;
+        gap: 8px 0;
+      }
+
+      .brand { font-size: 19px; }
+      .brand-icon { width: 34px; height: 34px; }
+
+      .nav-pill-group {
+        order: 3;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        padding: 4px;
+        gap: 4px;
+      }
+
+      .nav-pill-btn {
+        flex: 1;
+        min-height: 44px;
+        padding: 9px 6px;
+        font-size: 13px;
+        text-align: center;
+        white-space: nowrap;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .input-mode-btn {
+        min-height: 44px;
+        padding: 8px 12px;
+        font-size: 13px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .theme-toggle-btn {
+        width: 44px;
+        height: 44px;
+        min-width: 44px;
+        min-height: 44px;
+        font-size: 16px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
       }
 
       .countdown-display {
@@ -2176,21 +2316,6 @@
         gap: 12px;
       }
 
-      .solver-equation-container {
-        flex-direction: column;
-        gap: 12px;
-      }
-
-      .solver-box {
-        padding: 18px 16px;
-      }
-
-      .equation-operator {
-        font-size: 24px;
-        padding: 2px 0;
-        line-height: 1;
-      }
-
       .mode-switch-bar {
         display: grid;
         grid-template-columns: 1fr;
@@ -2200,63 +2325,93 @@
       }
 
       .mode-indicator { border-radius: var(--radius-sm); }
-      .mode-switch-btn { padding: 10px 12px; font-size: 13px; text-align: center; }
-
-      .durmath-grid {
-        grid-template-columns: 1fr;
-        gap: 12px;
-      }
-
-      .durmath-box {
-        padding: 16px 14px;
-      }
-
-      .durmath-op-select {
-        flex-direction: row;
+      .mode-switch-btn {
+        padding: 10px 12px;
+        min-height: 44px;
+        font-size: 13px;
+        text-align: center;
+        display: inline-flex;
+        align-items: center;
         justify-content: center;
-        gap: 12px;
-        margin: 4px 0;
       }
 
-      .stepper-row {
-        gap: 4px;
+      .input-row-with-btn {
+        gap: 8px;
       }
 
-      .stepper-btn {
-        padding: 10px 0;
-        font-size: 12px;
+      .input-row-with-btn .btn-subtle {
+        min-height: 56px;
+        min-width: 56px;
+        padding: 0 14px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
       }
 
       .result-callout { padding: 22px 14px; }
       .copy-pills-row { gap: 6px; }
-      .copy-fmt-pill { padding: 6px 12px; font-size: 12px; }
+      .copy-fmt-pill {
+        min-height: 44px;
+        padding: 8px 14px;
+        font-size: 12.5px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+    }
 
-      /* Mobile Modal Bottom Sheet */
-      .ts-picker-modal {
-        top: auto !important;
-        left: 0 !important;
-        right: 0 !important;
-        bottom: 0 !important;
-        transform: translateY(100%) !important;
-        width: 100vw !important;
-        max-width: 100vw !important;
-        max-height: 90vh !important;
-        border-radius: 24px 24px 0 0 !important;
-        padding: 20px 16px calc(20px + env(safe-area-inset-bottom, 0px)) 16px !important;
+    @media (max-width: 520px) {
+      .stepper-row {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+        margin-top: 12px;
       }
 
-      .ts-picker-modal.visible {
-        transform: translateY(0) !important;
+      .stepper-btn {
+        min-height: 44px;
+        font-size: 13px;
+        padding: 0 4px;
       }
 
-      .ts-picker-modal.wide-mode .ts-picker-body-grid {
-        display: flex;
-        flex-direction: column;
-        gap: 16px;
+      .durmath-box .stepper-row {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
       }
 
-      .ts-calendar-box {
-        display: flex !important;
+      .durmath-quick-row {
+        gap: 8px;
+      }
+
+      .durmath-quick-chip {
+        flex: 1 1 calc(50% - 8px);
+        text-align: center;
+        justify-content: center;
+      }
+
+      .nav-pill-btn {
+        font-size: 12px;
+        padding: 8px 4px;
+      }
+
+      .brand span {
+        font-size: 17px;
+      }
+
+      .brand-icon {
+        width: 32px;
+        height: 32px;
+      }
+
+      .countdown-num {
+        font-size: clamp(26px, 7vw, 36px);
+      }
+
+      .countdown-tag {
+        font-size: 11.5px;
+      }
+
+      .glass-card {
+        padding: 20px 12px;
       }
     }
   </style>
@@ -2502,8 +2657,10 @@
             <!-- Box 1: Start Time -->
             <div class="solver-box js-solver-box" id="box-start" data-field="start">
               <div>
-                <label class="form-label" for="solver-start-input">Start Time</label>
-                <div id="badge-start"></div>
+                <div class="solver-box-header">
+                  <label class="form-label" for="solver-start-input">Start Time</label>
+                  <div id="badge-start"></div>
+                </div>
                 <div class="input-row-with-btn">
                   <div class="custom-input-trigger" id="trigger-solver-start" data-field="start" tabindex="0" role="button" aria-haspopup="dialog" aria-label="Select Start Time">
                     <span class="trigger-text-val" id="disp-solver-start">12:00</span>
@@ -2536,8 +2693,10 @@
             <!-- Box 2: Duration -->
             <div class="solver-box js-solver-box highlight" id="box-dur" data-field="dur">
               <div>
-                <label class="form-label" for="solver-dur-h">Duration</label>
-                <div id="badge-dur"><span class="solver-target-badge">Solving</span></div>
+                <div class="solver-box-header">
+                  <label class="form-label" for="solver-dur-h">Duration</label>
+                  <div id="badge-dur"><span class="solver-target-badge">Solving</span></div>
+                </div>
                 
                 <div class="custom-input-trigger" id="trigger-solver-dur" data-field="dur" tabindex="0" role="button" aria-haspopup="dialog" aria-label="Select Duration">
                   <span class="trigger-text-val" id="disp-solver-dur">4h 00m</span>
@@ -2574,8 +2733,10 @@
             <!-- Box 3: End Time -->
             <div class="solver-box js-solver-box" id="box-end" data-field="end">
               <div>
-                <label class="form-label" for="solver-end-input">End Time</label>
-                <div id="badge-end"></div>
+                <div class="solver-box-header">
+                  <label class="form-label" for="solver-end-input">End Time</label>
+                  <div id="badge-end"></div>
+                </div>
                 <div class="input-row-with-btn">
                   <div class="custom-input-trigger" id="trigger-solver-end" data-field="end" tabindex="0" role="button" aria-haspopup="dialog" aria-label="Select End Time">
                     <span class="trigger-text-val" id="disp-solver-end">16:00</span>
@@ -3447,6 +3608,7 @@
     let idleBeaconTimer = null;
 
     function initStartBeacons() {
+      if (typeof TimePickerEngine !== 'undefined' && TimePickerEngine.isOpen) return;
       dismissStartBeacons();
 
       // Subtle, targeted guidance: pulse only ONE primary interaction component on the active view
@@ -3479,17 +3641,22 @@
     }
 
     function dismissStartBeacons() {
-      document.querySelectorAll('.start-action-beacon, .start-chip-beacon, .conv-cascade-beacon').forEach(el => {
-        el.classList.remove('start-action-beacon', 'start-chip-beacon', 'conv-cascade-beacon');
-        el.style.animationDelay = '';
+      const beacons = document.querySelectorAll('.start-action-beacon, .start-chip-beacon, .conv-cascade-beacon');
+      if (!beacons || beacons.length === 0) return;
+      requestAnimationFrame(() => {
+        beacons.forEach(el => {
+          el.classList.remove('start-action-beacon', 'start-chip-beacon', 'conv-cascade-beacon');
+          el.style.animationDelay = '';
+        });
       });
     }
 
     function resetIdleBeaconTimer() {
       if (idleBeaconTimer) clearTimeout(idleBeaconTimer);
+      if (typeof TimePickerEngine !== 'undefined' && TimePickerEngine.isOpen) return;
       idleBeaconTimer = setTimeout(() => {
         initStartBeacons();
-      }, 3000);
+      }, 5000);
     }
 
     /* 1. WHEEL ENGINE (SCROLL WHEEL COLUMN CONTROLLER) */
@@ -3529,16 +3696,22 @@
         this.reportedIndex = null;
         this.rafId = null;
 
-        // 2. Sanitizing Mouse Wheel Inputs
+        // 2. Sanitizing Mouse Wheel Inputs (Desktop)
         this.lastWheelTime = 0;
         this.wheelCooldown = options.wheelCooldown || 80; // 80ms throttle guard
 
-        // 3. Drag Damping and Click Resolution
-        this.isDragging = false;
+        // 3. Desktop Drag & Mouse State
+        this.dragMode = null; // 'mouse' | 'touch' | null
         this.hasMoved = false;
-        this.startY = 0;
-        this.lastY = 0;
-        this.dragDamping = 0.4; // Multiply raw cursor delta by 0.4 damping factor
+        this.mouseStartY = 0;
+        this.mouseLastY = 0;
+        this.dragDamping = 0.4; // Desktop cursor damping
+
+        // 4. Mobile Touch & Ballistic Inertia State
+        this.touchId = null;
+        this.touchStartY = 0;
+        this.touchLastY = 0;
+        this.touchHistory = [];
 
         this.initDOM();
         this.bindEvents();
@@ -3599,7 +3772,8 @@
         this.currentIndex = activeIndex;
         this.currentY = -activeIndex * this.itemHeight;
         this.snapTarget = null;
-        this.isDragging = false;
+        this.dragMode = null;
+        this.touchId = null;
         this.reportedIndex = -1; // Force notification to onSelect
         this.renderFrame(true);
         return activeIndex;
@@ -3616,7 +3790,7 @@
         const MAX_ITERATIONS = 60; // Max 1 second at 60fps
 
         const tick = () => {
-          if (this.isDragging || this.snapTarget === null) {
+          if (this.dragMode !== null || this.snapTarget === null) {
             this.rafId = null;
             iterations = 0;
             return;
@@ -3644,6 +3818,62 @@
         this.rafId = requestAnimationFrame(tick);
       }
 
+      // Mobile Kinetic Glide Animation Loop: provides natural momentum and fluid deceleration
+      startGlide(targetIndex, velocity = 0) {
+        if (this.rafId) {
+          cancelAnimationFrame(this.rafId);
+          this.rafId = null;
+        }
+
+        const clampedTarget = Math.max(0, Math.min(this.count - 1, targetIndex));
+        const targetY = -clampedTarget * this.itemHeight;
+        const startY = this.currentY;
+        const deltaY = targetY - startY;
+
+        if (Math.abs(deltaY) < 0.5) {
+          this.currentY = targetY;
+          this.currentIndex = clampedTarget;
+          this.reportedIndex = -1;
+          this.renderFrame(true);
+          return;
+        }
+
+        this.currentIndex = clampedTarget;
+
+        const distance = Math.abs(deltaY);
+        // Dynamic duration scaling: short flick (~220ms) to long ballistic traversal (~780ms)
+        const baseDuration = 180 + Math.sqrt(distance) * 16;
+        const duration = Math.min(780, Math.max(220, baseDuration));
+        const startTime = performance.now();
+
+        const tick = (now) => {
+          if (this.dragMode !== null) {
+            this.rafId = null;
+            return;
+          }
+
+          const elapsed = now - startTime;
+          const progress = Math.min(1, elapsed / duration);
+
+          // Fluid mobile deceleration curve (easeOutCubic/Quart blend)
+          const ease = 1 - Math.pow(1 - progress, 3.5);
+
+          this.currentY = startY + deltaY * ease;
+
+          if (progress >= 1) {
+            this.currentY = targetY;
+            this.rafId = null;
+            this.renderFrame(true); // Final settle: notifies onSelect safely ONCE
+            return;
+          }
+
+          this.renderFrame(false);
+          this.rafId = requestAnimationFrame(tick);
+        };
+
+        this.rafId = requestAnimationFrame(tick);
+      }
+
       // 2. Sanitizing Mouse Wheel Inputs
       handleWheel(e) {
         if (e.cancelable) e.preventDefault();
@@ -3665,28 +3895,28 @@
       }
 
       bindEvents() {
-        // 3. Drag Damping and Click Resolution
+        // --- 1. DESKTOP MOUSE DRAG ---
         this.container.addEventListener('mousedown', (e) => {
           e.preventDefault();
-          this.isDragging = true;
+          this.dragMode = 'mouse';
           this.hasMoved = false;
           if (this.rafId) {
             cancelAnimationFrame(this.rafId);
             this.rafId = null;
           }
           this.snapTarget = null;
-          this.startY = e.clientY;
-          this.lastY = e.clientY;
+          this.mouseStartY = e.clientY;
+          this.mouseLastY = e.clientY;
         });
 
         window.addEventListener('mousemove', (e) => {
-          if (!this.isDragging) return;
-          if (Math.abs(e.clientY - this.startY) > 3) {
+          if (this.dragMode !== 'mouse') return;
+          if (Math.abs(e.clientY - this.mouseStartY) > 3) {
             this.hasMoved = true;
           }
 
-          const rawDelta = e.clientY - this.lastY;
-          this.lastY = e.clientY;
+          const rawDelta = e.clientY - this.mouseLastY;
+          this.mouseLastY = e.clientY;
 
           const delta = rawDelta * this.dragDamping;
           this.currentY += delta;
@@ -3699,8 +3929,8 @@
         });
 
         window.addEventListener('mouseup', () => {
-          if (!this.isDragging) return;
-          this.isDragging = false;
+          if (this.dragMode !== 'mouse') return;
+          this.dragMode = null;
           // The Spring Release: When dragging ends, set snapTarget and start loop
           const nearestIdx = Math.max(0, Math.min(this.count - 1, Math.round(-this.currentY / this.itemHeight)));
           this.currentIndex = nearestIdx;
@@ -3708,58 +3938,122 @@
           this.startLoop();
         });
 
-        // Touch support
+        // --- 2. MOBILE TOUCH & INERTIA SWIPE ---
         this.container.addEventListener('touchstart', (e) => {
-          if (!e.touches || e.touches.length !== 1) return;
-          this.isDragging = true;
+          if (!e.changedTouches || e.changedTouches.length === 0) return;
+          const touch = e.changedTouches[0];
+          this.touchId = touch.identifier;
+          this.dragMode = 'touch';
           this.hasMoved = false;
+
+          // Halt any running glide/spring loop immediately so user can catch the wheel mid-flight
           if (this.rafId) {
             cancelAnimationFrame(this.rafId);
             this.rafId = null;
           }
           this.snapTarget = null;
-          this.startY = e.touches[0].clientY;
-          this.lastY = e.touches[0].clientY;
+
+          this.touchStartY = touch.clientY;
+          this.touchLastY = touch.clientY;
+          this.touchHistory = [{ y: touch.clientY, time: performance.now() }];
         }, { passive: true });
 
         window.addEventListener('touchmove', (e) => {
-          if (!this.isDragging || !e.touches || e.touches.length !== 1) return;
-          const clientY = e.touches[0].clientY;
-          if (Math.abs(clientY - this.startY) > 3) {
+          if (this.dragMode !== 'touch') return;
+          const touch = Array.from(e.touches || []).find(t => t.identifier === this.touchId);
+          if (!touch) return;
+
+          if (e.cancelable) e.preventDefault();
+
+          const clientY = touch.clientY;
+          const now = performance.now();
+
+          if (Math.abs(clientY - this.touchStartY) > 6) {
             this.hasMoved = true;
           }
 
-          const rawDelta = clientY - this.lastY;
-          this.lastY = clientY;
+          const rawDelta = clientY - this.touchLastY;
+          this.touchLastY = clientY;
 
-          const delta = rawDelta * this.dragDamping;
+          // 1:1 responsive tracking during active touch drag with elastic overscroll resistance
+          let delta = rawDelta;
+          if (this.currentY > this.maxY && rawDelta > 0) {
+            const over = this.currentY - this.maxY;
+            const factor = Math.max(0.15, 1 - (over / (this.itemHeight * 1.5)));
+            delta = rawDelta * factor * 0.45;
+          } else if (this.currentY < this.minY && rawDelta < 0) {
+            const over = this.minY - this.currentY;
+            const factor = Math.max(0.15, 1 - (over / (this.itemHeight * 1.5)));
+            delta = rawDelta * factor * 0.45;
+          }
+
           this.currentY += delta;
 
-          const boundaryLimit = this.itemHeight * 0.8;
-          this.currentY = Math.max(this.minY - boundaryLimit, Math.min(this.maxY + boundaryLimit, this.currentY));
+          // Strict boundary envelope
+          const maxOverscroll = this.itemHeight * 1.2;
+          this.currentY = Math.max(this.minY - maxOverscroll, Math.min(this.maxY + maxOverscroll, this.currentY));
+
+          // Record rolling velocity history (last 100ms)
+          this.touchHistory.push({ y: clientY, time: now });
+          while (this.touchHistory.length > 2 && (now - this.touchHistory[0].time) > 100) {
+            this.touchHistory.shift();
+          }
 
           this.renderFrame(false);
-        }, { passive: true });
+        }, { passive: false });
 
-        window.addEventListener('touchend', () => {
-          if (!this.isDragging) return;
-          this.isDragging = false;
-          const nearestIdx = Math.max(0, Math.min(this.count - 1, Math.round(-this.currentY / this.itemHeight)));
-          this.currentIndex = nearestIdx;
-          this.snapTarget = -nearestIdx * this.itemHeight;
-          this.startLoop();
-        });
+        const handleTouchEnd = (e) => {
+          if (this.dragMode !== 'touch') return;
+          const touch = Array.from(e.changedTouches || []).find(t => t.identifier === this.touchId);
+          if (!touch && e.type !== 'touchcancel') return;
 
-        window.addEventListener('touchcancel', () => {
-          if (!this.isDragging) return;
-          this.isDragging = false;
-          const nearestIdx = Math.max(0, Math.min(this.count - 1, Math.round(-this.currentY / this.itemHeight)));
-          this.currentIndex = nearestIdx;
-          this.snapTarget = -nearestIdx * this.itemHeight;
-          this.startLoop();
-        });
+          this.dragMode = null;
+          this.touchId = null;
 
-        // Container wheel event
+          const now = performance.now();
+          const recent = this.touchHistory.filter(pt => (now - pt.time) <= 100);
+
+          let velocity = 0; // px/ms
+          if (recent.length >= 2) {
+            const first = recent[0];
+            const last = recent[recent.length - 1];
+            const dt = last.time - first.time;
+            // Only compute flick velocity if last movement was recent (within 60ms)
+            if (dt >= 8 && (now - last.time) < 60) {
+              velocity = (last.y - first.y) / dt;
+            }
+          }
+
+          // Case A: Slow scrub or static release (< 0.15 px/ms)
+          if (Math.abs(velocity) < 0.15) {
+            const nearestIdx = Math.max(0, Math.min(this.count - 1, Math.round(-this.currentY / this.itemHeight)));
+            this.currentIndex = nearestIdx;
+            this.snapTarget = -nearestIdx * this.itemHeight;
+            this.startLoop();
+            return;
+          }
+
+          // Case B: Swiped with momentum - calculate ballistic destination
+          // Scaling momentum factor allows natural multi-value gliding on standard swipes
+          const momentumFactor = 230 + Math.min(180, Math.abs(velocity) * 45);
+          const projectedDistance = velocity * momentumFactor;
+          const projectedY = this.currentY + projectedDistance;
+          let rawTargetIndex = Math.round(-projectedY / this.itemHeight);
+
+          // Ensure swipe advances at least one value in the swipe direction
+          const swipeDirection = velocity > 0 ? -1 : 1;
+          if (rawTargetIndex === this.currentIndex) {
+            rawTargetIndex = this.currentIndex + swipeDirection;
+          }
+
+          const targetIndex = Math.max(0, Math.min(this.count - 1, rawTargetIndex));
+          this.startGlide(targetIndex, velocity);
+        };
+
+        window.addEventListener('touchend', handleTouchEnd);
+        window.addEventListener('touchcancel', handleTouchEnd);
+
+        // --- 3. DESKTOP MOUSE WHEEL & TRACKPAD SCROLLING ---
         this.container.addEventListener('wheel', (e) => {
           e.preventDefault();
           e.stopPropagation();
@@ -4014,8 +4308,9 @@
         const trigger = document.getElementById(triggerId);
         if (!trigger) return;
         const openHandler = (e) => {
-          e.preventDefault();
-          e.stopPropagation();
+          if (e) {
+            e.preventDefault();
+          }
           this.open(trigger, inputId, type);
         };
         trigger.addEventListener('click', openHandler);
@@ -4069,9 +4364,9 @@
           document.getElementById('col-h-hours').textContent = "Hours";
           const colMin = document.getElementById('col-h-minutes');
           if (colMin) colMin.innerHTML = '<span>Minutes</span> <span class="ts-subcol-indicators"><span class="subcol-tag">10s</span><span class="subcol-dot">&bull;</span><span class="subcol-tag">1s</span></span>';
-          const parsed = TimeEngine.parseFlexibleDuration(currentVal || '0m');
-          this.selectedHour = Math.max(0, parsed.hours);
-          this.selectedMin = Math.min(59, Math.max(0, parsed.minutes));
+          const parsed = (typeof TimeEngine !== 'undefined' && TimeEngine.parseFlexibleDuration(currentVal || '0m')) || { hours: 0, minutes: 0 };
+          this.selectedHour = Math.max(0, parsed.hours || 0);
+          this.selectedMin = Math.min(59, Math.max(0, parsed.minutes || 0));
           maxH = 49;
         } else {
           this.modal.classList.add('wide-mode');
@@ -4080,7 +4375,8 @@
           document.getElementById('col-h-hours').textContent = "Hours (00 - 23)";
           const colMin = document.getElementById('col-h-minutes');
           if (colMin) colMin.innerHTML = '<span>Minutes (00-59)</span> <span class="ts-subcol-indicators"><span class="subcol-tag">10s</span><span class="subcol-dot">&bull;</span><span class="subcol-tag">1s</span></span>';
-          const d = parseIsoToLocalDate(currentVal);
+          let d = parseIsoToLocalDate(currentVal);
+          if (!d || isNaN(d.getTime())) d = new Date();
           this.selectedDate = d;
           this.calViewDate = new Date(d.getFullYear(), d.getMonth(), 1);
           this.selectedHour = d.getHours();
@@ -4678,8 +4974,8 @@
     }
 
     function bindEvents() {
-      // Dismiss start guidance beacons on any user action, and trigger pulsing again after 3s of inactivity
-      const userActivityEvents = ['pointerdown', 'keydown', 'input', 'wheel', 'touchstart', 'scroll'];
+      // Dismiss start guidance beacons on any user action, and trigger pulsing again after 5s of inactivity
+      const userActivityEvents = ['click', 'keydown', 'input', 'scroll'];
       userActivityEvents.forEach(evtName => {
         document.addEventListener(evtName, () => {
           dismissStartBeacons();
@@ -4707,6 +5003,33 @@
         updateCountdownTarget(true);
       });
 
+      const cdTrigger = document.getElementById('trigger-cd-target');
+      const cdLabel = document.getElementById('cd-input-label');
+      if (cdLabel && cdTrigger) {
+        cdLabel.addEventListener('click', (e) => {
+          if (AppState.inputMode === 'wheel') {
+            e.preventDefault();
+            TimePickerEngine.open(cdTrigger, 'countdown-target-input', 'datetime');
+          }
+        });
+      }
+
+      // Ensure clicking labels in wheel mode opens the wheel picker instead of trying to focus hidden inputs
+      document.querySelectorAll('label.form-label').forEach(lbl => {
+        lbl.addEventListener('click', (e) => {
+          if (AppState.inputMode === 'wheel') {
+            const parent = lbl.closest('.solver-box, .durmath-box, .form-group');
+            if (parent) {
+              const trigger = parent.querySelector('.custom-input-trigger');
+              if (trigger && !parent.classList.contains('highlight')) {
+                e.preventDefault();
+                trigger.click();
+              }
+            }
+          }
+        });
+      });
+
       document.querySelectorAll('.conv-cell-form').forEach(form => form.addEventListener('submit', (e) => e.preventDefault()));
       document.querySelectorAll('.conv-input').forEach(input => {
         input.addEventListener('input', (e) => handleConvInput(e.target.dataset.unit, e.target.value));
@@ -4722,10 +5045,48 @@
       document.querySelectorAll('.js-solver-mode-btn').forEach(btn => {
         btn.addEventListener('click', (e) => setSolverMode(e.target.dataset.mode));
       });
+
       document.querySelectorAll('.js-solver-box').forEach(box => {
         box.addEventListener('click', (e) => {
-          if (!e.target.closest('.stepper-btn') && !e.target.closest('.custom-input-trigger') && !e.target.closest('button')) {
-            handleBoxInteraction(box.dataset.field);
+          if (e.target.closest('.stepper-btn') || e.target.closest('button') || e.target.closest('input')) {
+            return;
+          }
+          if (e.target.closest('.custom-input-trigger')) {
+            // Already handled by trigger click listener
+            return;
+          }
+          const field = box.dataset.field;
+          if (AppState.inputMode === 'wheel') {
+            if (AppState.solver.mode === field) {
+              handleBoxInteraction(field);
+            } else {
+              const trigger = box.querySelector('.custom-input-trigger');
+              if (trigger) {
+                const inputId = field === 'dur' ? 'solver-dur-m' : (field === 'start' ? 'solver-start-input' : 'solver-end-input');
+                const pType = field === 'dur' ? 'duration' : 'time';
+                TimePickerEngine.open(trigger, inputId, pType);
+              }
+            }
+          } else {
+            handleBoxInteraction(field);
+          }
+        });
+      });
+
+      document.querySelectorAll('.js-durmath-box').forEach(box => {
+        box.addEventListener('click', (e) => {
+          if (e.target.closest('.stepper-btn') || e.target.closest('button') || e.target.closest('input') || e.target.closest('.durmath-quick-chip')) {
+            return;
+          }
+          if (e.target.closest('.custom-input-trigger')) {
+            return;
+          }
+          if (AppState.inputMode === 'wheel') {
+            const trigger = box.querySelector('.custom-input-trigger');
+            if (trigger) {
+              const isA = trigger.id === 'trigger-durmath-a';
+              TimePickerEngine.open(trigger, isA ? 'durmath-input-a' : 'durmath-input-b', isA ? 'durmath-a' : 'durmath-b');
+            }
           }
         });
       });
